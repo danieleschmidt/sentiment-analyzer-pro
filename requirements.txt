@@ -3,3 +3,4 @@ scikit-learn
 pytest
 transformers
 torch
+mlflow

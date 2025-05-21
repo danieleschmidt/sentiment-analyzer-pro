@@ -1,134 +1,187 @@
-from transformers import pipeline, AutoTokenizer, AutoModelForSequenceClassification
-import torch # PyTorch is a dependency for transformers
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
+import torch.nn.functional as F
+import numpy as np # For array manipulation if needed
 
 class TransformerSentimentModel:
     """A sentiment analysis model using Hugging Face Transformers.
-
     This model uses a pre-trained transformer model for sentiment analysis.
     It can perform zero-shot prediction. Fine-tuning is not implemented
     in this basic version but can be added.
 
     Attributes:
         model_name (str): The name of the pre-trained Hugging Face model.
-        sentiment_pipeline (transformers.pipelines.Pipeline): The sentiment analysis pipeline.
         tokenizer (transformers.PreTrainedTokenizer): The tokenizer for the model.
         model (transformers.PreTrainedModel): The loaded transformer model.
+        device (torch.device): The device (CPU or CUDA) the model is on.
+        id2label (dict): Mapping from class ID to label name from model config.
+        label2id (dict): Mapping from label name to class ID from model config.
     """
 
     def __init__(self, model_name='distilbert-base-uncased-finetuned-sst-2-english'):
         """Initializes the TransformerSentimentModel.
 
         Args:
-            model_name (str, optional): The name of the pre-trained Hugging Face model
-                                        to use. Defaults to
-                                        'distilbert-base-uncased-finetuned-sst-2-english'.
-                                        This model typically outputs 'POSITIVE' or 'NEGATIVE'.
+            model_name (str, optional): Name of the pre-trained Hugging Face model.
         """
         self.model_name = model_name
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print(f"Using device: {self.device} for Transformer model.")
+
         try:
-            # Using a pipeline is simpler for direct sentiment classification
-            self.sentiment_pipeline = pipeline(
-                "sentiment-analysis",
-                model=self.model_name,
-                # device=0 if torch.cuda.is_available() else -1 # Use GPU if available
-            )
-            # For more control, you can load tokenizer and model separately
-            # self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
-            # self.model = AutoModelForSequenceClassification.from_pretrained(self.model_name)
-            print(f"Transformer model '{self.model_name}' loaded successfully.")
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_name)
+            self.model = AutoModelForSequenceClassification.from_pretrained(self.model_name)
+            self.model.to(self.device)
+            self.model.eval()
+            print(f"Transformer model '{self.model_name}' and tokenizer loaded successfully.")
+            # Storing label mapping if available in model config
+            self.id2label = self.model.config.id2label
+            self.label2id = self.model.config.label2id # Added label2id
+            print(f"Model label mapping (id2label): {self.id2label}")
+            print(f"Model label mapping (label2id): {self.label2id}")
+
+
         except Exception as e:
             print(f"Error loading transformer model '{self.model_name}': {e}")
-            print("Please ensure you have an internet connection and the model name is correct.")
-            print("You might need to install additional dependencies like 'torch' or 'tensorflow'.")
-            self.sentiment_pipeline = None # Indicate failure
-
+            self.tokenizer = None
+            self.model = None
+            self.id2label = None
+            self.label2id = None # Ensure label2id is also None on error
+    
     def train(self, X, y, **kwargs):
         """Placeholder for training/fine-tuning.
-
-        For many pre-trained sentiment models, explicit training on custom small
-        datasets might not be immediately necessary for good performance (zero-shot).
-        Actual fine-tuning would require a more complex setup (e.g., using
-        Hugging Face Trainer API).
-
-        Args:
-            X: Input features (not used in this basic zero-shot version).
-            y: Target labels (not used in this basic zero-shot version).
-            **kwargs: Additional training arguments.
+        For this version, it just ensures the model is loaded.
         """
-        if self.sentiment_pipeline:
+        if self.model and self.tokenizer:
             print(f"The model '{self.model_name}' is a pre-trained model. "
-                  "Fine-tuning is not implemented in this basic version. "
-                  "Using it for zero-shot predictions.")
+                  "Fine-tuning is not implemented in this version. Using for zero-shot predictions.")
         else:
             print("Cannot 'train' as the transformer model failed to load.")
 
-
-    def predict(self, X):
+    def predict(self, texts: list, return_probabilities=False):
         """Predicts sentiment for a list of text samples.
 
         Args:
-            X (list[str]): A list of text samples.
+            texts (list[str]): A list of text samples.
+            return_probabilities (bool, optional): If True, returns probabilities
+                                                  for the positive class alongside labels.
+                                                  Defaults to False.
 
         Returns:
-            list[str]: A list of predicted sentiment labels (e.g., 'POSITIVE', 'NEGATIVE').
-                       Returns an empty list if the model isn't loaded or input is empty.
+            list[str] or tuple(list[str], list[float]):
+                - A list of predicted sentiment labels (e.g., 'positive', 'negative').
+                - If return_probabilities is True, a tuple containing:
+                    - list[str]: predicted labels.
+                    - list[float]: probabilities for the positive class.
+                       (Assumes binary classification positive/negative for this score)
         """
-        if not self.sentiment_pipeline:
-            print("Sentiment pipeline not available. Cannot predict.")
-            return []
-        if not X:
-            return []
+        if not self.model or not self.tokenizer:
+            print("Transformer model or tokenizer not available. Cannot predict.")
+            # Ensure return type matches expected output structure even on early exit
+            return ([], []) if return_probabilities else []
+        if not texts: # Handle empty input list
+            return ([], []) if return_probabilities else []
 
         try:
-            results = self.sentiment_pipeline(X)
-            # The pipeline returns a list of dictionaries, e.g., [{'label': 'POSITIVE', 'score': 0.99}]
-            # We need to extract the 'label' and map it to our desired output format
-            # if necessary. 'distilbert-base-uncased-finetuned-sst-2-english'
-            # already outputs 'POSITIVE' or 'NEGATIVE'.
-            # Other models might output 'LABEL_0', 'LABEL_1', etc.
-            # This example assumes direct compatibility for simplicity with sst-2-english.
-            predictions = [result['label'].lower() for result in results]
-            return predictions
-        except Exception as e:
-            print(f"Error during prediction with transformer model: {e}")
-            return ["error"] * len(X) # Return error placeholders
+            valid_texts = [str(text) if text is not None else "" for text in texts]
+            inputs = self.tokenizer(
+                valid_texts, padding=True, truncation=True,
+                max_length=self.tokenizer.model_max_length if hasattr(self.tokenizer, 'model_max_length') and self.tokenizer.model_max_length is not None else 512,
+                return_tensors="pt"
+            )
+            inputs = {k: v.to(self.device) for k, v in inputs.items()}
 
+            with torch.no_grad():
+                outputs = self.model(**inputs)
+                logits = outputs.logits
+
+            probabilities_all_classes = F.softmax(logits, dim=-1)
+            predicted_class_ids = torch.argmax(probabilities_all_classes, dim=-1).cpu().tolist()
+
+            if self.id2label:
+                predictions = [self.id2label[class_id].lower() for class_id in predicted_class_ids]
+            else: # Fallback if id2label is not available
+                print("Warning: id2label mapping not found in model config. Returning raw class IDs as strings.")
+                predictions = [str(class_id) for class_id in predicted_class_ids]
+
+            if return_probabilities:
+                positive_class_id = None
+                if self.label2id: # Primary way to find 'positive' class ID
+                    for label, id_val in self.label2id.items():
+                        if label.lower() == 'positive':
+                            positive_class_id = id_val
+                            break
+                
+                if positive_class_id is None and self.id2label: # Fallback using id2label
+                    for id_val, label_str in self.id2label.items():
+                        if label_str.lower() == 'positive':
+                            positive_class_id = id_val
+                            break
+                
+                if positive_class_id is None: # Further fallback for binary classification
+                    if probabilities_all_classes.shape[1] == 2:
+                        print("Warning: Could not definitively determine 'positive' class ID. Assuming class ID 1 (the higher index) is 'positive' for binary classification.")
+                        positive_class_id = 1 # Common for SST-2 like models where 0 is neg, 1 is pos
+                    else:
+                        print("Error: Cannot determine positive class ID for probabilities. Multiclass or unknown mapping. Returning 0.0 for all positive probabilities.")
+                        positive_class_probs = [0.0] * len(texts)
+                        return predictions, positive_class_probs
+                
+                # Ensure positive_class_id is within bounds of the probability tensor
+                if positive_class_id >= probabilities_all_classes.shape[1]:
+                    print(f"Error: Determined positive_class_id {positive_class_id} is out of bounds for probability tensor shape {probabilities_all_classes.shape}. Returning 0.0 for all probabilities.")
+                    positive_class_probs = [0.0] * len(texts)
+                else:
+                    positive_class_probs = probabilities_all_classes[:, positive_class_id].cpu().tolist()
+                
+                return predictions, positive_class_probs
+            else:
+                return predictions
+
+        except Exception as e:
+            print(f"Error during transformer prediction: {e}")
+            # Prepare error values matching the expected return type
+            error_val_labels = ["error"] * len(texts)
+            if return_probabilities:
+                error_val_probs = [0.0] * len(texts) # Default probability for error cases
+                return error_val_labels, error_val_probs
+            else:
+                return error_val_labels
 
 if __name__ == '__main__':
-    # Example Usage:
-    print("Testing TransformerSentimentModel...")
-    transformer_model = TransformerSentimentModel()
+    print("Testing TransformerSentimentModel with probabilities...")
+    # This model will download files on first run if not cached by Hugging Face.
+    transformer_model = TransformerSentimentModel() # Uses default distilbert model
 
-    if transformer_model.sentiment_pipeline:
-        sample_texts_transformer = [
+    if transformer_model.model: # Check if model loaded successfully
+        sample_texts = [
             "This is a fantastic movie, I loved every minute of it!",
             "What a complete waste of time, the plot was nonsensical.",
-            "It was an okay experience, not great but not terrible either."
+            "It was an okay experience, not great but not terrible either.",
+            "The product is amazing, works as expected.",
+            "I'm very disappointed with the quality.",
+            None, 
+            ""    
         ]
-        print(f"\nInput texts: {sample_texts_transformer}")
+        print(f"\nInput texts for Transformer: {sample_texts}")
+        
+        # Test labels only
+        labels_only = transformer_model.predict(sample_texts, return_probabilities=False)
+        print(f"\nTransformer Predictions (labels only):")
+        for text, pred_label in zip(sample_texts, labels_only):
+            text_display = str(text)[:30] if text is not None else "None"
+            print(f"  Text: \"{text_display}...\" => Prediction: {pred_label}")
 
-        # Test train method (placeholder)
-        transformer_model.train([], [])
-
-        # Test predict method
-        predictions = transformer_model.predict(sample_texts_transformer)
-        print(f"Predictions: {predictions}")
-
-        # Example of how the output looks for 'distilbert-base-uncased-finetuned-sst-2-english'
-        # Predictions: [{'label': 'POSITIVE', 'score': 0.99...}, {'label': 'NEGATIVE', 'score': 0.99...}, {'label': 'POSITIVE', 'score': 0.9...}]
-        # We need to map this to 'positive' or 'negative' if our convention is lowercase
-        # The current predict method already converts to lowercase.
-
-        # To match SentimentModel's output (e.g. 'positive', 'negative')
-        # the current implementation of predict() already handles this.
-        # For 'distilbert-base-uncased-finetuned-sst-2-english'
-        # labels are 'POSITIVE' or 'NEGATIVE'.
-        # The .lower() call in predict() handles this.
-
-        # If a different model returns, e.g. 'LABEL_1' for positive and 'LABEL_0' for negative
-        # a mapping would be needed:
-        # label_map = {'LABEL_1': 'positive', 'LABEL_0': 'negative'}
-        # predictions = [label_map.get(result['label'], 'unknown') for result in results]
-
+        # Test labels and probabilities
+        labels_and_probs_output = transformer_model.predict(sample_texts, return_probabilities=True)
+        print(f"\nTransformer Predictions (labels and positive class probabilities):")
+        if labels_and_probs_output and len(labels_and_probs_output) == 2:
+            preds, probs = labels_and_probs_output
+            for text, p_label, prob_score in zip(sample_texts, preds, probs):
+                text_display = str(text)[:30] if text is not None else "None"
+                print(f"  Text: \"{text_display}...\" => Prediction: {p_label}, Positive Prob: {prob_score:.4f}")
+        else:
+            print("Error: predict method did not return the expected tuple for labels and probabilities.")
+            
     else:
-        print("Transformer model could not be initialized. Skipping tests.")
+        print("Transformer model could not be initialized. Skipping example usage.")
