@@ -40,12 +40,18 @@ sentiment-analyzer-pro/
 New features, bug fixes, and improvements will be requested via GitHub Issues and assigned to Jules, our Async Development Agent.
 
 For details on preparing datasets, see [docs/DATA_HANDLING.md](docs/DATA_HANDLING.md).
+For a brief overview of the new aspect-based sentiment component, see [docs/ASPECT_SENTIMENT.md](docs/ASPECT_SENTIMENT.md).
+For running detailed evaluations, see [docs/EVALUATION.md](docs/EVALUATION.md).
 
 ## Getting Started
 
 1. Install dependencies:
    ```bash
-   pip install -r requirements.txt
+   pip install -e .
+   ```
+   For advanced models or the web API, install optional extras:
+   ```bash
+   pip install -e .[ml,web]
    ```
 2. Run unit tests:
    ```bash
@@ -69,10 +75,41 @@ For details on preparing datasets, see [docs/DATA_HANDLING.md](docs/DATA_HANDLIN
    ```bash
    python -m src.predict your_reviews.csv
    ```
-7. Compare model performance (baseline vs. LSTM vs. Transformer):
+7. Use the unified CLI for training, prediction, and evaluation:
+   ```bash
+   sentiment-cli train --csv data/sample_reviews.csv --model my_model.joblib
+   sentiment-cli predict your_reviews.csv --model my_model.joblib
+   ```
+8. Compare model performance (baseline vs. LSTM vs. Transformer):
    ```bash
    python -m src.model_comparison
    ```
 
 Model comparison results are available in
 [docs/MODEL_RESULTS.md](docs/MODEL_RESULTS.md).
+
+## Deployment
+
+To build a Docker image with all dependencies preinstalled:
+
+```bash
+docker build -t sentiment-pro .
+docker run sentiment-pro
+```
+
+## Web API
+
+Run a lightweight Flask server to get predictions over HTTP:
+
+```bash
+sentiment-web --model model.joblib
+```
+
+Send a POST request with JSON to `/predict`:
+
+```bash
+curl -X POST -H "Content-Type: application/json" \
+     -d '{"text": "Great phone"}' http://localhost:5000/predict
+```
+
+The server will respond with the predicted sentiment.

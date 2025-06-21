@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sentiment-analyzer-pro"
+version = "0.1.0"
+description = "Advanced sentiment analysis toolkit"
+authors = [{name = "Jules"}]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "nltk",
+    "joblib",
+]
+
+[project.optional-dependencies]
+ml = [
+    "tensorflow",
+    "transformers",
+    "torch",
+]
+web = [
+    "flask",
+]
+
+[project.scripts]
+sentiment-cli = "src.cli:main"
+sentiment-web = "src.webapp:main"

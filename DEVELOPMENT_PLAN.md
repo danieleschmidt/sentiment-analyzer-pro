@@ -28,16 +28,26 @@ The following checklist outlines the major tasks required to build the Sentiment
 - [x] Update documentation with findings
 
 ## Milestone 5: Aspect-Based Sentiment Analysis
-- [ ] Design approach for aspect extraction
-- [ ] Implement aspect-based sentiment component
-- [ ] Add tests for aspect-based methods
-- [ ] Document usage and limitations
+- [x] Design approach for aspect extraction
+- [x] Implement aspect-based sentiment component
+- [x] Add tests for aspect-based methods
+- [x] Document usage and limitations
 
 ## Milestone 6: Robust Evaluation and Deployment
-- [ ] Create comprehensive evaluation suite (confusion matrices, error analysis)
-- [ ] Build simple CLI or web demo for predictions
-- [ ] Prepare model for deployment (packaging, Dockerfile, etc.)
-- [ ] Ensure continuous integration and automated testing
+- [x] Create comprehensive evaluation suite (confusion matrices, error analysis)
+- [x] Build simple CLI or web demo for predictions
+ - [x] Prepare model for deployment (packaging, Dockerfile, etc.)
+- [x] Ensure continuous integration and automated testing
+
+## Milestone 7: Web API
+- [x] Implement Flask-based prediction server
+- [x] Add tests for web server
+- [x] Document web server usage
+
+## Milestone 8: Packaging and Release
+- [ ] Split heavy dependencies into optional extras
+- [ ] Publish package to PyPI
+- [ ] Provide installation instructions for extras
 
 ---
 
