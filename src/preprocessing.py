@@ -3,12 +3,15 @@
 import re
 from typing import List
 
-import nltk
-from nltk.corpus import stopwords
+try:
+    import nltk
+    from nltk.corpus import stopwords
 
-nltk.download("stopwords", quiet=True)
-
-STOP_WORDS = set(stopwords.words("english"))
+    nltk.download("stopwords", quiet=True)
+    STOP_WORDS = set(stopwords.words("english"))
+except Exception:  # pragma: no cover - optional dependency
+    nltk = None
+    STOP_WORDS = {"the", "is", "a", "an", "this", "of", "and", "in", "on", "to"}
 
 
 def clean_text(text: str) -> str:
