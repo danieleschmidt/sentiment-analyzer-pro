@@ -5,6 +5,7 @@ import argparse
 from typing import Dict
 
 from flask import Flask, jsonify, request
+from importlib import metadata
 import joblib
 
 from .models import SentimentModel
@@ -13,6 +14,11 @@ app = Flask(__name__)
 
 MODEL_PATH = "model.joblib"
 _model_cache: Dict[str, SentimentModel] = {}
+
+try:
+    APP_VERSION = metadata.version("sentiment-analyzer-pro")
+except metadata.PackageNotFoundError:  # pragma: no cover - local usage
+    APP_VERSION = "0.0.0"
 
 
 def load_model(path: str = MODEL_PATH) -> SentimentModel:
@@ -31,6 +37,18 @@ def predict():
     model = load_model(MODEL_PATH)
     prediction = model.predict([text])[0]
     return jsonify({"prediction": prediction})
+
+
+@app.route("/", methods=["GET"])
+def index():
+    """Simple health check endpoint."""
+    return jsonify({"status": "ok"})
+
+
+@app.route("/version", methods=["GET"])
+def version():
+    """Return the running package version."""
+    return jsonify({"version": APP_VERSION})
 
 
 def main(argv: list[str] | None = None) -> None:

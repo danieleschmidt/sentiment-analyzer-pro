@@ -1,3 +1,5 @@
+from importlib import metadata
+
 from .aspect_sentiment import extract_aspects, predict_aspect_sentiment
 from .model_comparison import compare_models
 from .models import build_lstm_model, build_model, build_transformer_model
@@ -15,6 +17,11 @@ except Exception:  # pragma: no cover - optional web server
     web_app = None  # type: ignore
     web_main = None  # type: ignore
 
+try:
+    __version__ = metadata.version("sentiment-analyzer-pro")
+except metadata.PackageNotFoundError:  # pragma: no cover - package not installed
+    __version__ = "0.0.0"
+
 __all__ = [
     "build_model",
     "build_lstm_model",
@@ -30,4 +37,5 @@ __all__ = [
     "cli_main",
     "web_app",
     "web_main",
+    "__version__",
 ]
