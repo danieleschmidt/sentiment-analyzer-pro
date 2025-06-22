@@ -2,12 +2,13 @@ import joblib
 import pytest
 
 from src.models import build_model
-from src import webapp
 
 
 def test_webapp_predict_endpoint(tmp_path):
     pytest.importorskip('flask')
     pytest.importorskip('sklearn')
+    from src import webapp
+
     model = build_model()
     model.fit(["good", "bad"], ["positive", "negative"])
     model_file = tmp_path / 'model.joblib'
@@ -20,3 +21,30 @@ def test_webapp_predict_endpoint(tmp_path):
         resp = client.post('/predict', json={'text': 'good'})
         assert resp.status_code == 200
         assert resp.get_json()['prediction'] == 'positive'
+
+
+def test_webapp_root_endpoint(tmp_path):
+    pytest.importorskip('flask')
+    from src import webapp
+
+    model_file = tmp_path / 'model.joblib'
+    joblib.dump(build_model().fit(["good", "bad"], ["positive", "negative"]), model_file)
+    webapp._model_cache.clear()
+    webapp.MODEL_PATH = str(model_file)
+
+    with webapp.app.test_client() as client:
+        resp = client.get('/')
+        assert resp.status_code == 200
+        assert resp.get_json()['status'] == 'ok'
+
+
+def test_webapp_version_endpoint(monkeypatch):
+    pytest.importorskip('flask')
+    from src import webapp
+
+    monkeypatch.setattr(webapp, 'APP_VERSION', 'test-version')
+
+    with webapp.app.test_client() as client:
+        resp = client.get('/version')
+        assert resp.status_code == 200
+        assert resp.get_json()['version'] == 'test-version'

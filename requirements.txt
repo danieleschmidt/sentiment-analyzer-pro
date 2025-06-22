@@ -3,8 +3,4 @@ pandas
 scikit-learn
 nltk
 joblib
-# Optional dependencies for advanced models and the web API
-tensorflow
-transformers
-torch
-flask
+# Optional dependencies have been moved to extras in pyproject.toml

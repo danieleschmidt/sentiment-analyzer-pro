@@ -36,7 +36,8 @@ The following checklist outlines the major tasks required to build the Sentiment
 ## Milestone 6: Robust Evaluation and Deployment
 - [x] Create comprehensive evaluation suite (confusion matrices, error analysis)
 - [x] Build simple CLI or web demo for predictions
- - [x] Prepare model for deployment (packaging, Dockerfile, etc.)
+- [x] Prepare model for deployment (packaging, Dockerfile, etc.)
+- [x] Update Dockerfile to use optional extras for the web API
 - [x] Ensure continuous integration and automated testing
 
 ## Milestone 7: Web API
@@ -45,9 +46,46 @@ The following checklist outlines the major tasks required to build the Sentiment
 - [x] Document web server usage
 
 ## Milestone 8: Packaging and Release
-- [ ] Split heavy dependencies into optional extras
-- [ ] Publish package to PyPI
-- [ ] Provide installation instructions for extras
+- [x] Split heavy dependencies into optional extras
+- [x] Publish package to PyPI
+- [x] Provide installation instructions for extras
+
+## Milestone 9: API Enhancements
+- [x] Add health check endpoint to the web server
+- [x] Document the root endpoint in the README
+
+## Milestone 10: Version Reporting
+- [x] Expose package version via `/version` endpoint
+- [x] Document the endpoint in the README
+
+## Milestone 11: CLI Enhancements
+- [x] Add `version` command to the CLI
+- [x] Document the new command in the README
+
+## Milestone 12: CLI Polishing
+- [x] Provide `--version` flag for quick access
+- [x] Review CLI usability and options
+
+## Milestone 13: Data Utilities
+- [x] Add CLI command for preprocessing datasets
+- [x] Document preprocessing usage in the README
+
+---
+
+## Milestone 14: Dataset Splitting
+- [x] Implement CLI command for splitting datasets
+- [x] Document dataset splitting usage in the README
+- [x] Add tests for the new CLI command
+
+## Milestone 15: Dataset Statistics
+- [x] Add CLI command to summarize datasets
+- [x] Document dataset summary usage in the README
+- [x] Write tests for the summary command
+
+## Milestone 16: Dataset Insights
+- [ ] Extend the summary command to list the most frequent words
+- [ ] Document the new option in the README
+- [ ] Add tests covering word frequency output
 
 ---
 

@@ -75,12 +75,47 @@ For running detailed evaluations, see [docs/EVALUATION.md](docs/EVALUATION.md).
    ```bash
    python -m src.predict your_reviews.csv
    ```
-7. Use the unified CLI for training, prediction, and evaluation:
+7. Preprocess a CSV of raw reviews:
    ```bash
-   sentiment-cli train --csv data/sample_reviews.csv --model my_model.joblib
-   sentiment-cli predict your_reviews.csv --model my_model.joblib
+   sentiment-cli preprocess data/raw.csv --out clean.csv --remove-stopwords
    ```
-8. Compare model performance (baseline vs. LSTM vs. Transformer):
+8. Split a labeled dataset into train and test files:
+   ```bash
+   sentiment-cli split data/all.csv --train train.csv --test test.csv --ratio 0.2
+   ```
+9. Summarize a dataset with basic statistics:
+   ```bash
+   sentiment-cli summary train.csv
+   # show the five most common words
+   sentiment-cli summary train.csv --top 5
+   ```
+10. Use the unified CLI for training, prediction, evaluation, and analysis:
+   ```bash
+sentiment-cli train --csv data/sample_reviews.csv --model my_model.joblib
+sentiment-cli predict your_reviews.csv --model my_model.joblib
+sentiment-cli eval data/labeled_reviews.csv
+sentiment-cli analyze data/labeled_reviews.csv
+```
+11. Start the web server via the CLI:
+   ```bash
+   sentiment-cli serve --model my_model.joblib --port 5000
+   ```
+12. Check the installed package version:
+   ```bash
+   sentiment-cli version
+   # or use the global flag
+   sentiment-cli --version
+   ```
+   You can also query the version programmatically:
+   ```python
+   from sentiment_analyzer_pro import __version__
+   print(__version__)
+   ```
+13. Increase command output with the verbose flag:
+   ```bash
+   sentiment-cli -v train --csv data/sample_reviews.csv
+   ```
+14. Compare model performance (baseline vs. LSTM vs. Transformer):
    ```bash
    python -m src.model_comparison
    ```
@@ -90,20 +125,23 @@ Model comparison results are available in
 
 ## Deployment
 
-To build a Docker image with all dependencies preinstalled:
+To build a Docker image with all dependencies preinstalled and start the web server:
 
 ```bash
 docker build -t sentiment-pro .
-docker run sentiment-pro
+docker run -p 5000:5000 sentiment-pro
 ```
 
 ## Web API
 
-Run a lightweight Flask server to get predictions over HTTP:
+Run a lightweight Flask server to get predictions over HTTP using the CLI:
 
 ```bash
-sentiment-web --model model.joblib
+sentiment-cli serve --model model.joblib
 ```
+
+You can also invoke the underlying web app directly with the
+`sentiment-web` command if preferred.
 
 Send a POST request with JSON to `/predict`:
 
@@ -113,3 +151,55 @@ curl -X POST -H "Content-Type: application/json" \
 ```
 
 The server will respond with the predicted sentiment.
+
+Check that the server is running by hitting the root endpoint:
+
+```bash
+curl http://localhost:5000/
+```
+
+You should see:
+
+```json
+{"status": "ok"}
+```
+
+To verify the package version running on the server:
+
+```bash
+curl http://localhost:5000/version
+```
+
+Which will return something like:
+
+```json
+{"version": "0.1.0"}
+```
+
+## Packaging & Release
+
+Build and publish a wheel using [build](https://pypi.org/project/build/) and
+[twine](https://pypi.org/project/twine/):
+
+```bash
+pip install build twine
+python -m build
+twine upload dist/*
+```
+
+You can also publish automatically from GitHub by pushing a tag that starts with `v`
+or by manually dispatching the workflow. The `Publish` workflow uses the
+[pypa/gh-action-pypi-publish](https://github.com/pypa/gh-action-pypi-publish)
+action to upload the built distributions with the `PYPI_API_TOKEN` secret.
+
+Install the package from PyPI:
+
+```bash
+pip install sentiment-analyzer-pro
+```
+
+Optional extras provide advanced ML models and the web server:
+
+```bash
+pip install sentiment-analyzer-pro[ml,web]
+```
