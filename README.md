@@ -85,10 +85,13 @@ For running detailed evaluations, see [docs/EVALUATION.md](docs/EVALUATION.md).
    ```
 9. Summarize a dataset with basic statistics:
    ```bash
-   sentiment-cli summary train.csv
-   # show the five most common words
-   sentiment-cli summary train.csv --top 5
-   ```
+sentiment-cli summary train.csv
+# show the five most common words
+sentiment-cli summary train.csv --top 5
+```
+The `--top` flag lists the most frequent tokens in the dataset. Punctuation is
+automatically stripped when counting words, so `movie!` and `movie.` are
+aggregated under the same entry.
 10. Use the unified CLI for training, prediction, evaluation, and analysis:
    ```bash
 sentiment-cli train --csv data/sample_reviews.csv --model my_model.joblib

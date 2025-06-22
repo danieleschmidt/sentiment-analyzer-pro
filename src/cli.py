@@ -150,7 +150,9 @@ def main(argv: list[str] | None = None) -> None:
         if args.top:
             from collections import Counter
 
-            tokens = df["text"].str.lower().str.split().explode()
+            tokens = (
+                df["text"].str.lower().str.findall(r"\b\w+\b").explode()
+            )
             common = Counter(tokens).most_common(args.top)
             print(f"Top {args.top} words:")
             for word, count in common:
