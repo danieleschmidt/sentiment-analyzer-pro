@@ -83,9 +83,9 @@ The following checklist outlines the major tasks required to build the Sentiment
 - [x] Write tests for the summary command
 
 ## Milestone 16: Dataset Insights
-- [ ] Extend the summary command to list the most frequent words
-- [ ] Document the new option in the README
-- [ ] Add tests covering word frequency output
+ - [x] Extend the summary command to list the most frequent words
+ - [x] Document the new option in the README
+ - [x] Add tests covering word frequency output
 
 ---
 
