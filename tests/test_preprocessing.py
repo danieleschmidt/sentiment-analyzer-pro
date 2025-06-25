@@ -1,4 +1,3 @@
-import pytest
 
 from src import preprocessing
 
@@ -6,6 +5,12 @@ from src import preprocessing
 def test_clean_text():
     text = "Hello!!!"
     assert preprocessing.clean_text(text) == "hello"
+
+
+def test_clean_text_lemmatizes_running():
+    text = "running"
+    clean = preprocessing.clean_text(text)
+    assert preprocessing.lemmatize_tokens(clean.split()) == ["run"]
 
 
 def test_remove_stopwords():

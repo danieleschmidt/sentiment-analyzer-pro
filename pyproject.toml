@@ -3,7 +3,7 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "sentiment-analyzer-pro"
+name = "sentiment_analyzer_pro"
 version = "0.1.0"
 description = "Advanced sentiment analysis toolkit"
 authors = [{name = "Jules"}]
@@ -30,3 +30,7 @@ web = [
 [project.scripts]
 sentiment-cli = "src.cli:main"
 sentiment-web = "src.webapp:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["sentiment_analyzer_pro"]

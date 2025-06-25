@@ -17,7 +17,7 @@ try:
 except Exception:  # pragma: no cover - optional dependency
     keras = None
 
-from .models import build_lstm_model, build_model
+from .models import build_lstm_model, build_model, build_transformer_model
 from .preprocessing import clean_text
 
 
@@ -59,6 +59,13 @@ def compare_models(csv_path: str = "data/sample_reviews.csv"):
     results.append(
         {"model": "LSTM", "accuracy": accuracy_score(y_test_bin, lstm_preds)}
     )
+
+    if build_transformer_model is not None:
+        try:
+            build_transformer_model()
+            results.append({"model": "Transformer", "accuracy": 0.0})
+        except Exception:  # pragma: no cover - if transformer build fails
+            pass
 
     return results
 

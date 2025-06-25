@@ -2,9 +2,14 @@ from importlib import metadata
 
 from .aspect_sentiment import extract_aspects, predict_aspect_sentiment
 from .model_comparison import compare_models
-from .models import build_lstm_model, build_model, build_transformer_model
-from .evaluate import analyze_errors, compute_confusion, evaluate
-from .preprocessing import clean_text, remove_stopwords
+from .models import (
+    build_lstm_model,
+    build_model,
+    build_nb_model,
+    build_transformer_model,
+)
+from .evaluate import analyze_errors, compute_confusion, evaluate, cross_validate
+from .preprocessing import clean_text, remove_stopwords, lemmatize_tokens
 
 try:  # optional dependency: argparse + CLI utilities
     from .cli import main as cli_main
@@ -24,16 +29,19 @@ except metadata.PackageNotFoundError:  # pragma: no cover - package not installe
 
 __all__ = [
     "build_model",
+    "build_nb_model",
     "build_lstm_model",
     "build_transformer_model",
     "compare_models",
     "clean_text",
     "remove_stopwords",
+    "lemmatize_tokens",
     "extract_aspects",
     "predict_aspect_sentiment",
     "evaluate",
     "compute_confusion",
     "analyze_errors",
+    "cross_validate",
     "cli_main",
     "web_app",
     "web_main",

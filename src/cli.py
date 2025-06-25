@@ -7,7 +7,7 @@ from importlib import metadata
 
 from . import compute_confusion
 from .evaluate import evaluate, analyze_errors
-from .preprocessing import clean_text, remove_stopwords
+from .preprocessing import clean_text, remove_stopwords, lemmatize_tokens
 from .predict import main as predict_main
 from .train import main as train_main
 
@@ -51,6 +51,11 @@ def main(argv: list[str] | None = None) -> None:
         "--remove-stopwords",
         action="store_true",
         help="Remove common stop words",
+    )
+    preprocess_p.add_argument(
+        "--lemmatize",
+        action="store_true",
+        help="Apply lemmatization to tokens",
     )
 
     split_p = sub.add_parser("split", help="Split dataset into train/test files")
@@ -116,10 +121,13 @@ def main(argv: list[str] | None = None) -> None:
 
         df = pd.read_csv(args.csv)
         df["text"] = df["text"].apply(clean_text)
-        if args.remove_stopwords:
-            df["text"] = (
-                df["text"].str.split().apply(remove_stopwords).str.join(" ")
-            )
+        if args.lemmatize or args.remove_stopwords:
+            df["text"] = df["text"].str.split()
+            if args.lemmatize:
+                df["text"] = df["text"].apply(lemmatize_tokens)
+            if args.remove_stopwords:
+                df["text"] = df["text"].apply(remove_stopwords)
+            df["text"] = df["text"].str.join(" ")
         df.to_csv(args.out, index=False)
         print(f"Wrote cleaned data to {args.out}")
     elif args.cmd == "split":
