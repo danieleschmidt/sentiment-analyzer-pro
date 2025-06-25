@@ -61,29 +61,34 @@ For running detailed evaluations, see [docs/EVALUATION.md](docs/EVALUATION.md).
    ```bash
    python -m src.train
    ```
-4. (Optional) Build the LSTM model for experimentation:
+4. Build a Naive Bayes model:
+   ```python
+   from src.models import build_nb_model
+   nb_model = build_nb_model()
+   ```
+5. (Optional) Build the LSTM model for experimentation:
    ```python
    from src.models import build_lstm_model
    model = build_lstm_model()
    ```
-5. (Optional) Build a Transformer-based model:
+6. (Optional) Build a Transformer-based model:
    ```python
    from src.models import build_transformer_model
    model = build_transformer_model()
    ```
-6. Make predictions on a CSV file with a `text` column:
+7. Make predictions on a CSV file with a `text` column:
    ```bash
    python -m src.predict your_reviews.csv
    ```
-7. Preprocess a CSV of raw reviews:
+8. Preprocess a CSV of raw reviews (with optional lemmatization):
    ```bash
-   sentiment-cli preprocess data/raw.csv --out clean.csv --remove-stopwords
+   sentiment-cli preprocess data/raw.csv --out clean.csv --remove-stopwords --lemmatize
    ```
-8. Split a labeled dataset into train and test files:
+9. Split a labeled dataset into train and test files:
    ```bash
    sentiment-cli split data/all.csv --train train.csv --test test.csv --ratio 0.2
    ```
-9. Summarize a dataset with basic statistics:
+10. Summarize a dataset with basic statistics:
    ```bash
 sentiment-cli summary train.csv
 # show the five most common words
@@ -92,18 +97,18 @@ sentiment-cli summary train.csv --top 5
 The `--top` flag lists the most frequent tokens in the dataset. Punctuation is
 automatically stripped when counting words, so `movie!` and `movie.` are
 aggregated under the same entry.
-10. Use the unified CLI for training, prediction, evaluation, and analysis:
+11. Use the unified CLI for training, prediction, evaluation, and analysis:
    ```bash
 sentiment-cli train --csv data/sample_reviews.csv --model my_model.joblib
 sentiment-cli predict your_reviews.csv --model my_model.joblib
 sentiment-cli eval data/labeled_reviews.csv
 sentiment-cli analyze data/labeled_reviews.csv
 ```
-11. Start the web server via the CLI:
+12. Start the web server via the CLI:
    ```bash
    sentiment-cli serve --model my_model.joblib --port 5000
    ```
-12. Check the installed package version:
+13. Check the installed package version:
    ```bash
    sentiment-cli version
    # or use the global flag
@@ -114,11 +119,11 @@ sentiment-cli analyze data/labeled_reviews.csv
    from sentiment_analyzer_pro import __version__
    print(__version__)
    ```
-13. Increase command output with the verbose flag:
+14. Increase command output with the verbose flag:
    ```bash
    sentiment-cli -v train --csv data/sample_reviews.csv
    ```
-14. Compare model performance (baseline vs. LSTM vs. Transformer):
+15. Compare model performance (baseline vs. LSTM vs. Transformer):
    ```bash
    python -m src.model_comparison
    ```

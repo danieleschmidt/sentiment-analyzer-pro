@@ -51,7 +51,9 @@ def test_cli_serve_calls_webapp(monkeypatch):
     def fake_main(args):
         called["args"] = args
 
-    import types, sys, src
+    import types
+    import sys
+    import src
 
     fake = types.SimpleNamespace(main=fake_main)
     monkeypatch.setitem(sys.modules, "src.webapp", fake)
@@ -128,6 +130,33 @@ def test_cli_preprocess_writes_file(tmp_path):
 
     df = pd.read_csv(out)
     assert df.iloc[0]["text"] == "hello world"
+
+
+def test_cli_preprocess_lemmatize_option(tmp_path):
+    pytest.importorskip("pandas")
+
+    import pandas as pd
+
+    csv = tmp_path / "raw.csv"
+    pd.DataFrame({"text": ["running"]}).to_csv(csv, index=False)
+    out = tmp_path / "clean.csv"
+
+    subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "src.cli",
+            "preprocess",
+            str(csv),
+            "--out",
+            str(out),
+            "--lemmatize",
+        ],
+        check=True,
+    )
+
+    df = pd.read_csv(out)
+    assert df.iloc[0]["text"] == "run"
 
 
 def test_cli_split_creates_files(tmp_path):

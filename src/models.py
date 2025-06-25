@@ -7,9 +7,10 @@ from dataclasses import dataclass
 try:
     from sklearn.feature_extraction.text import TfidfVectorizer
     from sklearn.linear_model import LogisticRegression
+    from sklearn.naive_bayes import MultinomialNB
     from sklearn.pipeline import Pipeline
 except Exception:  # pragma: no cover - optional dependency
-    TfidfVectorizer = LogisticRegression = Pipeline = None
+    TfidfVectorizer = LogisticRegression = MultinomialNB = Pipeline = None
 
 try:
     from tensorflow import keras
@@ -41,6 +42,23 @@ def build_model() -> SentimentModel:
         [
             ("tfidf", TfidfVectorizer()),
             ("clf", LogisticRegression(max_iter=1000)),
+        ]
+    )
+    return SentimentModel(pipeline=pipeline)
+
+
+def build_nb_model() -> SentimentModel:
+    """Return a simple Naive Bayes sentiment classifier."""
+    if (
+        Pipeline is None
+        or TfidfVectorizer is None
+        or MultinomialNB is None
+    ):
+        raise ImportError("scikit-learn is required for build_nb_model")
+    pipeline = Pipeline(
+        [
+            ("tfidf", TfidfVectorizer()),
+            ("clf", MultinomialNB()),
         ]
     )
     return SentimentModel(pipeline=pipeline)

@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "task": "Add Naive Bayes model implementation in `models.py`.",
+    "criteria": [
+      "Naive Bayes model function returns SentimentModel instance",
+      "Predicts correct labels on ['good','bad'] dataset",
+      "Raises ImportError when scikit-learn missing"
+    ]
+  },
+  {
+    "id": 2,
+    "task": "Update `model_comparison.py` to evaluate transformer models.",
+    "criteria": [
+      "Model comparison results include a Transformer entry",
+      "Runs without error when transformers installed",
+      "Gracefully skips Transformer if dependency missing"
+    ]
+  },
+  {
+    "id": 3,
+    "task": "Improve preprocessing with lemmatization and additional normalization.",
+    "criteria": [
+      "Preprocessing adds lemmatization step",
+      "Cleaning 'running' -> 'run'",
+      "Can toggle normalization options via CLI"
+    ]
+  },
+  {
+    "id": 4,
+    "task": "Extend evaluation utilities with cross-validation support.",
+    "criteria": [
+      "Cross-validation function returns mean accuracy",
+      "Handles custom fold counts",
+      "Raises error if dataset insufficient for folds"
+    ]
+  },
+  {
+    "id": 5,
+    "task": "Update documentation and tests for new features.",
+    "criteria": [
+      "README documents Naive Bayes and new preprocessing",
+      "Tests added covering new features"
+    ]
+  }
+]

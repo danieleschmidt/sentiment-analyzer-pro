@@ -10,9 +10,13 @@ except Exception:  # pragma: no cover - optional dependency
     pd = None
 
 try:
-    from sklearn.metrics import classification_report, confusion_matrix
+    from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
+    from sklearn.model_selection import KFold
 except Exception:  # pragma: no cover - optional dependency
-    classification_report = confusion_matrix = None
+    classification_report = confusion_matrix = accuracy_score = None
+    KFold = None
+
+from .models import build_model
 
 
 def evaluate(true_labels: Iterable[str], predicted_labels: Iterable[str]) -> str:
@@ -44,9 +48,34 @@ def analyze_errors(
     return pd.DataFrame(records)
 
 
+def cross_validate(
+    texts: Iterable[str], labels: Iterable[str], folds: int = 5
+) -> float:
+    """Return mean accuracy from cross-validation."""
+    if KFold is None or accuracy_score is None:
+        raise ImportError("scikit-learn is required for cross_validate")
+
+    texts = list(texts)
+    labels = list(labels)
+    if len(texts) < folds:
+        raise ValueError("Dataset too small for the number of folds")
+
+    kf = KFold(n_splits=folds, shuffle=True, random_state=0)
+    accuracies = []
+    for train_index, test_index in kf.split(texts):
+        model = build_model()
+        X_train = [texts[i] for i in train_index]
+        y_train = [labels[i] for i in train_index]
+        X_test = [texts[i] for i in test_index]
+        y_test = [labels[i] for i in test_index]
+        model.fit(X_train, y_train)
+        preds = model.predict(X_test)
+        accuracies.append(accuracy_score(y_test, preds))
+    return sum(accuracies) / len(accuracies)
+
+
 if __name__ == "__main__":  # pragma: no cover - convenience CLI
     import argparse
-    from .models import build_model
 
     parser = argparse.ArgumentParser(description="Evaluate sentiment model")
     parser.add_argument("csv", help="CSV file with 'text' and 'label' columns")
