@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import logging
+import sys
 from importlib import metadata
 
 from . import compute_confusion
@@ -80,14 +82,18 @@ def main(argv: list[str] | None = None) -> None:
 
     serve_p = sub.add_parser("serve", help="Run the web prediction server")
     serve_p.add_argument("--model", default="model.joblib", help="Trained model path")
-    serve_p.add_argument("--host", default="0.0.0.0")
+    serve_p.add_argument("--host", default="127.0.0.1")
     serve_p.add_argument("--port", default=5000, type=int)
 
     sub.add_parser("version", help="Show package version")
 
     args = parser.parse_args(argv)
+    logging.basicConfig(
+        level=logging.INFO, format="%(message)s", stream=sys.stdout, force=True
+    )
+    logger = logging.getLogger(__name__)
     if args.verbose:
-        print(f"Verbosity level: {args.verbose}")
+        logger.info(f"Verbosity level: {args.verbose}")
 
     if args.cmd == "train":
         train_main(args.csv, args.model)
@@ -101,8 +107,8 @@ def main(argv: list[str] | None = None) -> None:
         model = build_model()
         model.fit(df["text"], df["label"])
         preds = model.predict(df["text"])
-        print(evaluate(df["label"], preds))
-        print(compute_confusion(df["label"], preds))
+        logger.info(evaluate(df["label"], preds))
+        logger.info(compute_confusion(df["label"], preds))
     elif args.cmd == "analyze":
         import pandas as pd
         from .models import build_model
@@ -113,9 +119,9 @@ def main(argv: list[str] | None = None) -> None:
         preds = model.predict(df["text"])
         errors = analyze_errors(df["text"], df["label"], preds)
         if errors.empty:
-            print("No errors found.")
+            logger.info("No errors found.")
         else:
-            print(errors.to_string(index=False))
+            logger.info(errors.to_string(index=False))
     elif args.cmd == "preprocess":
         import pandas as pd
 
@@ -129,7 +135,7 @@ def main(argv: list[str] | None = None) -> None:
                 df["text"] = df["text"].apply(remove_stopwords)
             df["text"] = df["text"].str.join(" ")
         df.to_csv(args.out, index=False)
-        print(f"Wrote cleaned data to {args.out}")
+        logger.info(f"Wrote cleaned data to {args.out}")
     elif args.cmd == "split":
         import pandas as pd
         from sklearn.model_selection import train_test_split
@@ -140,21 +146,21 @@ def main(argv: list[str] | None = None) -> None:
         )
         train_df.to_csv(args.train, index=False)
         test_df.to_csv(args.test, index=False)
-        print(
+        logger.info(
             f"Wrote {len(train_df)} rows to {args.train} and {len(test_df)} rows to {args.test}"
         )
     elif args.cmd == "summary":
         import pandas as pd
 
         df = pd.read_csv(args.csv)
-        print(f"Rows: {len(df)}")
+        logger.info(f"Rows: {len(df)}")
         avg_len = df["text"].str.split().apply(len).mean()
-        print(f"Avg words: {avg_len:.2f}")
+        logger.info(f"Avg words: {avg_len:.2f}")
         if "label" in df.columns:
             counts = df["label"].value_counts()
-            print("Label counts:")
+            logger.info("Label counts:")
             for label, count in counts.items():
-                print(f"{label}: {count}")
+                logger.info(f"{label}: {count}")
         if args.top:
             from collections import Counter
 
@@ -162,9 +168,9 @@ def main(argv: list[str] | None = None) -> None:
                 df["text"].str.lower().str.findall(r"\b\w+\b").explode()
             )
             common = Counter(tokens).most_common(args.top)
-            print(f"Top {args.top} words:")
+            logger.info(f"Top {args.top} words:")
             for word, count in common:
-                print(f"{word}: {count}")
+                logger.info(f"{word}: {count}")
     elif args.cmd == "serve":
         from . import webapp
 

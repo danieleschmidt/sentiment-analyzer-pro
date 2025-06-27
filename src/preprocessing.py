@@ -7,31 +7,54 @@ try:
     import nltk
     from nltk.corpus import stopwords
     from nltk.stem import WordNetLemmatizer
-
-    nltk.download("stopwords", quiet=True)
-    nltk.download("wordnet", quiet=True)
-    STOP_WORDS = set(stopwords.words("english"))
-    _lemmatizer = WordNetLemmatizer()
 except Exception:  # pragma: no cover - optional dependency
     nltk = None
-    _lemmatizer = None
-    STOP_WORDS = {"the", "is", "a", "an", "this", "of", "and", "in", "on", "to"}
+    stopwords = None
+    WordNetLemmatizer = None
+
+STOP_WORDS = {"the", "is", "a", "an", "this", "of", "and", "in", "on", "to"}
+_lemmatizer = None
+
+
+def _ensure_nltk() -> None:
+    """Ensure required NLTK data is available."""
+    if nltk is None:
+        return
+    global STOP_WORDS, _lemmatizer
+    if not STOP_WORDS or STOP_WORDS == {"the", "is", "a", "an", "this", "of", "and", "in", "on", "to"}:
+        try:
+            nltk.data.find("corpora/stopwords")
+        except LookupError:  # pragma: no cover - download if missing
+            nltk.download("stopwords", quiet=True)
+        STOP_WORDS = set(stopwords.words("english"))
+    if _lemmatizer is None and WordNetLemmatizer is not None:
+        try:
+            nltk.data.find("corpora/wordnet")
+        except LookupError:  # pragma: no cover - download if missing
+            nltk.download("wordnet", quiet=True)
+        _lemmatizer = WordNetLemmatizer()
 
 
 def clean_text(text: str) -> str:
     """Lowercase, remove non-alphabetic characters, and trim."""
     text = text.lower()
     text = re.sub(r"[^a-z\s]", "", text)
+    text = re.sub(r"\s+", " ", text)
     return text.strip()
 
 
 def remove_stopwords(tokens: List[str]) -> List[str]:
     """Remove common English stop words from token list."""
+    if not STOP_WORDS or STOP_WORDS == {"the", "is", "a", "an", "this", "of", "and", "in", "on", "to"}:
+        _ensure_nltk()
     return [t for t in tokens if t not in STOP_WORDS]
 
 
 def lemmatize_tokens(tokens: List[str]) -> List[str]:
     """Return lemmatized tokens."""
+    if _lemmatizer is None:
+        _ensure_nltk()
+
     if _lemmatizer is None:
         # simple fallback without nltk
         def _fallback(word: str) -> str:

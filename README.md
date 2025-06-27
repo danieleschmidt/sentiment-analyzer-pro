@@ -104,10 +104,11 @@ sentiment-cli predict your_reviews.csv --model my_model.joblib
 sentiment-cli eval data/labeled_reviews.csv
 sentiment-cli analyze data/labeled_reviews.csv
 ```
-12. Start the web server via the CLI:
+12. Start the web server via the CLI (binds to `127.0.0.1` by default):
    ```bash
    sentiment-cli serve --model my_model.joblib --port 5000
    ```
+   To expose it to other machines, pass `--host 0.0.0.0`.
 13. Check the installed package version:
    ```bash
    sentiment-cli version
@@ -137,7 +138,7 @@ To build a Docker image with all dependencies preinstalled and start the web ser
 
 ```bash
 docker build -t sentiment-pro .
-docker run -p 5000:5000 sentiment-pro
+docker run -p 5000:5000 sentiment-pro --host 0.0.0.0
 ```
 
 ## Web API
@@ -147,6 +148,8 @@ Run a lightweight Flask server to get predictions over HTTP using the CLI:
 ```bash
 sentiment-cli serve --model model.joblib
 ```
+By default the server is only available on `127.0.0.1`. Use
+`--host 0.0.0.0` to allow external access.
 
 You can also invoke the underlying web app directly with the
 `sentiment-web` command if preferred.

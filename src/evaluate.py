@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Iterable, List
+import logging
 
 try:
     import pandas as pd
@@ -80,6 +81,8 @@ if __name__ == "__main__":  # pragma: no cover - convenience CLI
     parser = argparse.ArgumentParser(description="Evaluate sentiment model")
     parser.add_argument("csv", help="CSV file with 'text' and 'label' columns")
     args = parser.parse_args()
+    logging.basicConfig(format="%(message)s", level=logging.INFO, force=True)
+    logger = logging.getLogger(__name__)
 
     if pd is None:
         raise SystemExit("pandas is required for CLI usage")
@@ -87,6 +90,6 @@ if __name__ == "__main__":  # pragma: no cover - convenience CLI
     model = build_model()
     model.fit(df["text"], df["label"])
     preds = model.predict(df["text"])
-    print(evaluate(df["label"], preds))
-    print("Confusion matrix:")
-    print(compute_confusion(df["label"], preds))
+    logger.info(evaluate(df["label"], preds))
+    logger.info("Confusion matrix:")
+    logger.info(compute_confusion(df["label"], preds))
