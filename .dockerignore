@@ -1,0 +1,10 @@
+__pycache__/
+pytest_cache/
+.git/
+*.py[cod]
+*.joblib
+data/
+notebooks/
+tests/
+.DS_Store
+*.pytest_cache

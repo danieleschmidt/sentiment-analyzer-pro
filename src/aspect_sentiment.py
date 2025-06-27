@@ -6,32 +6,59 @@ try:
     import nltk
     from nltk import pos_tag, word_tokenize
     from nltk.corpus import stopwords
-
-    nltk.download("punkt", quiet=True)
-    nltk.download("averaged_perceptron_tagger", quiet=True)
-    nltk.download("stopwords", quiet=True)
-
-    STOP_WORDS = set(stopwords.words("english"))
 except Exception:  # pragma: no cover - optional dependency
     nltk = None
     pos_tag = word_tokenize = None
-    STOP_WORDS = set()
+    stopwords = None
+
+STOP_WORDS: set[str] = set()
+
+
+def _ensure_nltk() -> None:
+    """Ensure required NLTK data is downloaded."""
+    if nltk is None:
+        return
+    global STOP_WORDS
+    if not STOP_WORDS:
+        try:
+            nltk.data.find("tokenizers/punkt")
+        except LookupError:  # pragma: no cover - download if missing
+            nltk.download("punkt", quiet=True)
+        try:
+            nltk.data.find("taggers/averaged_perceptron_tagger")
+        except LookupError:  # pragma: no cover - download if missing
+            nltk.download("averaged_perceptron_tagger", quiet=True)
+        try:
+            nltk.data.find("corpora/stopwords")
+        except LookupError:  # pragma: no cover - download if missing
+            nltk.download("stopwords", quiet=True)
+        STOP_WORDS = set(stopwords.words("english"))
 
 
 def extract_aspects(text: str) -> List[str]:
     """Return a list of noun tokens representing aspects."""
+    if not STOP_WORDS:
+        _ensure_nltk()
     if word_tokenize is not None:
         try:
             tokens = word_tokenize(text)
         except LookupError:
-            tokens = text.split()
+            _ensure_nltk()
+            try:
+                tokens = word_tokenize(text)
+            except LookupError:
+                tokens = text.split()
     else:
         tokens = text.split()
     if pos_tag is not None:
         try:
             tagged = pos_tag(tokens)
         except LookupError:
-            tagged = [(t, "NN") for t in tokens]
+            _ensure_nltk()
+            try:
+                tagged = pos_tag(tokens)
+            except LookupError:
+                tagged = [(t, "NN") for t in tokens]
     else:
         tagged = [(t, "NN") for t in tokens]
     aspects = [

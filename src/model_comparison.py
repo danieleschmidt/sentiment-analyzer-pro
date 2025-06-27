@@ -17,6 +17,8 @@ try:
 except Exception:  # pragma: no cover - optional dependency
     keras = None
 
+import logging
+
 from .models import build_lstm_model, build_model, build_transformer_model
 from .preprocessing import clean_text
 
@@ -64,12 +66,14 @@ def compare_models(csv_path: str = "data/sample_reviews.csv"):
         try:
             build_transformer_model()
             results.append({"model": "Transformer", "accuracy": 0.0})
-        except Exception:  # pragma: no cover - if transformer build fails
+        except (RuntimeError, ImportError):  # pragma: no cover - transformer optional
             pass
 
     return results
 
 
 if __name__ == "__main__":
+    logging.basicConfig(format="%(message)s", level=logging.INFO, force=True)
+    logger = logging.getLogger(__name__)
     for result in compare_models():
-        print(f"{result['model']}: {result['accuracy']:.2f}")
+        logger.info("%s: %.2f", result["model"], result["accuracy"])

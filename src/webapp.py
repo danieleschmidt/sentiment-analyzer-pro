@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import argparse
-from typing import Dict
+from functools import lru_cache
 
 from flask import Flask, jsonify, request
 from importlib import metadata
@@ -13,7 +13,6 @@ from .models import SentimentModel
 app = Flask(__name__)
 
 MODEL_PATH = "model.joblib"
-_model_cache: Dict[str, SentimentModel] = {}
 
 try:
     APP_VERSION = metadata.version("sentiment-analyzer-pro")
@@ -21,11 +20,10 @@ except metadata.PackageNotFoundError:  # pragma: no cover - local usage
     APP_VERSION = "0.0.0"
 
 
+@lru_cache(maxsize=1)
 def load_model(path: str = MODEL_PATH) -> SentimentModel:
     """Load and cache a trained model from disk."""
-    if path not in _model_cache:
-        _model_cache[path] = joblib.load(path)
-    return _model_cache[path]
+    return joblib.load(path)
 
 
 @app.route("/predict", methods=["POST"])
@@ -55,7 +53,7 @@ def main(argv: list[str] | None = None) -> None:
     global MODEL_PATH
     parser = argparse.ArgumentParser(description="Run prediction web server")
     parser.add_argument("--model", default=MODEL_PATH, help="Trained model path")
-    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", default=5000, type=int)
     args = parser.parse_args(argv)
 

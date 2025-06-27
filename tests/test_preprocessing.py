@@ -7,6 +7,11 @@ def test_clean_text():
     assert preprocessing.clean_text(text) == "hello"
 
 
+def test_clean_text_collapses_spaces():
+    text = "Hello   world"
+    assert preprocessing.clean_text(text) == "hello world"
+
+
 def test_clean_text_lemmatizes_running():
     text = "running"
     clean = preprocessing.clean_text(text)
