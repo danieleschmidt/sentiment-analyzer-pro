@@ -263,6 +263,59 @@ def test_cli_summary_top_respects_limit(tmp_path):
     assert "cherry" not in out
 
 
+def test_cli_crossval_runs(tmp_path):
+    pytest.importorskip("pandas")
+    pytest.importorskip("sklearn")
+
+    import pandas as pd
+
+    csv = tmp_path / "data.csv"
+    pd.DataFrame(
+        {"text": ["good", "bad", "good", "bad"], "label": ["pos", "neg", "pos", "neg"]}
+    ).to_csv(csv, index=False)
+
+    result = subprocess.run(
+        [sys.executable, "-m", "src.cli", "crossval", str(csv), "--folds", "2"],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "Cross-val score:" in result.stdout
+
+
+def test_cli_crossval_custom_metric(tmp_path):
+    pytest.importorskip("pandas")
+    pytest.importorskip("sklearn")
+
+    import pandas as pd
+
+    csv = tmp_path / "data.csv"
+    pd.DataFrame(
+        {"text": ["good", "bad", "good", "bad"], "label": ["pos", "neg", "pos", "neg"]}
+    ).to_csv(csv, index=False)
+
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-m",
+            "src.cli",
+            "crossval",
+            str(csv),
+            "--folds",
+            "2",
+            "--metric",
+            "f1",
+            "--nb",
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    assert "Cross-val score:" in result.stdout
+
+
 def test_cli_version(monkeypatch, capsys):
     monkeypatch.setitem(sys.modules, 'importlib.metadata', None)
     import src.cli as cli

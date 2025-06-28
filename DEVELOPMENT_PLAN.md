@@ -1,10 +1,10 @@
 # Development Plan
 
 ## Phase 1: Upcoming Work
-- [ ] Add Naive Bayes model implementation in `models.py`.
-- [ ] Update `model_comparison.py` to evaluate transformer models.
-- [ ] Improve preprocessing with lemmatization and additional normalization.
-- [ ] Extend evaluation utilities with cross-validation support.
+- [x] Add Naive Bayes model implementation in `models.py`.
+- [x] Update `model_comparison.py` to evaluate transformer models.
+- [x] Improve preprocessing with lemmatization and additional normalization.
+- [x] Extend evaluation utilities with cross-validation support.
 
 ## Completed Tasks
 - [x] Initialize Git repository and configure remote

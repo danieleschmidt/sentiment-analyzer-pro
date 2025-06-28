@@ -71,6 +71,23 @@ def main(argv: list[str] | None = None) -> None:
         help="Proportion to use as the test set",
     )
 
+    cross_p = sub.add_parser(
+        "crossval", help="Evaluate model using k-fold cross-validation"
+    )
+    cross_p.add_argument("csv", help="CSV with 'text' and 'label' columns")
+    cross_p.add_argument(
+        "--folds", type=int, default=5, help="Number of cross-validation folds"
+    )
+    cross_p.add_argument(
+        "--nb", action="store_true", help="Use Naive Bayes model instead of Logistic Regression"
+    )
+    cross_p.add_argument(
+        "--metric",
+        choices=["accuracy", "f1"],
+        default="accuracy",
+        help="Scoring metric (accuracy or macro F1)",
+    )
+
     summary_p = sub.add_parser("summary", help="Show dataset statistics")
     summary_p.add_argument("csv", help="CSV with a 'text' column")
     summary_p.add_argument(
@@ -149,6 +166,27 @@ def main(argv: list[str] | None = None) -> None:
         logger.info(
             f"Wrote {len(train_df)} rows to {args.train} and {len(test_df)} rows to {args.test}"
         )
+    elif args.cmd == "crossval":
+        import pandas as pd
+        from .models import build_model, build_nb_model
+        from .evaluate import cross_validate
+
+        df = pd.read_csv(args.csv)
+        model_fn = build_nb_model if args.nb else build_model
+        scorer = None
+        if args.metric == "f1":
+            from sklearn.metrics import f1_score
+
+            def scorer(y_true, y_pred) -> float:
+                return f1_score(y_true, y_pred, average="macro")
+        score = cross_validate(
+            df["text"],
+            df["label"],
+            folds=args.folds,
+            model_fn=model_fn,
+            scorer=scorer,
+        )
+        logger.info(f"Cross-val score: {score:.2f}")
     elif args.cmd == "summary":
         import pandas as pd
 
