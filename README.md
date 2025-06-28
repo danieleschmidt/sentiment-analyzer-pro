@@ -128,6 +128,33 @@ sentiment-cli analyze data/labeled_reviews.csv
    ```bash
    python -m src.model_comparison
    ```
+16. Evaluate a model using stratified k-fold cross-validation:
+   ```python
+   from src.evaluate import cross_validate
+   import pandas as pd
+
+   data = pd.read_csv("data/sample_reviews.csv")
+   score = cross_validate(data["text"], data["label"], folds=5)
+   print(f"CV accuracy: {score:.2f}")  # texts and labels must be the same length
+   # Use a different model:
+   from src.models import build_nb_model
+   nb_score = cross_validate(
+       data["text"],
+       data["label"],
+       folds=5,
+       model_fn=build_nb_model,
+   )
+   print(f"NB CV accuracy: {nb_score:.2f}")
+   # cross_validate uses StratifiedKFold to keep label ratios consistent
+   ```
+17. Run stratified cross-validation from the CLI:
+   ```bash
+   sentiment-cli crossval data/sample_reviews.csv --folds 3
+   ```
+   Use macro F1 instead of accuracy:
+   ```bash
+   sentiment-cli crossval data/sample_reviews.csv --metric f1
+   ```
 
 Model comparison results are available in
 [docs/MODEL_RESULTS.md](docs/MODEL_RESULTS.md).
