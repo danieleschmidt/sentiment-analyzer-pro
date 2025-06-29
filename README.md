@@ -101,6 +101,8 @@ aggregated under the same entry.
    ```bash
 sentiment-cli train --csv data/sample_reviews.csv --model my_model.joblib
 sentiment-cli predict your_reviews.csv --model my_model.joblib
+# Both commands also read the MODEL_PATH environment variable when --model
+# is omitted.
 sentiment-cli eval data/labeled_reviews.csv
 sentiment-cli analyze data/labeled_reviews.csv
 ```
@@ -182,6 +184,9 @@ By default the server binds to `127.0.0.1` for safety. Use the
 You can also invoke the underlying web app directly with the
 `sentiment-web` command if preferred.
 
+The server will also read the `MODEL_PATH` environment variable as the default
+model location if `--model` is not supplied.
+
 Send a POST request with JSON to `/predict`:
 
 ```bash
@@ -257,7 +262,9 @@ pip install sentiment-analyzer-pro[ml,web]
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and pull request
-guidelines. Always run `pytest -q` before submitting changes.
+guidelines. After installing dependencies run `pre-commit install` to enable
+automatic linting and secret scanning. Always run `pytest -q` before submitting
+changes.
 
 ## License
 

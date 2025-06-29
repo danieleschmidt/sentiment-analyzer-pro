@@ -3,4 +3,6 @@ pandas
 scikit-learn
 nltk
 joblib
+# Added for input validation
+pydantic==1.10.2
 # Optional dependencies have been moved to extras in pyproject.toml

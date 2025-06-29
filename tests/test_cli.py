@@ -1,5 +1,7 @@
 import sys
 import subprocess
+import os
+import joblib
 import pytest
 
 
@@ -334,3 +336,46 @@ def test_cli_global_version(monkeypatch, capsys):
         cli.main(['--version'])
     out, _ = capsys.readouterr()
     assert out.strip() == '1.2.3'
+
+
+def test_cli_preprocess_missing_column(tmp_path):
+    pytest.importorskip('pandas')
+
+    import pandas as pd
+
+    csv = tmp_path / 'bad.csv'
+    pd.DataFrame({'textx': ['hi']}).to_csv(csv, index=False)
+
+    result = subprocess.run(
+        [sys.executable, '-m', 'src.cli', 'preprocess', str(csv)],
+        capture_output=True,
+        text=True
+    )
+    assert result.returncode != 0
+    assert 'Missing required columns' in result.stderr
+
+
+def test_cli_predict_uses_env(tmp_path):
+    pytest.importorskip('pandas')
+
+    import pandas as pd
+    from src.models import build_model
+
+    csv = tmp_path / 'reviews.csv'
+    pd.DataFrame({'text': ['great', 'bad'], 'label': ['pos', 'neg']}).to_csv(csv, index=False)
+
+    model_file = tmp_path / 'model.joblib'
+    model = build_model()
+    model.fit(['great', 'bad'], ['pos', 'neg'])
+    joblib.dump(model, model_file)
+
+    env = os.environ.copy()
+    env['MODEL_PATH'] = str(model_file)
+
+    result = subprocess.run(
+        [sys.executable, '-m', 'src.cli', 'predict', str(csv)],
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    assert 'pos' in result.stdout

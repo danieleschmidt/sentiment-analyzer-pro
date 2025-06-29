@@ -82,3 +82,37 @@ def test_webapp_metrics_endpoint(tmp_path):
         assert resp.status_code == 200
         assert data['predictions'] == 1
         assert data['requests'] >= 2  # at least predict + metrics
+
+def test_webapp_predict_validation(tmp_path):
+    pytest.importorskip('flask')
+    from src import webapp
+
+    model_file = tmp_path / 'model.joblib'
+    joblib.dump(build_model().fit(["good", "bad"], ["pos", "neg"]), model_file)
+    webapp.load_model.cache_clear()
+    webapp.MODEL_PATH = str(model_file)
+
+    with webapp.app.test_client() as client:
+        resp = client.post('/predict', json={})
+        assert resp.status_code == 400
+        assert 'error' in resp.get_json()
+
+
+def test_webapp_env_model_path(tmp_path, monkeypatch):
+    pytest.importorskip('flask')
+    from src import webapp
+
+    model_file = tmp_path / 'model.joblib'
+    model = build_model()
+    model.fit(['hi', 'no'], ['pos', 'neg'])
+    joblib.dump(model, model_file)
+
+    monkeypatch.setenv('MODEL_PATH', str(model_file))
+    import importlib
+    importlib.reload(webapp)
+    webapp.load_model.cache_clear()
+
+    with webapp.app.test_client() as client:
+        resp = client.post('/predict', json={'text': 'hi'})
+        assert resp.status_code == 200
+        assert resp.get_json()['prediction'] == 'pos'

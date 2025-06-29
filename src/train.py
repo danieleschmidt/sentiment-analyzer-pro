@@ -1,11 +1,12 @@
 """Training script for baseline model."""
 
 import logging
+import os
 
 from .models import build_model
 
 
-def main(csv_path: str = "data/sample_reviews.csv", model_path: str = "model.joblib"):
+def main(csv_path: str = "data/sample_reviews.csv", model_path: str = os.getenv("MODEL_PATH", "model.joblib")):
     """Train the baseline model on a CSV and save to disk."""
     import pandas as pd
 
@@ -25,7 +26,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Train sentiment model")
     parser.add_argument("--csv", default="data/sample_reviews.csv", help="Training data CSV")
-    parser.add_argument("--model", default="model.joblib", help="Where to save the model")
+    parser.add_argument("--model", default=os.getenv("MODEL_PATH", "model.joblib"), help="Where to save the model")
     args = parser.parse_args()
     logging.basicConfig(format="%(message)s", level=logging.INFO, force=True)
     main(args.csv, args.model)
