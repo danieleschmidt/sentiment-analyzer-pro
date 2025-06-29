@@ -95,7 +95,7 @@ def cross_validate(
     if model_fn is None:
         model_fn = build_model
     scores = []
-    for train_index, test_index in kf.split(texts):
+    for train_index, test_index in kf.split(texts, labels):
         model = model_fn()
         X_train = [texts[i] for i in train_index]
         y_train = [labels[i] for i in train_index]
@@ -104,7 +104,10 @@ def cross_validate(
         model.fit(X_train, y_train)
         preds = model.predict(X_test)
         scores.append(scorer(y_test, preds))
-    return sum(scores) / len(scores)
+
+    from statistics import fmean
+
+    return fmean(scores)
 
 
 if __name__ == "__main__":  # pragma: no cover - convenience CLI

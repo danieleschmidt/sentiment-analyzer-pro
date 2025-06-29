@@ -108,7 +108,7 @@ sentiment-cli analyze data/labeled_reviews.csv
    ```bash
    sentiment-cli serve --model my_model.joblib --port 5000
    ```
-   To expose it to other machines, pass `--host 0.0.0.0`.
+   To expose it to other machines, pass `--host 0.0.0.0` (use with caution).
 13. Check the installed package version:
    ```bash
    sentiment-cli version
@@ -165,7 +165,8 @@ To build a Docker image with all dependencies preinstalled and start the web ser
 
 ```bash
 docker build -t sentiment-pro .
-docker run -p 5000:5000 sentiment-pro --host 0.0.0.0
+docker run -p 5000:5000 sentiment-pro
+# add --host 0.0.0.0 if you need external access
 ```
 
 ## Web API
@@ -175,8 +176,8 @@ Run a lightweight Flask server to get predictions over HTTP using the CLI:
 ```bash
 sentiment-cli serve --model model.joblib
 ```
-By default the server is only available on `127.0.0.1`. Use
-`--host 0.0.0.0` to allow external access.
+By default the server binds to `127.0.0.1` for safety. Use the
+`--host 0.0.0.0` option only when you need external access.
 
 You can also invoke the underlying web app directly with the
 `sentiment-web` command if preferred.
@@ -214,6 +215,17 @@ Which will return something like:
 {"version": "0.1.0"}
 ```
 
+You can fetch simple service metrics:
+
+```bash
+curl http://localhost:5000/metrics
+```
+Which returns JSON similar to:
+
+```json
+{"requests": 42, "predictions": 40}
+```
+
 ## Packaging & Release
 
 Build and publish a wheel using [build](https://pypi.org/project/build/) and
@@ -241,3 +253,12 @@ Optional extras provide advanced ML models and the web server:
 ```bash
 pip install sentiment-analyzer-pro[ml,web]
 ```
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup instructions and pull request
+guidelines. Always run `pytest -q` before submitting changes.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).

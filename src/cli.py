@@ -8,10 +8,141 @@ import sys
 from importlib import metadata
 
 from . import compute_confusion
-from .evaluate import evaluate, analyze_errors
+from .evaluate import evaluate, analyze_errors, cross_validate
 from .preprocessing import clean_text, remove_stopwords, lemmatize_tokens
 from .predict import main as predict_main
 from .train import main as train_main
+
+logger = logging.getLogger(__name__)
+
+
+def cmd_train(args) -> None:
+    train_main(args.csv, args.model)
+
+
+def cmd_predict(args) -> None:
+    predict_main(args.csv, args.model)
+
+
+def cmd_eval(args) -> None:
+    import pandas as pd
+    from .models import build_model
+
+    df = pd.read_csv(args.csv)
+    model = build_model()
+    model.fit(df["text"], df["label"])
+    preds = model.predict(df["text"])
+    logger.info(evaluate(df["label"], preds))
+    logger.info(compute_confusion(df["label"], preds))
+
+
+def cmd_analyze(args) -> None:
+    import pandas as pd
+    from .models import build_model
+
+    df = pd.read_csv(args.csv)
+    model = build_model()
+    model.fit(df["text"], df["label"])
+    preds = model.predict(df["text"])
+    errors = analyze_errors(df["text"], df["label"], preds)
+    if errors.empty:
+        logger.info("No errors found.")
+    else:
+        logger.info(errors.to_string(index=False))
+
+
+def cmd_preprocess(args) -> None:
+    import pandas as pd
+
+    df = pd.read_csv(args.csv)
+    df["text"] = df["text"].apply(clean_text)
+    if args.lemmatize or args.remove_stopwords:
+        df["text"] = df["text"].str.split()
+        if args.lemmatize:
+            df["text"] = df["text"].apply(lemmatize_tokens)
+        if args.remove_stopwords:
+            df["text"] = df["text"].apply(remove_stopwords)
+        df["text"] = df["text"].str.join(" ")
+    df.to_csv(args.out, index=False)
+    logger.info(f"Wrote cleaned data to {args.out}")
+
+
+def cmd_split(args) -> None:
+    import pandas as pd
+    from sklearn.model_selection import train_test_split
+
+    df = pd.read_csv(args.csv)
+    train_df, test_df = train_test_split(df, test_size=args.ratio, random_state=0)
+    train_df.to_csv(args.train, index=False)
+    test_df.to_csv(args.test, index=False)
+    logger.info(
+        f"Wrote {len(train_df)} rows to {args.train} and {len(test_df)} rows to {args.test}"
+    )
+
+
+def cmd_crossval(args) -> None:
+    import pandas as pd
+    from .models import build_model, build_nb_model
+
+    df = pd.read_csv(args.csv)
+    model_fn = build_nb_model if args.nb else build_model
+    scorer = None
+    if args.metric == "f1":
+        from sklearn.metrics import f1_score
+
+        def scorer(y_true, y_pred) -> float:
+            return f1_score(y_true, y_pred, average="macro")
+
+    score = cross_validate(
+        df["text"],
+        df["label"],
+        folds=args.folds,
+        model_fn=model_fn,
+        scorer=scorer,
+    )
+    logger.info(f"Cross-val score: {score:.2f}")
+
+
+def cmd_summary(args) -> None:
+    import pandas as pd
+    from collections import Counter
+
+    df = pd.read_csv(args.csv)
+    logger.info(f"Rows: {len(df)}")
+    avg_len = df["text"].str.split().apply(len).mean()
+    logger.info(f"Avg words: {avg_len:.2f}")
+    if "label" in df.columns:
+        counts = df["label"].value_counts()
+        logger.info("Label counts:")
+        for label, count in counts.items():
+            logger.info(f"{label}: {count}")
+    if args.top:
+        tokens = df["text"].str.lower().str.findall(r"\b\w+\b").explode()
+        common = Counter(tokens).most_common(args.top)
+        logger.info(f"Top {args.top} words:")
+        for word, count in common:
+            logger.info(f"{word}: {count}")
+
+
+def cmd_serve(args) -> None:
+    from . import webapp
+
+    webapp.main([
+        "--model",
+        args.model,
+        "--host",
+        args.host,
+        "--port",
+        str(args.port),
+    ])
+
+
+def cmd_version(args) -> None:
+    try:
+        version = metadata.version("sentiment-analyzer-pro")
+    except metadata.PackageNotFoundError:
+        version = "0.0.0"
+    print(version)
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -108,124 +239,23 @@ def main(argv: list[str] | None = None) -> None:
     logging.basicConfig(
         level=logging.INFO, format="%(message)s", stream=sys.stdout, force=True
     )
-    logger = logging.getLogger(__name__)
     if args.verbose:
         logger.info(f"Verbosity level: {args.verbose}")
 
-    if args.cmd == "train":
-        train_main(args.csv, args.model)
-    elif args.cmd == "predict":
-        predict_main(args.csv, args.model)
-    elif args.cmd == "eval":
-        import pandas as pd
-        from .models import build_model
+    commands = {
+        "train": cmd_train,
+        "predict": cmd_predict,
+        "eval": cmd_eval,
+        "analyze": cmd_analyze,
+        "preprocess": cmd_preprocess,
+        "split": cmd_split,
+        "crossval": cmd_crossval,
+        "summary": cmd_summary,
+        "serve": cmd_serve,
+        "version": cmd_version,
+    }
 
-        df = pd.read_csv(args.csv)
-        model = build_model()
-        model.fit(df["text"], df["label"])
-        preds = model.predict(df["text"])
-        logger.info(evaluate(df["label"], preds))
-        logger.info(compute_confusion(df["label"], preds))
-    elif args.cmd == "analyze":
-        import pandas as pd
-        from .models import build_model
-
-        df = pd.read_csv(args.csv)
-        model = build_model()
-        model.fit(df["text"], df["label"])
-        preds = model.predict(df["text"])
-        errors = analyze_errors(df["text"], df["label"], preds)
-        if errors.empty:
-            logger.info("No errors found.")
-        else:
-            logger.info(errors.to_string(index=False))
-    elif args.cmd == "preprocess":
-        import pandas as pd
-
-        df = pd.read_csv(args.csv)
-        df["text"] = df["text"].apply(clean_text)
-        if args.lemmatize or args.remove_stopwords:
-            df["text"] = df["text"].str.split()
-            if args.lemmatize:
-                df["text"] = df["text"].apply(lemmatize_tokens)
-            if args.remove_stopwords:
-                df["text"] = df["text"].apply(remove_stopwords)
-            df["text"] = df["text"].str.join(" ")
-        df.to_csv(args.out, index=False)
-        logger.info(f"Wrote cleaned data to {args.out}")
-    elif args.cmd == "split":
-        import pandas as pd
-        from sklearn.model_selection import train_test_split
-
-        df = pd.read_csv(args.csv)
-        train_df, test_df = train_test_split(
-            df, test_size=args.ratio, random_state=0
-        )
-        train_df.to_csv(args.train, index=False)
-        test_df.to_csv(args.test, index=False)
-        logger.info(
-            f"Wrote {len(train_df)} rows to {args.train} and {len(test_df)} rows to {args.test}"
-        )
-    elif args.cmd == "crossval":
-        import pandas as pd
-        from .models import build_model, build_nb_model
-        from .evaluate import cross_validate
-
-        df = pd.read_csv(args.csv)
-        model_fn = build_nb_model if args.nb else build_model
-        scorer = None
-        if args.metric == "f1":
-            from sklearn.metrics import f1_score
-
-            def scorer(y_true, y_pred) -> float:
-                return f1_score(y_true, y_pred, average="macro")
-        score = cross_validate(
-            df["text"],
-            df["label"],
-            folds=args.folds,
-            model_fn=model_fn,
-            scorer=scorer,
-        )
-        logger.info(f"Cross-val score: {score:.2f}")
-    elif args.cmd == "summary":
-        import pandas as pd
-
-        df = pd.read_csv(args.csv)
-        logger.info(f"Rows: {len(df)}")
-        avg_len = df["text"].str.split().apply(len).mean()
-        logger.info(f"Avg words: {avg_len:.2f}")
-        if "label" in df.columns:
-            counts = df["label"].value_counts()
-            logger.info("Label counts:")
-            for label, count in counts.items():
-                logger.info(f"{label}: {count}")
-        if args.top:
-            from collections import Counter
-
-            tokens = (
-                df["text"].str.lower().str.findall(r"\b\w+\b").explode()
-            )
-            common = Counter(tokens).most_common(args.top)
-            logger.info(f"Top {args.top} words:")
-            for word, count in common:
-                logger.info(f"{word}: {count}")
-    elif args.cmd == "serve":
-        from . import webapp
-
-        webapp.main(
-            [
-                "--model",
-                args.model,
-                "--host",
-                args.host,
-                "--port",
-                str(args.port),
-            ]
-        )
-    elif args.cmd == "version":
-        print(version)
-    else:
-        parser.print_help()
+    commands[args.cmd](args)
 
 
 if __name__ == "__main__":  # pragma: no cover - manual entry point
