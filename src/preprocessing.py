@@ -3,6 +3,8 @@
 import re
 from typing import List
 
+import pandas as pd
+
 try:
     import nltk
     from nltk.corpus import stopwords
@@ -14,6 +16,9 @@ except Exception:  # pragma: no cover - optional dependency
 
 STOP_WORDS = {"the", "is", "a", "an", "this", "of", "and", "in", "on", "to"}
 _lemmatizer = None
+
+_CLEAN_RE = re.compile(r"[^a-z]+")
+_WS_RE = re.compile(r"\s+")
 
 
 def _ensure_nltk() -> None:
@@ -38,9 +43,17 @@ def _ensure_nltk() -> None:
 def clean_text(text: str) -> str:
     """Lowercase, remove non-alphabetic characters, and trim."""
     text = text.lower()
-    text = re.sub(r"[^a-z\s]", "", text)
-    text = re.sub(r"\s+", " ", text)
+    text = _CLEAN_RE.sub(" ", text)
+    text = _WS_RE.sub(" ", text)
     return text.strip()
+
+
+def clean_series(series: pd.Series) -> pd.Series:
+    """Vectorized variant of ``clean_text`` for Pandas series."""
+    series = series.str.lower()
+    series = series.str.replace(_CLEAN_RE, " ", regex=True)
+    series = series.str.replace(_WS_RE, " ", regex=True)
+    return series.str.strip()
 
 
 def remove_stopwords(tokens: List[str]) -> List[str]:

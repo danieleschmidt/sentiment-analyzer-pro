@@ -2,13 +2,18 @@
 from __future__ import annotations
 
 import argparse
-from functools import lru_cache
 import logging
+import os
+from functools import lru_cache
 from typing import Any
 
 from flask import Flask, jsonify, request
 from importlib import metadata
+from pydantic import ValidationError
+
 import joblib
+
+from .schemas import PredictRequest
 
 from .models import SentimentModel
 
@@ -18,7 +23,7 @@ logger = logging.getLogger(__name__)
 REQUEST_COUNT = 0
 PREDICTION_COUNT = 0
 
-MODEL_PATH = "model.joblib"
+MODEL_PATH = os.getenv("MODEL_PATH", "model.joblib")
 
 try:
     APP_VERSION = metadata.version("sentiment-analyzer-pro")
@@ -42,11 +47,12 @@ def _log_request() -> None:  # pragma: no cover - logging side effect
 @app.route("/predict", methods=["POST"])
 def predict():
     data = request.get_json(silent=True) or {}
-    text = data.get("text")
-    if not text:
-        return jsonify({"error": "Missing text"}), 400
+    try:
+        req = PredictRequest(**data)
+    except ValidationError as exc:
+        return jsonify({"error": "Invalid input", "details": exc.errors()}), 400
     model = load_model(MODEL_PATH)
-    prediction = model.predict([text])[0]
+    prediction = model.predict([req.text])[0]
     global PREDICTION_COUNT
     PREDICTION_COUNT += 1
     return jsonify({"prediction": prediction})

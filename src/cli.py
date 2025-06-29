@@ -4,31 +4,52 @@ from __future__ import annotations
 
 import argparse
 import logging
+import os
 import sys
 from importlib import metadata
 
 from . import compute_confusion
 from .evaluate import evaluate, analyze_errors, cross_validate
-from .preprocessing import clean_text, remove_stopwords, lemmatize_tokens
+from .preprocessing import (
+    clean_series,
+    remove_stopwords,
+    lemmatize_tokens,
+)
+from .schemas import validate_columns
 from .predict import main as predict_main
 from .train import main as train_main
 
 logger = logging.getLogger(__name__)
 
+MODEL_DEFAULT = os.getenv("MODEL_PATH", "model.joblib")
+
+
+def load_csv(path: str, required: list[str] | None = None):
+    import pandas as pd
+
+    df = pd.read_csv(path)
+    if required:
+        try:
+            validate_columns(df.columns, required)
+        except ValueError as exc:
+            raise SystemExit(str(exc)) from exc
+    return df
+
 
 def cmd_train(args) -> None:
+    load_csv(args.csv, ["text", "label"])
     train_main(args.csv, args.model)
 
 
 def cmd_predict(args) -> None:
+    load_csv(args.csv, ["text"])
     predict_main(args.csv, args.model)
 
 
 def cmd_eval(args) -> None:
-    import pandas as pd
     from .models import build_model
 
-    df = pd.read_csv(args.csv)
+    df = load_csv(args.csv, ["text", "label"])
     model = build_model()
     model.fit(df["text"], df["label"])
     preds = model.predict(df["text"])
@@ -37,10 +58,9 @@ def cmd_eval(args) -> None:
 
 
 def cmd_analyze(args) -> None:
-    import pandas as pd
     from .models import build_model
 
-    df = pd.read_csv(args.csv)
+    df = load_csv(args.csv, ["text", "label"])
     model = build_model()
     model.fit(df["text"], df["label"])
     preds = model.predict(df["text"])
@@ -52,10 +72,8 @@ def cmd_analyze(args) -> None:
 
 
 def cmd_preprocess(args) -> None:
-    import pandas as pd
-
-    df = pd.read_csv(args.csv)
-    df["text"] = df["text"].apply(clean_text)
+    df = load_csv(args.csv, ["text"])
+    df["text"] = clean_series(df["text"])
     if args.lemmatize or args.remove_stopwords:
         df["text"] = df["text"].str.split()
         if args.lemmatize:
@@ -68,10 +86,9 @@ def cmd_preprocess(args) -> None:
 
 
 def cmd_split(args) -> None:
-    import pandas as pd
     from sklearn.model_selection import train_test_split
 
-    df = pd.read_csv(args.csv)
+    df = load_csv(args.csv, ["text", "label"])
     train_df, test_df = train_test_split(df, test_size=args.ratio, random_state=0)
     train_df.to_csv(args.train, index=False)
     test_df.to_csv(args.test, index=False)
@@ -81,10 +98,9 @@ def cmd_split(args) -> None:
 
 
 def cmd_crossval(args) -> None:
-    import pandas as pd
     from .models import build_model, build_nb_model
 
-    df = pd.read_csv(args.csv)
+    df = load_csv(args.csv, ["text", "label"])
     model_fn = build_nb_model if args.nb else build_model
     scorer = None
     if args.metric == "f1":
@@ -104,10 +120,9 @@ def cmd_crossval(args) -> None:
 
 
 def cmd_summary(args) -> None:
-    import pandas as pd
     from collections import Counter
 
-    df = pd.read_csv(args.csv)
+    df = load_csv(args.csv, ["text"])
     logger.info(f"Rows: {len(df)}")
     avg_len = df["text"].str.split().apply(len).mean()
     logger.info(f"Avg words: {avg_len:.2f}")
@@ -165,11 +180,11 @@ def main(argv: list[str] | None = None) -> None:
     train_p.add_argument(
         "--csv", default="data/sample_reviews.csv", help="Training CSV"
     )
-    train_p.add_argument("--model", default="model.joblib", help="Path to save model")
+    train_p.add_argument("--model", default=MODEL_DEFAULT, help="Path to save model")
 
     predict_p = sub.add_parser("predict", help="Predict sentiments")
     predict_p.add_argument("csv", help="CSV with a 'text' column")
-    predict_p.add_argument("--model", default="model.joblib", help="Trained model path")
+    predict_p.add_argument("--model", default=MODEL_DEFAULT, help="Trained model path")
 
     eval_p = sub.add_parser("eval", help="Quick evaluation on a labeled CSV")
     eval_p.add_argument("csv", help="CSV with 'text' and 'label' columns")
@@ -229,7 +244,7 @@ def main(argv: list[str] | None = None) -> None:
     )
 
     serve_p = sub.add_parser("serve", help="Run the web prediction server")
-    serve_p.add_argument("--model", default="model.joblib", help="Trained model path")
+    serve_p.add_argument("--model", default=MODEL_DEFAULT, help="Trained model path")
     serve_p.add_argument("--host", default="127.0.0.1")
     serve_p.add_argument("--port", default=5000, type=int)
 

@@ -15,6 +15,7 @@ dependencies = [
     "scikit-learn",
     "nltk",
     "joblib",
+    "pydantic>=1.10",
 ]
 
 [project.optional-dependencies]

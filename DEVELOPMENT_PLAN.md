@@ -1,60 +1,75 @@
-# Development Plan
+# 🧭 Project Vision
 
-## Phase 1: Upcoming Work
-- [x] Add Naive Bayes model implementation in `models.py`.
-- [x] Update `model_comparison.py` to evaluate transformer models.
-- [x] Improve preprocessing with lemmatization and additional normalization.
-- [x] Extend evaluation utilities with cross-validation support.
+> A short 2–3 sentence description of what this repo does, for whom, and why.
 
-## Completed Tasks
-- [x] Initialize Git repository and configure remote
-- [x] Create Python virtual environment
-- [x] Add `requirements.txt` with base dependencies
-- [x] Set up initial project structure as described in `README.md`
-- [x] Gather and clean initial dataset(s)
-- [x] Implement text preprocessing module (`src/preprocessing.py`)
-- [x] Create unit tests for preprocessing
-- [x] Write documentation for data handling
-- [x] Implement baseline model (e.g., Naive Bayes or Logistic Regression) in `src/models.py`
-- [x] Implement training script (`src/train.py`)
-- [x] Implement prediction script (`src/predict.py`)
-- [x] Add evaluation module (`src/evaluate.py`)
-- [x] Write unit tests for model training and prediction
-- [x] Experiment with RNN/LSTM models
-- [x] Explore Transformer-based approaches
-- [x] Compare models and record results
-- [x] Update documentation with findings
-- [x] Design approach for aspect extraction
-- [x] Implement aspect-based sentiment component
-- [x] Add tests for aspect-based methods
-- [x] Document usage and limitations
-- [x] Create comprehensive evaluation suite (confusion matrices, error analysis)
-- [x] Build simple CLI or web demo for predictions
-- [x] Prepare model for deployment (packaging, Dockerfile, etc.)
-- [x] Update Dockerfile to use optional extras for the web API
-- [x] Ensure continuous integration and automated testing
-- [x] Implement Flask-based prediction server
-- [x] Add tests for web server
-- [x] Document web server usage
-- [x] Split heavy dependencies into optional extras
-- [x] Publish package to PyPI
-- [x] Provide installation instructions for extras
-- [x] Add health check endpoint to the web server
-- [x] Document the root endpoint in the README
-- [x] Expose package version via `/version` endpoint
-- [x] Document the endpoint in the README
-- [x] Add `version` command to the CLI
-- [x] Document the new command in the README
-- [x] Provide `--version` flag for quick access
-- [x] Review CLI usability and options
-- [x] Add CLI command for preprocessing datasets
-- [x] Document preprocessing usage in the README
-- [x] Implement CLI command for splitting datasets
-- [x] Document dataset splitting usage in the README
-- [x] Add tests for the new CLI command
-- [x] Add CLI command to summarize datasets
-- [x] Document dataset summary usage in the README
-- [x] Write tests for the summary command
- - [x] Extend the summary command to list the most frequent words
- - [x] Document the new option in the README
- - [x] Add tests covering word frequency output
+# 📅 12-Week Roadmap
+
+## I1
+- **Themes**: Security, Performance
+- **Goals / Epics**
+    - Harden API endpoints and CLI input handling
+    - Optimize preprocessing for larger datasets
+- **Definition of Done**
+    - Input schema validation in webapp & CLI
+    - Benchmarks show 20% speed improvement for cleaning functions
+
+## I2
+- **Themes**: Observability, Developer UX
+- **Goals / Epics**
+    - Add structured logging and metrics export
+    - Simplify test execution and local setup
+- **Definition of Done**
+    - Metrics available at `/metrics` and exported to Prometheus
+    - `make test` runs lint + pytest in <3m with no flakes
+
+## I3
+- **Themes**: Advanced Modeling, Release Prep
+- **Goals / Epics**
+    - Experiment with transformer fine-tuning
+    - Prepare Docker and CI for production release
+- **Definition of Done**
+    - Transformer model evaluated and documented
+    - CI builds and pushes versioned container images
+
+# ✅ Epic & Task Checklist
+
+### 🔐 Increment 1: Security & Refactoring
+- [ ] [EPIC] Eliminate hardcoded secrets
+  - [ ] Load from environment securely
+  - [ ] Add `pre-commit` hook for scanning secrets
+- [ ] [EPIC] Improve CI stability
+  - [ ] Replace flaky integration tests
+  - [ ] Enable parallel test execution
+
+### 📈 Increment 2: Observability & Developer UX
+- [ ] [EPIC] Structured logging
+  - [ ] Standard JSON logs in CLI and webapp
+  - [ ] Document log levels
+- [ ] [EPIC] Local developer setup
+  - [ ] `make setup` installs optional deps
+  - [ ] Update CONTRIBUTING with quickstart
+
+### 🤖 Increment 3: Advanced Modeling & Release
+- [ ] [EPIC] Transformer fine-tuning
+  - [ ] Add training script for BERT models
+  - [ ] Compare results with baseline
+- [ ] [EPIC] Production-ready container
+  - [ ] Multi-stage Docker build
+  - [ ] Push images from CI
+
+# ⚠️ Risks & Mitigation
+- Limited data volume → augment with public datasets
+- Heavy ML dependencies slow CI → use lightweight test fixtures
+- Incomplete NLTK downloads → cache datasets in CI image
+- Library updates may break API → pin versions & run regression tests
+
+# 📊 KPIs & Metrics
+- [ ] >85% test coverage
+- [ ] <15 min CI pipeline time
+- [ ] <5% error rate on core service
+- [ ] 100% secrets loaded from vault/env
+
+# 👥 Ownership & Roles (Optional)
+- DevOps: CI/CD pipeline, Docker images
+- ML Engineer: modeling experiments
+- QA: automated tests and coverage monitoring

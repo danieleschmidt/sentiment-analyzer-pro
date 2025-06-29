@@ -21,3 +21,12 @@ def test_clean_text_lemmatizes_running():
 def test_remove_stopwords():
     tokens = ["this", "is", "a", "test"]
     assert preprocessing.remove_stopwords(tokens) == ["test"]
+
+
+
+def test_clean_series_vectorized():
+    import pandas as pd
+
+    series = pd.Series(['Hello!!!', 'Test   Me'])
+    cleaned = preprocessing.clean_series(series)
+    assert cleaned.tolist() == ['hello', 'test me']
