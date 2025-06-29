@@ -10,5 +10,13 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      - name: Cache pip
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
       - run: pip install -e .[ml,web]
+      - run: pip install ruff bandit
+      - run: ruff check src tests
+      - run: bandit -r src
       - run: pytest -q
