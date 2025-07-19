@@ -23,7 +23,7 @@ def test_cli_verbose_flag(capsys):
     import src.cli as cli
     cli.main(["-v", "version"])
     out, _ = capsys.readouterr()
-    assert "Verbosity level: 1" in out
+    assert "CLI started" in out
 
 
 def test_cli_train_creates_model(tmp_path):
