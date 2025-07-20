@@ -11,6 +11,21 @@
 - Dataset summary and preprocessing commands.
 - Simple metrics endpoint with request logging in the web server.
 - Bandit and Ruff checks with pip caching in CI.
+- **Comprehensive Makefile for developer workflow**:
+  - `make setup` for one-command development environment setup
+  - `make test` for test suite with coverage reporting
+  - `make lint`, `make format`, `make security` for code quality
+  - `make dev` and `make serve` for development and production servers
+  - `make build`, `make docker-build` for packaging and deployment
+  - `make clean` for artifact cleanup
+  - Comprehensive help system with `make help`
+  - Color-coded output and graceful degradation
+- **Enhanced CONTRIBUTING.md documentation**:
+  - Quick start guide using Makefile
+  - Comprehensive development workflow documentation
+  - Pull request guidelines with quality gates
+  - Advanced development patterns and best practices
+- **Makefile test suite** ensuring reliable development workflow
 - Comprehensive security enhancements:
   - Input validation and sanitization for web API
   - Rate limiting with per-IP tracking
