@@ -24,7 +24,20 @@
   - [x] Add comprehensive test suite for Makefile functionality
   - [x] Handle externally-managed Python environments gracefully
 
-### 2. Dependency Management & Environment Setup (WSJF: 2.6)
+### 2. Critical Test Coverage Gaps (WSJF: 3.2)
+- **Value**: 8/10 - Essential for code reliability and maintainability
+- **Criticality**: 9/10 - Missing tests for core functionality (predict, train, schemas)
+- **Risk**: 8/10 - High risk of bugs in production without proper testing
+- **Effort**: 8/10 - Moderate effort to create comprehensive test suite
+- **Tasks**:
+  - [ ] Create test_predict.py for prediction functionality
+  - [ ] Create test_train.py for training pipeline
+  - [ ] Create test_schemas.py for data validation
+  - [ ] Add integration tests for end-to-end workflows
+  - [ ] Increase coverage to 85%+ across all modules
+  - [ ] Add edge case testing for empty inputs and error conditions
+
+### 3. Dependency Management & Environment Setup (WSJF: 2.6)
 - **Value**: 7/10 - Critical for reproducible builds
 - **Criticality**: 8/10 - Currently blocks testing and development
 - **Risk**: 8/10 - Prevents proper CI/CD and quality assurance
@@ -35,7 +48,20 @@
   - [ ] Create requirements-dev.txt for development dependencies
   - [ ] Test installation in clean environment
 
-### 3. CI Pipeline Optimization (WSJF: 2.2)
+### 4. Error Handling & Code Quality (WSJF: 2.4)
+- **Value**: 6/10 - Improves code maintainability and debugging
+- **Criticality**: 7/10 - Current broad exception handling masks important errors
+- **Risk**: 6/10 - Could hide critical issues in production
+- **Effort**: 8/10 - Need to review and improve exception handling throughout codebase
+- **Tasks**:
+  - [ ] Replace broad Exception catching with specific exceptions
+  - [ ] Add proper logging to all exception handlers
+  - [ ] Implement graceful error handling for missing dependencies
+  - [ ] Add validation for hardcoded values (tokenizer params, paths)
+  - [ ] Fix incomplete transformer model evaluation
+  - [ ] Improve error context in preprocessing functions
+
+### 5. CI Pipeline Optimization (WSJF: 2.2)
 - **Value**: 6/10 - Improves development velocity
 - **Criticality**: 5/10 - Current CI works but could be faster
 - **Risk**: 5/10 - Prevents regression and deployment issues
@@ -111,9 +137,10 @@
 ## Next Sprint Candidates
 
 Based on WSJF scoring, the next sprint should focus on:
-1. **Makefile for Developer UX** - Quick wins for development workflow
-2. **Dependency Management** - Critical blocker for testing and development
-3. **CI Pipeline Optimization** - Improves overall development velocity
+1. **Critical Test Coverage Gaps** - Essential for code reliability and catching bugs early
+2. **Error Handling & Code Quality** - Improves debugging and prevents issues being masked
+3. **Dependency Management** - Critical blocker for testing and development
+4. **CI Pipeline Optimization** - Improves overall development velocity
 
 ## Review Schedule
 - Weekly backlog grooming to reassess priorities
