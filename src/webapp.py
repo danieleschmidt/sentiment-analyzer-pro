@@ -125,12 +125,20 @@ def predict():
             details={'errors': exc.errors(), 'data_keys': list(data.keys())}
         )
         return jsonify({"error": "Invalid input", "details": exc.errors()}), 400
+    except (TypeError, KeyError, AttributeError) as exc:
+        logger.error("Request parsing error", extra={
+            'error_type': type(exc).__name__,
+            'error_message': str(exc),
+            'request_data': str(data) if 'data' in locals() else 'unavailable'
+        })
+        return jsonify({"error": "Invalid request format"}), 400
     except Exception as exc:
         logger.error("Unexpected validation error", extra={
             'error_type': type(exc).__name__,
-            'error_message': str(exc)
+            'error_message': str(exc),
+            'request_data': str(data) if 'data' in locals() else 'unavailable'
         })
-        return jsonify({"error": "Invalid request format"}), 400
+        return jsonify({"error": "Internal server error during validation"}), 500
     
     try:
         start_time = time.time()
@@ -150,11 +158,27 @@ def predict():
         })
         
         return jsonify({"prediction": prediction})
-    except Exception as exc:
-        logger.error("Prediction error", extra={
+    except FileNotFoundError as exc:
+        logger.error("Model file not found", extra={
             'error_type': type(exc).__name__,
             'error_message': str(exc),
             'model_path': MODEL_PATH
+        })
+        return jsonify({"error": "Model not available"}), 503
+    except (ValueError, AttributeError) as exc:
+        logger.error("Model prediction error", extra={
+            'error_type': type(exc).__name__,
+            'error_message': str(exc),
+            'model_path': MODEL_PATH,
+            'text_length': len(req.text) if 'req' in locals() else 0
+        })
+        return jsonify({"error": "Invalid input for prediction"}), 400
+    except Exception as exc:
+        logger.error("Unexpected prediction error", extra={
+            'error_type': type(exc).__name__,
+            'error_message': str(exc),
+            'model_path': MODEL_PATH,
+            'text_length': len(req.text) if 'req' in locals() else 0
         })
         return jsonify({"error": "Internal server error"}), 500
 

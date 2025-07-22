@@ -48,8 +48,20 @@ def load_csv(path: str, required: list[str] | None = None):
     
     try:
         df = pd.read_csv(path)
+    except FileNotFoundError as exc:
+        logger.error(f"CSV file not found: {path}")
+        raise SystemExit(f"CSV file not found: {path}") from exc
+    except pd.errors.EmptyDataError as exc:
+        logger.error(f"CSV file is empty: {path}")
+        raise SystemExit(f"CSV file is empty: {path}") from exc
+    except pd.errors.ParserError as exc:
+        logger.error(f"CSV parsing error in {path}: {exc}")
+        raise SystemExit(f"Invalid CSV format in {path}: {exc}") from exc
+    except PermissionError as exc:
+        logger.error(f"Permission denied reading {path}: {exc}")
+        raise SystemExit(f"Permission denied reading {path}") from exc
     except Exception as exc:
-        logger.error(f"Error reading CSV file: {exc}")
+        logger.error(f"Unexpected error reading CSV file {path}: {exc}")
         raise SystemExit(f"Failed to read CSV file: {path}") from exc
     
     # Security: Validate data size
@@ -138,8 +150,14 @@ def cmd_preprocess(args) -> None:
     try:
         df.to_csv(args.out, index=False)
         logger.info(f"Wrote cleaned data to {args.out}")
+    except PermissionError as exc:
+        logger.error(f"Permission denied writing to {args.out}: {exc}")
+        raise SystemExit(f"Permission denied writing to {args.out}") from exc
+    except OSError as exc:
+        logger.error(f"OS error writing to {args.out}: {exc}")
+        raise SystemExit(f"Failed to write output file {args.out}: {exc}") from exc
     except Exception as exc:
-        logger.error(f"Error writing to file: {exc}")
+        logger.error(f"Unexpected error writing to file {args.out}: {exc}")
         raise SystemExit(f"Failed to write output file: {args.out}") from exc
 
 
@@ -162,8 +180,14 @@ def cmd_split(args) -> None:
         logger.info(
             f"Wrote {len(train_df)} rows to {args.train} and {len(test_df)} rows to {args.test}"
         )
+    except PermissionError as exc:
+        logger.error(f"Permission denied writing split files: {exc}")
+        raise SystemExit(f"Permission denied writing to output directories") from exc
+    except OSError as exc:
+        logger.error(f"OS error writing split files: {exc}")
+        raise SystemExit(f"Failed to write train/test files: {exc}") from exc
     except Exception as exc:
-        logger.error(f"Error writing split files: {exc}")
+        logger.error(f"Unexpected error writing split files: {exc}")
         raise SystemExit("Failed to write train/test files") from exc
 
 

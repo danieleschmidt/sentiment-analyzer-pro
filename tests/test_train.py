@@ -112,13 +112,13 @@ class TestTrainMain:
         
         non_existent_csv = "/non/existent/file.csv"
         
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(SystemExit, match="Training CSV file not found"):
             main(non_existent_csv, self.model_path)
     
     @patch('joblib.dump')
     @patch('src.train.build_model')
     def test_main_missing_text_column(self, mock_build_model, mock_joblib_dump):
-        """Test that KeyError is raised when CSV lacks 'text' column."""
+        """Test that SystemExit is raised when CSV lacks 'text' column."""
         mock_model = Mock()
         mock_build_model.return_value = mock_model
         
@@ -130,7 +130,7 @@ class TestTrainMain:
         })
         bad_data.to_csv(bad_csv_path, index=False)
         
-        with pytest.raises(KeyError):
+        with pytest.raises(SystemExit, match="Required columns .* not found"):
             main(bad_csv_path, self.model_path)
         
         # Cleanup
@@ -139,7 +139,7 @@ class TestTrainMain:
     @patch('joblib.dump')
     @patch('src.train.build_model')
     def test_main_missing_label_column(self, mock_build_model, mock_joblib_dump):
-        """Test that KeyError is raised when CSV lacks 'label' column."""
+        """Test that SystemExit is raised when CSV lacks 'label' column."""
         mock_model = Mock()
         mock_build_model.return_value = mock_model
         
@@ -151,7 +151,7 @@ class TestTrainMain:
         })
         bad_data.to_csv(bad_csv_path, index=False)
         
-        with pytest.raises(KeyError):
+        with pytest.raises(SystemExit, match="Required columns .* not found"):
             main(bad_csv_path, self.model_path)
         
         # Cleanup
@@ -168,13 +168,10 @@ class TestTrainMain:
         empty_data = pd.DataFrame({"text": [], "label": []})
         empty_data.to_csv(empty_csv_path, index=False)
         
-        main(empty_csv_path, self.model_path)
+        with pytest.raises(SystemExit, match="No training data found"):
+            main(empty_csv_path, self.model_path)
         
-        # Should still call fit with empty data
-        mock_model.fit.assert_called_once()
-        call_args = mock_model.fit.call_args[0]
-        assert len(call_args[0]) == 0  # Empty text series
-        assert len(call_args[1]) == 0  # Empty label series
+        # Function should exit before calling fit due to empty data
         
         # Cleanup
         os.remove(empty_csv_path)
@@ -206,7 +203,7 @@ class TestTrainMain:
         """Test behavior when build_model raises an exception."""
         mock_build_model.side_effect = ValueError("Model build failed")
         
-        with pytest.raises(ValueError, match="Model build failed"):
+        with pytest.raises(SystemExit, match="Training failed due to invalid data: Model build failed"):
             main(self.csv_path, self.model_path)
     
     @patch('joblib.dump')
@@ -217,7 +214,7 @@ class TestTrainMain:
         mock_model.fit.side_effect = ValueError("Model fit failed")
         mock_build_model.return_value = mock_model
         
-        with pytest.raises(ValueError, match="Model fit failed"):
+        with pytest.raises(SystemExit, match="Training failed due to invalid data: Model fit failed"):
             main(self.csv_path, self.model_path)
     
     @patch('joblib.dump')
@@ -228,7 +225,7 @@ class TestTrainMain:
         mock_build_model.return_value = mock_model
         mock_joblib_dump.side_effect = PermissionError("Cannot write to file")
         
-        with pytest.raises(PermissionError, match="Cannot write to file"):
+        with pytest.raises(SystemExit, match="Permission denied writing model"):
             main(self.csv_path, self.model_path)
     
     @patch('pandas.read_csv')
@@ -409,7 +406,7 @@ class TestTrainEdgeCases:
         invalid_model_path = "/non/existent/directory/model.joblib"
         mock_joblib_dump.side_effect = FileNotFoundError("Directory not found")
         
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(SystemExit, match="Failed to save model.*Directory not found"):
             main(csv_path, invalid_model_path)
         
         # Cleanup
