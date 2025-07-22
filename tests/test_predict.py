@@ -86,7 +86,7 @@ class TestPredictMain:
         
         non_existent_csv = "/non/existent/file.csv"
         
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(SystemExit, match="Input CSV file not found"):
             main(non_existent_csv, self.model_path)
     
     @patch('joblib.load')
@@ -94,7 +94,7 @@ class TestPredictMain:
         """Test that FileNotFoundError is raised for non-existent model file."""
         mock_joblib_load.side_effect = FileNotFoundError("Model file not found")
         
-        with pytest.raises(FileNotFoundError):
+        with pytest.raises(SystemExit, match="Model file not found"):
             main(self.csv_path, "/non/existent/model.joblib")
     
     @patch('joblib.load')
@@ -111,7 +111,7 @@ class TestPredictMain:
         })
         bad_data.to_csv(bad_csv_path, index=False)
         
-        with pytest.raises(KeyError):
+        with pytest.raises(SystemExit, match="Required 'text' column not found"):
             main(bad_csv_path, self.model_path)
         
         # Cleanup
@@ -128,12 +128,10 @@ class TestPredictMain:
         empty_data = pd.DataFrame({"text": []})
         empty_data.to_csv(empty_csv_path, index=False)
         
-        main(empty_csv_path, self.model_path)
+        with pytest.raises(SystemExit, match="No valid text data found"):
+            main(empty_csv_path, self.model_path)
         
-        # Should still call predict with empty series
-        mock_model.predict.assert_called_once()
-        called_texts = mock_model.predict.call_args[0][0]
-        assert len(called_texts) == 0
+        # Function should exit before calling predict due to all missing text values
         
         # Cleanup
         os.remove(empty_csv_path)
@@ -165,7 +163,7 @@ class TestPredictMain:
         mock_model.predict.side_effect = ValueError("Model prediction failed")
         mock_joblib_load.return_value = mock_model
         
-        with pytest.raises(ValueError, match="Model prediction failed"):
+        with pytest.raises(SystemExit, match="Model prediction failed"):
             main(self.csv_path, self.model_path)
     
     @patch('pandas.read_csv')
@@ -466,30 +464,26 @@ sys.argv = ["predict.py", "{csv_path}", "--model", "model.joblib"]
 import argparse
 import logging
 from unittest.mock import Mock, patch
+import pandas as pd
 
-# Mock the dependencies to avoid file not found errors
+# Mock only joblib.load, use real CSV file
 with patch("joblib.load") as mock_joblib:
-    with patch("pandas.read_csv") as mock_read_csv:
-        mock_model = Mock()
-        mock_model.predict.return_value = ["positive"]
-        mock_joblib.return_value = mock_model
-        
-        mock_df = Mock()
-        mock_df.__getitem__ = Mock(return_value=["test"])
-        mock_read_csv.return_value = mock_df
-        
-        # Now execute the __main__ block logic
-        parser = argparse.ArgumentParser(description="Predict sentiment for reviews.")
-        parser.add_argument("csv", help="CSV file with a 'text' column")
-        parser.add_argument("--model", default=os.getenv("MODEL_PATH", "model.joblib"), help="Trained model path")
-        
-        args = parser.parse_args()
-        logging.basicConfig(format="%(message)s", level=logging.INFO, force=True)
-        
-        from src.predict import main
-        main(args.csv, args.model)
-        
-        print("CLI execution successful")
+    mock_model = Mock()
+    mock_model.predict.return_value = ["positive"]
+    mock_joblib.return_value = mock_model
+    
+    # Now execute the __main__ block logic
+    parser = argparse.ArgumentParser(description="Predict sentiment for reviews.")
+    parser.add_argument("csv", help="CSV file with a 'text' column")
+    parser.add_argument("--model", default=os.getenv("MODEL_PATH", "model.joblib"), help="Trained model path")
+    
+    args = parser.parse_args()
+    logging.basicConfig(format="%(message)s", level=logging.INFO, force=True)
+    
+    from src.predict import main
+    main(args.csv, args.model)
+    
+    print("CLI execution successful")
 '''
         
         with open(test_script, 'w') as f:

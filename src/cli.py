@@ -16,6 +16,7 @@ from .preprocessing import (
     remove_stopwords,
     lemmatize_tokens,
 )
+from .config import Config
 from .schemas import validate_columns
 from .predict import main as predict_main
 from .train import main as train_main
@@ -23,7 +24,7 @@ from .logging_config import setup_logging, get_logger, log_performance_metric
 
 logger = get_logger(__name__)
 
-MODEL_DEFAULT = os.getenv("MODEL_PATH", "model.joblib")
+MODEL_DEFAULT = Config.MODEL_PATH
 
 
 def load_csv(path: str, required: list[str] | None = None):
@@ -42,19 +43,32 @@ def load_csv(path: str, required: list[str] | None = None):
     if path.startswith("/") and not (path.startswith("/tmp/") or path.startswith("/var/")):
         raise SystemExit("Invalid file path: absolute paths not allowed except for temp directories")
     
-    # Security: Check file size (max 100MB)
-    if os.path.getsize(path) > 100 * 1024 * 1024:
-        raise SystemExit("File too large: maximum 100MB allowed")
+    # Security: Check file size (configurable via environment)
+    max_file_size = Config.MAX_FILE_SIZE_MB * 1024 * 1024
+    if os.path.getsize(path) > max_file_size:
+        raise SystemExit(f"File too large: maximum {Config.MAX_FILE_SIZE_MB}MB allowed")
     
     try:
         df = pd.read_csv(path)
+    except FileNotFoundError as exc:
+        logger.error(f"CSV file not found: {path}")
+        raise SystemExit(f"CSV file not found: {path}") from exc
+    except pd.errors.EmptyDataError as exc:
+        logger.error(f"CSV file is empty: {path}")
+        raise SystemExit(f"CSV file is empty: {path}") from exc
+    except pd.errors.ParserError as exc:
+        logger.error(f"CSV parsing error in {path}: {exc}")
+        raise SystemExit(f"Invalid CSV format in {path}: {exc}") from exc
+    except PermissionError as exc:
+        logger.error(f"Permission denied reading {path}: {exc}")
+        raise SystemExit(f"Permission denied reading {path}") from exc
     except Exception as exc:
-        logger.error(f"Error reading CSV file: {exc}")
+        logger.error(f"Unexpected error reading CSV file {path}: {exc}")
         raise SystemExit(f"Failed to read CSV file: {path}") from exc
     
-    # Security: Validate data size
-    if len(df) > 1_000_000:  # 1M rows max
-        raise SystemExit("Dataset too large: maximum 1M rows allowed")
+    # Security: Validate data size (configurable via environment)
+    if len(df) > Config.MAX_DATASET_ROWS:
+        raise SystemExit(f"Dataset too large: maximum {Config.MAX_DATASET_ROWS:,} rows allowed")
     
     if required:
         try:
@@ -138,8 +152,14 @@ def cmd_preprocess(args) -> None:
     try:
         df.to_csv(args.out, index=False)
         logger.info(f"Wrote cleaned data to {args.out}")
+    except PermissionError as exc:
+        logger.error(f"Permission denied writing to {args.out}: {exc}")
+        raise SystemExit(f"Permission denied writing to {args.out}") from exc
+    except OSError as exc:
+        logger.error(f"OS error writing to {args.out}: {exc}")
+        raise SystemExit(f"Failed to write output file {args.out}: {exc}") from exc
     except Exception as exc:
-        logger.error(f"Error writing to file: {exc}")
+        logger.error(f"Unexpected error writing to file {args.out}: {exc}")
         raise SystemExit(f"Failed to write output file: {args.out}") from exc
 
 
@@ -162,8 +182,14 @@ def cmd_split(args) -> None:
         logger.info(
             f"Wrote {len(train_df)} rows to {args.train} and {len(test_df)} rows to {args.test}"
         )
+    except PermissionError as exc:
+        logger.error(f"Permission denied writing split files: {exc}")
+        raise SystemExit(f"Permission denied writing to output directories") from exc
+    except OSError as exc:
+        logger.error(f"OS error writing split files: {exc}")
+        raise SystemExit(f"Failed to write train/test files: {exc}") from exc
     except Exception as exc:
-        logger.error(f"Error writing split files: {exc}")
+        logger.error(f"Unexpected error writing split files: {exc}")
         raise SystemExit("Failed to write train/test files") from exc
 
 

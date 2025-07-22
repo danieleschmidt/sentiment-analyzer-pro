@@ -27,7 +27,7 @@ def test_webapp_predict_endpoint(tmp_path):
     joblib.dump(model, model_file)
 
     webapp.load_model.cache_clear()
-    webapp.MODEL_PATH = str(model_file)
+    webapp.load_model._test_model_path = str(model_file)
 
     with webapp.app.test_client() as client:
         resp = client.post('/predict', json={'text': 'good'})
@@ -42,7 +42,7 @@ def test_webapp_root_endpoint(tmp_path):
     model_file = tmp_path / 'model.joblib'
     joblib.dump(build_model().fit(["good", "bad"], ["positive", "negative"]), model_file)
     webapp.load_model.cache_clear()
-    webapp.MODEL_PATH = str(model_file)
+    webapp.load_model._test_model_path = str(model_file)
 
     with webapp.app.test_client() as client:
         resp = client.get('/')
@@ -73,7 +73,7 @@ def test_webapp_metrics_endpoint(tmp_path):
     joblib.dump(model, model_file)
 
     webapp.load_model.cache_clear()
-    webapp.MODEL_PATH = str(model_file)
+    webapp.load_model._test_model_path = str(model_file)
 
     with webapp.app.test_client() as client:
         client.post('/predict', json={'text': 'good'})
@@ -90,7 +90,7 @@ def test_webapp_predict_validation(tmp_path):
     model_file = tmp_path / 'model.joblib'
     joblib.dump(build_model().fit(["good", "bad"], ["pos", "neg"]), model_file)
     webapp.load_model.cache_clear()
-    webapp.MODEL_PATH = str(model_file)
+    webapp.load_model._test_model_path = str(model_file)
 
     with webapp.app.test_client() as client:
         resp = client.post('/predict', json={})
@@ -109,6 +109,8 @@ def test_webapp_env_model_path(tmp_path, monkeypatch):
 
     monkeypatch.setenv('MODEL_PATH', str(model_file))
     import importlib
+    from src import config
+    importlib.reload(config)
     importlib.reload(webapp)
     webapp.load_model.cache_clear()
 

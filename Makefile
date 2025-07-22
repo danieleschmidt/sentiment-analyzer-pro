@@ -102,16 +102,24 @@ install-web: ## Install web server dependencies (optional)
 # Testing
 test: ## Run test suite with coverage
 	@echo "$(GREEN)Running test suite...$(NC)"
-	@$(PYTEST) $(TEST_DIR)/ -v --cov=$(SRC_DIR) --cov-report=term-missing --cov-report=html -q || echo "$(RED)Tests failed or pytest not available$(NC)"
+	@$(PYTEST) -v --cov=$(SRC_DIR) --cov-report=term-missing --cov-report=html || echo "$(RED)Tests failed or pytest not available$(NC)"
 
 test-verbose: ## Run tests with verbose output
 	@echo "$(GREEN)Running tests with verbose output...$(NC)"
-	@$(PYTEST) $(TEST_DIR)/ -v --cov=$(SRC_DIR) --cov-report=term-missing || echo "$(RED)Tests failed or pytest not available$(NC)"
+	@$(PYTEST) -v --cov=$(SRC_DIR) --cov-report=term-missing || echo "$(RED)Tests failed or pytest not available$(NC)"
+
+test-parallel: ## Run tests in parallel with pytest-xdist
+	@echo "$(GREEN)Running tests in parallel...$(NC)"
+	@$(PYTEST) -v --cov=$(SRC_DIR) --cov-report=term-missing --cov-report=html -n auto || echo "$(RED)Tests failed or pytest-xdist not available$(NC)"
+
+test-fast: ## Run tests without coverage for quick feedback
+	@echo "$(GREEN)Running fast tests...$(NC)"
+	@$(PYTEST) -x -v -n auto || echo "$(RED)Tests failed or pytest not available$(NC)"
 
 # Code Quality
-lint: ## Run linting checks
+lint: ## Run linting checks with ruff
 	@echo "$(GREEN)Running linting checks...$(NC)"
-	@flake8 $(SRC_DIR) $(TEST_DIR) --max-line-length=88 --extend-ignore=E203,W503 2>/dev/null || echo "$(YELLOW)flake8 not available, skipping lint$(NC)"
+	@ruff check $(SRC_DIR) $(TEST_DIR) 2>/dev/null || echo "$(YELLOW)ruff not available, skipping lint$(NC)"
 
 format: ## Format code with autopep8
 	@echo "$(GREEN)Formatting code...$(NC)"
