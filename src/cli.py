@@ -16,6 +16,7 @@ from .preprocessing import (
     remove_stopwords,
     lemmatize_tokens,
 )
+from .config import Config
 from .schemas import validate_columns
 from .predict import main as predict_main
 from .train import main as train_main
@@ -23,7 +24,7 @@ from .logging_config import setup_logging, get_logger, log_performance_metric
 
 logger = get_logger(__name__)
 
-MODEL_DEFAULT = os.getenv("MODEL_PATH", "model.joblib")
+MODEL_DEFAULT = Config.MODEL_PATH
 
 
 def load_csv(path: str, required: list[str] | None = None):
@@ -42,9 +43,10 @@ def load_csv(path: str, required: list[str] | None = None):
     if path.startswith("/") and not (path.startswith("/tmp/") or path.startswith("/var/")):
         raise SystemExit("Invalid file path: absolute paths not allowed except for temp directories")
     
-    # Security: Check file size (max 100MB)
-    if os.path.getsize(path) > 100 * 1024 * 1024:
-        raise SystemExit("File too large: maximum 100MB allowed")
+    # Security: Check file size (configurable via environment)
+    max_file_size = Config.MAX_FILE_SIZE_MB * 1024 * 1024
+    if os.path.getsize(path) > max_file_size:
+        raise SystemExit(f"File too large: maximum {Config.MAX_FILE_SIZE_MB}MB allowed")
     
     try:
         df = pd.read_csv(path)
@@ -64,9 +66,9 @@ def load_csv(path: str, required: list[str] | None = None):
         logger.error(f"Unexpected error reading CSV file {path}: {exc}")
         raise SystemExit(f"Failed to read CSV file: {path}") from exc
     
-    # Security: Validate data size
-    if len(df) > 1_000_000:  # 1M rows max
-        raise SystemExit("Dataset too large: maximum 1M rows allowed")
+    # Security: Validate data size (configurable via environment)
+    if len(df) > Config.MAX_DATASET_ROWS:
+        raise SystemExit(f"Dataset too large: maximum {Config.MAX_DATASET_ROWS:,} rows allowed")
     
     if required:
         try:

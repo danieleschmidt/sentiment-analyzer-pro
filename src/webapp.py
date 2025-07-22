@@ -15,6 +15,7 @@ from pydantic import ValidationError
 
 import joblib
 
+from .config import Config
 from .schemas import PredictRequest
 from .models import SentimentModel
 from .logging_config import setup_logging, get_logger, log_security_event, log_api_request
@@ -24,13 +25,9 @@ logger = get_logger(__name__)
 
 # Rate limiting - simple in-memory store
 RATE_LIMIT_REQUESTS = defaultdict(lambda: deque())
-RATE_LIMIT_WINDOW = 60  # seconds
-RATE_LIMIT_MAX_REQUESTS = 100  # per window
 
 REQUEST_COUNT = 0
 PREDICTION_COUNT = 0
-
-MODEL_PATH = os.getenv("MODEL_PATH", "model.joblib")
 
 try:
     APP_VERSION = metadata.version("sentiment-analyzer-pro")
@@ -39,8 +36,10 @@ except metadata.PackageNotFoundError:  # pragma: no cover - local usage
 
 
 @lru_cache(maxsize=1)
-def load_model(path: str = MODEL_PATH) -> SentimentModel:
+def load_model(path: str | None = None) -> SentimentModel:
     """Load and cache a trained model from disk."""
+    if path is None:
+        path = Config.MODEL_PATH
     return joblib.load(path)
 
 
@@ -50,11 +49,11 @@ def _check_rate_limit(client_ip: str) -> bool:
     client_requests = RATE_LIMIT_REQUESTS[client_ip]
     
     # Remove old requests outside the window
-    while client_requests and client_requests[0] <= now - RATE_LIMIT_WINDOW:
+    while client_requests and client_requests[0] <= now - Config.RATE_LIMIT_WINDOW:
         client_requests.popleft()
     
     # Check if under limit
-    if len(client_requests) >= RATE_LIMIT_MAX_REQUESTS:
+    if len(client_requests) >= Config.RATE_LIMIT_MAX_REQUESTS:
         return False
     
     # Add current request
@@ -142,7 +141,9 @@ def predict():
     
     try:
         start_time = time.time()
-        model = load_model(MODEL_PATH)
+        # For testing, allow model path override via global variable
+        model_path = getattr(load_model, '_test_model_path', None) or Config.MODEL_PATH
+        model = load_model(model_path)
         prediction = model.predict([req.text])[0]
         prediction_time = time.time() - start_time
         
@@ -162,14 +163,14 @@ def predict():
         logger.error("Model file not found", extra={
             'error_type': type(exc).__name__,
             'error_message': str(exc),
-            'model_path': MODEL_PATH
+            'model_path': Config.MODEL_PATH
         })
         return jsonify({"error": "Model not available"}), 503
     except (ValueError, AttributeError) as exc:
         logger.error("Model prediction error", extra={
             'error_type': type(exc).__name__,
             'error_message': str(exc),
-            'model_path': MODEL_PATH,
+            'model_path': Config.MODEL_PATH,
             'text_length': len(req.text) if 'req' in locals() else 0
         })
         return jsonify({"error": "Invalid input for prediction"}), 400
@@ -177,7 +178,7 @@ def predict():
         logger.error("Unexpected prediction error", extra={
             'error_type': type(exc).__name__,
             'error_message': str(exc),
-            'model_path': MODEL_PATH,
+            'model_path': Config.MODEL_PATH,
             'text_length': len(req.text) if 'req' in locals() else 0
         })
         return jsonify({"error": "Internal server error"}), 500
