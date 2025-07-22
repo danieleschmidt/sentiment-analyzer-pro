@@ -3,11 +3,13 @@
 This project aims to develop an advanced sentiment analysis tool. It will start with a basic sentiment classifier and progressively add features like aspect-based sentiment analysis, sophisticated text preprocessing, model comparison, and robust evaluation.
 
 ## Project Goals
-- Implement and compare various sentiment analysis models (e.g., Naive Bayes, Logistic Regression, RNN/LSTM, Transformer-based).
-- Develop robust text preprocessing pipelines.
-- Explore aspect-based sentiment analysis.
-- Implement comprehensive model evaluation and error analysis.
-- Ensure code is well-documented and tested.
+- ✅ Implement and compare various sentiment analysis models (Naive Bayes, Logistic Regression, RNN/LSTM, **Transformer-based**).
+- ✅ Develop robust text preprocessing pipelines.
+- ✅ Explore aspect-based sentiment analysis.
+- ✅ Implement comprehensive model evaluation and error analysis.
+- ✅ **Advanced BERT fine-tuning pipeline with full training capabilities**.
+- ✅ **Comprehensive model comparison framework with detailed performance metrics**.
+- ✅ Ensure code is well-documented and tested.
 
 ## Tech Stack (Planned)
 - Python
@@ -71,10 +73,20 @@ For running detailed evaluations, see [docs/EVALUATION.md](docs/EVALUATION.md).
    from src.models import build_lstm_model
    model = build_lstm_model()
    ```
-6. (Optional) Build a Transformer-based model:
+6. **NEW: Advanced Transformer Training & Comparison**:
    ```python
-   from src.models import build_transformer_model
-   model = build_transformer_model()
+   # Quick model comparison (fast)
+   from src.model_comparison import benchmark_models
+   results = benchmark_models("data/sample_reviews.csv", include_transformer_training=False)
+   
+   # Full BERT fine-tuning (requires torch + transformers)
+   from src.transformer_trainer import TransformerTrainer, TransformerConfig
+   config = TransformerConfig(num_epochs=3, batch_size=16)
+   trainer = TransformerTrainer(config)
+   results = trainer.train("data/sample_reviews.csv")
+   
+   # Comprehensive model comparison with training
+   results = benchmark_models("data/sample_reviews.csv", include_transformer_training=True)
    ```
 7. Make predictions on a CSV file with a `text` column:
    ```bash
@@ -160,6 +172,77 @@ sentiment-cli analyze data/labeled_reviews.csv
 
 Model comparison results are available in
 [docs/MODEL_RESULTS.md](docs/MODEL_RESULTS.md).
+
+## 🚀 Advanced Transformer Capabilities
+
+The project now includes state-of-the-art transformer model support with comprehensive training and evaluation capabilities:
+
+### Quick Model Comparison
+```python
+from src.model_comparison import benchmark_models
+
+# Fast comparison (no transformer training)
+results = benchmark_models("data/sample_reviews.csv", include_transformer_training=False)
+```
+
+### Full BERT Fine-tuning
+```python
+from src.transformer_trainer import TransformerTrainer, TransformerConfig
+
+# Configure transformer training
+config = TransformerConfig(
+    model_name="distilbert-base-uncased",
+    num_epochs=3,
+    batch_size=16,
+    learning_rate=2e-5,
+    max_length=128,
+    output_dir="models/my_sentiment_model"
+)
+
+# Train the model
+trainer = TransformerTrainer(config)
+results = trainer.train("data/sample_reviews.csv")
+
+# Make predictions
+predictions = trainer.predict(["Great product!", "Terrible experience"])
+print(predictions)  # ['positive', 'negative']
+```
+
+### Comprehensive Model Comparison
+```python
+from src.model_comparison import ComprehensiveModelComparison
+
+# Detailed comparison with metrics
+comparison = ComprehensiveModelComparison("data/sample_reviews.csv")
+results = comparison.compare_all_models(include_transformer_training=True)
+comparison.print_comparison_table()
+
+# Get results as DataFrame
+df = comparison.get_results_dataframe()
+```
+
+### Example Usage
+Run the complete example script:
+```bash
+python examples/transformer_example.py
+```
+
+### Performance Metrics
+The framework provides detailed metrics for each model:
+- **Accuracy, Precision, Recall, F1-Score**: Standard classification metrics
+- **Training Time**: Time to train the model
+- **Prediction Time**: Average inference time per sample
+- **Additional Metrics**: Model-specific information (loss, parameters, etc.)
+
+### Requirements for Full Functionality
+For complete transformer capabilities, install the optional ML dependencies:
+```bash
+pip install torch transformers
+# or
+pip install sentiment-analyzer-pro[ml]
+```
+
+The framework gracefully handles missing dependencies and provides reasonable baseline estimates when transformer libraries are not available.
 
 ## Deployment
 
