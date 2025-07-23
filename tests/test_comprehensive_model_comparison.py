@@ -68,10 +68,18 @@ def test_load_data_success():
         mock_df = Mock()
         mock_texts = Mock()
         mock_texts.apply.return_value = ["text1", "text2", "text3", "text4"]
-        mock_df.__getitem__.side_effect = lambda key: {
-            "text": mock_texts,
-            "label": ["pos", "neg", "pos", "neg"]
-        }[key]
+        mock_labels = ["pos", "neg", "pos", "neg"]
+        
+        # Configure the mock DataFrame to behave like a real DataFrame
+        def mock_getitem(key):
+            if key == "text":
+                return mock_texts
+            elif key == "label":
+                return mock_labels
+            else:
+                raise KeyError(f"Column '{key}' not found")
+        
+        mock_df.__getitem__ = Mock(side_effect=mock_getitem)
         mock_pd.read_csv.return_value = mock_df
         
         mock_split.return_value = (["text1", "text2"], ["text3", "text4"], 
@@ -107,7 +115,7 @@ def test_calculate_detailed_metrics():
 def test_evaluate_baseline_models():
     """Test baseline model evaluation."""
     with patch('src.model_comparison.build_model') as mock_build, \
-         patch('src.model_comparison.build_nb_model') as mock_build_nb:
+         patch('src.models.build_nb_model') as mock_build_nb:
         
         # Mock models
         mock_model = Mock()
@@ -136,7 +144,7 @@ def test_evaluate_baseline_models():
 def test_evaluate_baseline_models_nb_failure():
     """Test baseline evaluation when Naive Bayes fails."""
     with patch('src.model_comparison.build_model') as mock_build, \
-         patch('src.model_comparison.build_nb_model', side_effect=ImportError("test error")):
+         patch('src.models.build_nb_model', side_effect=ImportError("test error")):
         
         mock_model = Mock()
         mock_model.fit.return_value = None
@@ -186,8 +194,9 @@ def test_evaluate_lstm_model_success():
         comparison = ComprehensiveModelComparison("test.csv")
         comparison.X_train = ["text1", "text2"]
         comparison.X_test = ["text3", "text4"]
-        comparison.y_train = ["positive", "negative"]
-        comparison.y_test = ["positive", "negative"]
+        # Use numpy arrays to support == operations and astype
+        comparison.y_train = np.array(["positive", "negative"])
+        comparison.y_test = np.array(["positive", "negative"])
         
         with patch.object(comparison, '_calculate_detailed_metrics', 
                          return_value={'accuracy': 0.85, 'precision': 0.84, 
@@ -365,10 +374,18 @@ def test_full_comparison_integration():
             mock_df = Mock()
             mock_texts = Mock()
             mock_texts.apply.return_value = ["good", "bad", "okay", "great"]
-            mock_df.__getitem__.side_effect = lambda key: {
-                "text": mock_texts,
-                "label": ["positive", "negative", "neutral", "positive"]
-            }[key]
+            mock_labels = ["positive", "negative", "neutral", "positive"]
+            
+            # Configure the mock DataFrame to behave like a real DataFrame
+            def mock_getitem(key):
+                if key == "text":
+                    return mock_texts
+                elif key == "label":
+                    return mock_labels
+                else:
+                    raise KeyError(f"Column '{key}' not found")
+            
+            mock_df.__getitem__ = Mock(side_effect=mock_getitem)
             mock_pd.read_csv.return_value = mock_df
             
             mock_split.return_value = (
