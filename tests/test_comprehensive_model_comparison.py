@@ -1,9 +1,8 @@
 """Tests for comprehensive model comparison framework."""
 
 import pytest
-import pandas as pd
 import numpy as np
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 import tempfile
 import os
 
@@ -68,10 +67,10 @@ def test_load_data_success():
         mock_df = Mock()
         mock_texts = Mock()
         mock_texts.apply.return_value = ["text1", "text2", "text3", "text4"]
-        mock_df.__getitem__.side_effect = lambda key: {
+        mock_df.__getitem__ = Mock(side_effect=lambda key: {
             "text": mock_texts,
             "label": ["pos", "neg", "pos", "neg"]
-        }[key]
+        }[key])
         mock_pd.read_csv.return_value = mock_df
         
         mock_split.return_value = (["text1", "text2"], ["text3", "text4"], 
@@ -107,7 +106,7 @@ def test_calculate_detailed_metrics():
 def test_evaluate_baseline_models():
     """Test baseline model evaluation."""
     with patch('src.model_comparison.build_model') as mock_build, \
-         patch('src.model_comparison.build_nb_model') as mock_build_nb:
+         patch('src.models.build_nb_model') as mock_build_nb:
         
         # Mock models
         mock_model = Mock()
@@ -136,7 +135,7 @@ def test_evaluate_baseline_models():
 def test_evaluate_baseline_models_nb_failure():
     """Test baseline evaluation when Naive Bayes fails."""
     with patch('src.model_comparison.build_model') as mock_build, \
-         patch('src.model_comparison.build_nb_model', side_effect=ImportError("test error")):
+         patch('src.models.build_nb_model', side_effect=ImportError("test error")):
         
         mock_model = Mock()
         mock_model.fit.return_value = None
@@ -186,8 +185,8 @@ def test_evaluate_lstm_model_success():
         comparison = ComprehensiveModelComparison("test.csv")
         comparison.X_train = ["text1", "text2"]
         comparison.X_test = ["text3", "text4"]
-        comparison.y_train = ["positive", "negative"]
-        comparison.y_test = ["positive", "negative"]
+        comparison.y_train = np.array(["positive", "negative"])
+        comparison.y_test = np.array(["positive", "negative"])
         
         with patch.object(comparison, '_calculate_detailed_metrics', 
                          return_value={'accuracy': 0.85, 'precision': 0.84, 
@@ -201,7 +200,7 @@ def test_evaluate_lstm_model_success():
 
 def test_evaluate_lstm_model_failure():
     """Test LSTM evaluation with failure."""
-    with patch('src.model_comparison.keras') as mock_keras, \
+    with patch('src.model_comparison.keras'), \
          patch('src.model_comparison.build_lstm_model', side_effect=Exception("test error")):
         
         comparison = ComprehensiveModelComparison("test.csv")
@@ -316,7 +315,7 @@ def test_get_results_dataframe_with_results():
             ModelResult("Model B", 0.80, 0.79, 0.81, 0.80, 2.0, 0.2, 50.0)
         ]
         
-        result = comparison.get_results_dataframe()
+        comparison.get_results_dataframe()
         
         # Verify DataFrame was called with correct data
         call_args = mock_pd.DataFrame.call_args[0][0]
@@ -365,10 +364,10 @@ def test_full_comparison_integration():
             mock_df = Mock()
             mock_texts = Mock()
             mock_texts.apply.return_value = ["good", "bad", "okay", "great"]
-            mock_df.__getitem__.side_effect = lambda key: {
+            mock_df.__getitem__ = Mock(side_effect=lambda key: {
                 "text": mock_texts,
                 "label": ["positive", "negative", "neutral", "positive"]
-            }[key]
+            }[key])
             mock_pd.read_csv.return_value = mock_df
             
             mock_split.return_value = (
