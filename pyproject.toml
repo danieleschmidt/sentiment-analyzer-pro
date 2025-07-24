@@ -27,6 +27,9 @@ ml = [
 web = [
     "flask",
 ]
+observability = [
+    "prometheus-client>=0.12.0",
+]
 
 [project.scripts]
 sentiment-cli = "src.cli:main"

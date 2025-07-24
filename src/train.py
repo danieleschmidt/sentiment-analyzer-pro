@@ -2,8 +2,13 @@
 
 import logging
 import os
+import time
 
 from .models import build_model
+from .logging_config import (
+    setup_logging, get_logger, log_data_processing, 
+    log_training_event, log_model_operation, log_system_event
+)
 
 
 def main(csv_path: str = "data/sample_reviews.csv", model_path: str = os.getenv("MODEL_PATH", "model.joblib")):
@@ -11,11 +16,19 @@ def main(csv_path: str = "data/sample_reviews.csv", model_path: str = os.getenv(
     import pandas as pd
     import joblib
 
-    logger = logging.getLogger(__name__)
+    logger = get_logger(__name__)
+    
+    log_system_event(logger, 'startup', 'training', {
+        'csv_path': csv_path,
+        'model_path': model_path
+    })
     
     # Load and validate training data
+    load_start = time.time()
     try:
         data = pd.read_csv(csv_path)
+        load_duration = time.time() - load_start
+        log_data_processing(logger, 'load', len(data), load_duration, csv_path)
     except FileNotFoundError:
         logger.error(f"Training CSV file not found: {csv_path}")
         raise SystemExit(f"Training CSV file not found: {csv_path}")
@@ -50,19 +63,42 @@ def main(csv_path: str = "data/sample_reviews.csv", model_path: str = os.getenv(
         raise SystemExit(f"All label values are missing in {csv_path}")
     
     # Filter out rows with missing values
+    preprocess_start = time.time()
     clean_data = data.dropna(subset=["text", "label"])
+    preprocess_duration = time.time() - preprocess_start
+    
     if len(clean_data) == 0:
         logger.error(f"No valid training samples after removing missing values in {csv_path}")
         raise SystemExit(f"No valid training samples after removing missing values in {csv_path}")
     
-    if len(clean_data) < len(data):
-        logger.warning(f"Removed {len(data) - len(clean_data)} rows with missing text or label values")
+    removed_rows = len(data) - len(clean_data)
+    if removed_rows > 0:
+        logger.warning(f"Removed {removed_rows} rows with missing text or label values")
+    
+    log_data_processing(logger, 'preprocess', len(clean_data), preprocess_duration, 
+                       details={
+                           'original_rows': len(data),
+                           'cleaned_rows': len(clean_data),
+                           'removed_rows': removed_rows
+                       })
     
     # Build and train model
     try:
         model = build_model()
-        logger.info(f"Training model on {len(clean_data)} samples...")
+        log_training_event(logger, 'start', details={
+            'training_samples': len(clean_data),
+            'model_type': 'baseline'
+        })
+        
+        training_start = time.time()
         model.fit(clean_data["text"], clean_data["label"])
+        training_duration = time.time() - training_start
+        
+        log_training_event(logger, 'complete', details={
+            'training_samples': len(clean_data),
+            'training_duration_seconds': training_duration,
+            'model_type': 'baseline'
+        })
     except ValueError as exc:
         logger.error(f"Training failed due to invalid data: {exc}")
         raise SystemExit(f"Training failed due to invalid data: {exc}")
@@ -77,8 +113,14 @@ def main(csv_path: str = "data/sample_reviews.csv", model_path: str = os.getenv(
         if model_dir and not os.path.exists(model_dir):
             os.makedirs(model_dir, exist_ok=True)
         
+        save_start = time.time()
         joblib.dump(model, model_path)
-        logger.info("Model saved to %s", model_path)
+        save_duration = time.time() - save_start
+        
+        log_model_operation(logger, 'save', model_path, save_duration, {
+            'model_type': 'baseline',
+            'training_samples': len(clean_data)
+        })
     except PermissionError:
         logger.error(f"Permission denied writing model to {model_path}")
         raise SystemExit(f"Permission denied writing model to {model_path}")
@@ -97,7 +139,7 @@ if __name__ == "__main__":
     parser.add_argument("--csv", default="data/sample_reviews.csv", help="Training data CSV")
     parser.add_argument("--model", default=os.getenv("MODEL_PATH", "model.joblib"), help="Where to save the model")
     args = parser.parse_args()
-    logging.basicConfig(format="%(message)s", level=logging.INFO, force=True)
+    setup_logging(level="INFO", structured=True)
     try:
         main(args.csv, args.model)
     except SystemExit:

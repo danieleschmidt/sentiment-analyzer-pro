@@ -19,6 +19,9 @@ from .config import Config
 from .schemas import PredictRequest
 from .models import SentimentModel
 from .logging_config import setup_logging, get_logger, log_security_event, log_api_request
+from .metrics import metrics_collector, get_metrics_content_type, setup_app_info
+from .dashboard import add_dashboard_routes
+from .profiling import profiler, profile_function, start_profiling
 
 app = Flask(__name__)
 logger = get_logger(__name__)
@@ -36,6 +39,7 @@ except metadata.PackageNotFoundError:  # pragma: no cover - local usage
 
 
 @lru_cache(maxsize=1)
+@profile_function('load_model')
 def load_model(path: str | None = None) -> SentimentModel:
     """Load and cache a trained model from disk."""
     if path is None:
@@ -78,6 +82,8 @@ def _log_request() -> None:  # pragma: no cover - logging side effect
             client_ip=client_ip,
             details={'path': request.path, 'method': request.method}
         )
+        metrics_collector.record_rate_limit_exceeded(client_ip)
+        metrics_collector.record_error('rate_limit', 'webapp')
         return jsonify({"error": "Rate limit exceeded"}), 429
 
 
@@ -90,7 +96,7 @@ def _add_security_headers(response):
     response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
     response.headers['Content-Security-Policy'] = "default-src 'self'"
     
-    # Log API request with duration
+    # Log API request with duration and record metrics
     if hasattr(request, 'start_time'):
         duration = time.time() - request.start_time
         client_ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.remote_addr)
@@ -102,11 +108,19 @@ def _add_security_headers(response):
             duration, 
             client_ip
         )
+        # Record metrics
+        metrics_collector.record_http_request(
+            request.method,
+            request.path,
+            response.status_code,
+            duration
+        )
     
     return response
 
 
 @app.route("/predict", methods=["POST"])
+@profile_function('predict_endpoint')
 def predict():
     # Validate Content-Type
     if not request.is_json:
@@ -123,6 +137,7 @@ def predict():
             client_ip=client_ip,
             details={'errors': exc.errors(), 'data_keys': list(data.keys())}
         )
+        metrics_collector.record_error('validation_error', 'webapp')
         return jsonify({"error": "Invalid input", "details": exc.errors()}), 400
     except (TypeError, KeyError, AttributeError) as exc:
         logger.error("Request parsing error", extra={
@@ -130,6 +145,7 @@ def predict():
             'error_message': str(exc),
             'request_data': str(data) if 'data' in locals() else 'unavailable'
         })
+        metrics_collector.record_error('parsing_error', 'webapp')
         return jsonify({"error": "Invalid request format"}), 400
     except Exception as exc:
         logger.error("Unexpected validation error", extra={
@@ -137,6 +153,7 @@ def predict():
             'error_message': str(exc),
             'request_data': str(data) if 'data' in locals() else 'unavailable'
         })
+        metrics_collector.record_error('unexpected_validation_error', 'webapp')
         return jsonify({"error": "Internal server error during validation"}), 500
     
     try:
@@ -150,13 +167,20 @@ def predict():
         global PREDICTION_COUNT
         PREDICTION_COUNT += 1
         
-        # Log prediction performance
+        # Log prediction performance and record metrics
         logger.info("Prediction completed", extra={
             'event_type': 'prediction',
             'prediction_time_seconds': prediction_time,
             'text_length': len(req.text),
             'prediction': prediction
         })
+        
+        # Record prediction metrics
+        metrics_collector.record_prediction(
+            'default',  # model type - could be expanded to detect actual model type
+            prediction_time,
+            len(req.text)
+        )
         
         return jsonify({"prediction": prediction})
     except FileNotFoundError as exc:
@@ -165,6 +189,7 @@ def predict():
             'error_message': str(exc),
             'model_path': Config.MODEL_PATH
         })
+        metrics_collector.record_error('model_not_found', 'webapp')
         return jsonify({"error": "Model not available"}), 503
     except (ValueError, AttributeError) as exc:
         logger.error("Model prediction error", extra={
@@ -173,6 +198,7 @@ def predict():
             'model_path': Config.MODEL_PATH,
             'text_length': len(req.text) if 'req' in locals() else 0
         })
+        metrics_collector.record_error('prediction_error', 'webapp')
         return jsonify({"error": "Invalid input for prediction"}), 400
     except Exception as exc:
         logger.error("Unexpected prediction error", extra={
@@ -181,6 +207,7 @@ def predict():
             'model_path': Config.MODEL_PATH,
             'text_length': len(req.text) if 'req' in locals() else 0
         })
+        metrics_collector.record_error('unexpected_prediction_error', 'webapp')
         return jsonify({"error": "Internal server error"}), 500
 
 
@@ -198,8 +225,30 @@ def version():
 
 @app.route("/metrics", methods=["GET"])
 def metrics() -> Any:
-    """Return simple service metrics."""
-    return jsonify({"requests": REQUEST_COUNT, "predictions": PREDICTION_COUNT})
+    """Return Prometheus-formatted metrics."""
+    from flask import Response
+    metrics_data = metrics_collector.get_prometheus_metrics()
+    return Response(metrics_data, mimetype=get_metrics_content_type())
+
+
+@app.route("/metrics/json", methods=["GET"])
+def metrics_json() -> Any:
+    """Return metrics in JSON format for dashboard."""
+    dashboard_data = metrics_collector.get_dashboard_data()
+    # Include legacy counters for backward compatibility
+    dashboard_data['legacy'] = {
+        'requests': REQUEST_COUNT, 
+        'predictions': PREDICTION_COUNT
+    }
+    return jsonify(dashboard_data)
+
+
+@app.route("/performance", methods=["GET"])
+def performance() -> Any:
+    """Return performance profiling data."""
+    from .profiling import get_performance_report
+    performance_data = get_performance_report()
+    return jsonify(performance_data)
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -217,6 +266,17 @@ def main(argv: list[str] | None = None) -> None:
     # Configure logging
     setup_logging(level=args.log_level, structured=args.structured_logs)
     
+    # Initialize application metrics
+    setup_app_info(APP_VERSION, {
+        'host': args.host,
+        'port': str(args.port),
+        'log_level': args.log_level,
+        'structured_logs': str(args.structured_logs)
+    })
+    
+    # Start profiling with system monitoring
+    start_profiling(enable_monitoring=True, monitor_interval=10.0)
+    
     MODEL_PATH = args.model
     logger.info("Starting web server", extra={
         'host': args.host,
@@ -224,6 +284,9 @@ def main(argv: list[str] | None = None) -> None:
         'model_path': MODEL_PATH,
         'structured_logs': args.structured_logs
     })
+    
+    # Add dashboard routes
+    add_dashboard_routes(app)
     
     app.run(host=args.host, port=args.port)
 
