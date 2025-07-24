@@ -7,7 +7,11 @@ repos:
     rev: v0.4.4
     hooks:
       - id: ruff
-  - repo: https://github.com/pytest-dev/pytest
-    rev: 7.4.4
+  - repo: local
     hooks:
       - id: pytest
+        name: pytest
+        entry: pytest
+        language: system
+        pass_filenames: false
+        always_run: true
