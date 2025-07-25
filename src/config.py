@@ -1,7 +1,7 @@
 """Configuration management for sentiment analyzer."""
 
 import os
-from typing import Optional, Union
+from typing import Optional
 
 
 def get_env_int(key: str, default: int) -> int:
@@ -59,6 +59,9 @@ class Config:
     
     # Logging
     LOG_LEVEL = get_env_str("LOG_LEVEL", "INFO")
+    
+    # Security: Allowed temp directories (configurable for different environments)
+    ALLOWED_TEMP_DIRS = get_env_str("ALLOWED_TEMP_DIRS", "/tmp,/var/tmp").split(",")
     
     @classmethod
     def validate(cls) -> None:

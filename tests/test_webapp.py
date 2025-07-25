@@ -77,11 +77,20 @@ def test_webapp_metrics_endpoint(tmp_path):
 
     with webapp.app.test_client() as client:
         client.post('/predict', json={'text': 'good'})
+        
+        # Test the Prometheus metrics endpoint
         resp = client.get('/metrics')
+        assert resp.status_code == 200
+        assert 'text/plain' in resp.content_type
+        
+        # Test the metrics summary endpoint (JSON)
+        resp = client.get('/metrics/summary')
         data = resp.get_json()
         assert resp.status_code == 200
         assert data['predictions'] == 1
         assert data['requests'] >= 2  # at least predict + metrics
+        assert 'prometheus_enabled' in data
+        assert 'fallback_metrics_count' in data
 
 def test_webapp_predict_validation(tmp_path):
     pytest.importorskip('flask')

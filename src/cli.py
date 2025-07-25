@@ -3,9 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import logging
-import os
-import sys
 import time
 from importlib import metadata
 
@@ -39,9 +36,9 @@ def load_csv(path: str, required: list[str] | None = None):
     if ".." in path:
         raise SystemExit("Invalid file path: path traversal not allowed")
     
-    # Allow absolute paths for temp directories (common in tests)
-    if path.startswith("/") and not (path.startswith("/tmp/") or path.startswith("/var/")):
-        raise SystemExit("Invalid file path: absolute paths not allowed except for temp directories")
+    # Allow absolute paths for allowed temp directories (configurable for security)
+    if path.startswith("/") and not any(path.startswith(temp_dir.strip() + "/") for temp_dir in Config.ALLOWED_TEMP_DIRS):
+        raise SystemExit(f"Invalid file path: absolute paths not allowed except for temp directories: {', '.join(Config.ALLOWED_TEMP_DIRS)}")
     
     # Security: Check file size (configurable via environment)
     max_file_size = Config.MAX_FILE_SIZE_MB * 1024 * 1024
@@ -136,8 +133,8 @@ def cmd_preprocess(args) -> None:
     if ".." in args.out:
         raise SystemExit("Invalid output path: path traversal not allowed")
     
-    if args.out.startswith("/") and not (args.out.startswith("/tmp/") or args.out.startswith("/var/")):
-        raise SystemExit("Invalid output path: absolute paths not allowed except for temp directories")
+    if args.out.startswith("/") and not any(args.out.startswith(temp_dir.strip() + "/") for temp_dir in Config.ALLOWED_TEMP_DIRS):
+        raise SystemExit(f"Invalid output path: absolute paths not allowed except for temp directories: {', '.join(Config.ALLOWED_TEMP_DIRS)}")
     
     df = load_csv(args.csv, ["text"])
     df["text"] = clean_series(df["text"])
@@ -170,8 +167,8 @@ def cmd_split(args) -> None:
     for path in [args.train, args.test]:
         if ".." in path:
             raise SystemExit(f"Invalid output path: path traversal not allowed - {path}")
-        if path.startswith("/") and not (path.startswith("/tmp/") or path.startswith("/var/")):
-            raise SystemExit(f"Invalid output path: absolute paths not allowed except for temp directories - {path}")
+        if path.startswith("/") and not any(path.startswith(temp_dir.strip() + "/") for temp_dir in Config.ALLOWED_TEMP_DIRS):
+            raise SystemExit(f"Invalid output path: absolute paths not allowed except for temp directories: {', '.join(Config.ALLOWED_TEMP_DIRS)} - {path}")
 
     df = load_csv(args.csv, ["text", "label"])
     train_df, test_df = train_test_split(df, test_size=args.ratio, random_state=0)
@@ -184,7 +181,7 @@ def cmd_split(args) -> None:
         )
     except PermissionError as exc:
         logger.error(f"Permission denied writing split files: {exc}")
-        raise SystemExit(f"Permission denied writing to output directories") from exc
+        raise SystemExit("Permission denied writing to output directories") from exc
     except OSError as exc:
         logger.error(f"OS error writing split files: {exc}")
         raise SystemExit(f"Failed to write train/test files: {exc}") from exc

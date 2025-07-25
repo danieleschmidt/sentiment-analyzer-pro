@@ -130,10 +130,14 @@ def test_transformer_trainer_setup_model():
         trainer = TransformerTrainer()
         trainer._setup_model(num_labels=3)
         
-        mock_tokenizer_class.from_pretrained.assert_called_once_with("distilbert-base-uncased")
+        mock_tokenizer_class.from_pretrained.assert_called_once_with(
+            "distilbert-base-uncased",
+            revision="main"
+        )
         mock_model_class.from_pretrained.assert_called_once_with(
             "distilbert-base-uncased",
-            num_labels=3
+            num_labels=3,
+            revision="main"
         )
 
 
