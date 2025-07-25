@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import logging
-import os
 import time
 from functools import lru_cache
 from typing import Any
@@ -18,6 +16,7 @@ import joblib
 from .config import Config
 from .schemas import PredictRequest
 from .models import SentimentModel
+from .metrics import metrics, monitor_api_request, monitor_model_loading
 from .logging_config import setup_logging, get_logger, log_security_event, log_api_request
 
 app = Flask(__name__)
@@ -36,6 +35,7 @@ except metadata.PackageNotFoundError:  # pragma: no cover - local usage
 
 
 @lru_cache(maxsize=1)
+@monitor_model_loading("sklearn")
 def load_model(path: str | None = None) -> SentimentModel:
     """Load and cache a trained model from disk."""
     if path is None:
@@ -107,6 +107,7 @@ def _add_security_headers(response):
 
 
 @app.route("/predict", methods=["POST"])
+@monitor_api_request("POST", "/predict")
 def predict():
     # Validate Content-Type
     if not request.is_json:
@@ -145,6 +146,9 @@ def predict():
         model_path = getattr(load_model, '_test_model_path', None) or Config.MODEL_PATH
         model = load_model(model_path)
         prediction = model.predict([req.text])[0]
+        
+        # Record prediction in metrics
+        metrics.inc_prediction_counter("sklearn", str(prediction))
         prediction_time = time.time() - start_time
         
         global PREDICTION_COUNT
@@ -185,21 +189,32 @@ def predict():
 
 
 @app.route("/", methods=["GET"])
+@monitor_api_request("GET", "/")
 def index():
     """Simple health check endpoint."""
     return jsonify({"status": "ok"})
 
 
 @app.route("/version", methods=["GET"])
+@monitor_api_request("GET", "/version")
 def version():
     """Return the running package version."""
     return jsonify({"version": APP_VERSION})
 
 
 @app.route("/metrics", methods=["GET"])
-def metrics() -> Any:
-    """Return simple service metrics."""
-    return jsonify({"requests": REQUEST_COUNT, "predictions": PREDICTION_COUNT})
+def metrics_endpoint() -> Any:
+    """Prometheus metrics endpoint."""
+    return metrics.get_metrics(), 200, {'Content-Type': 'text/plain'}
+
+
+@app.route("/metrics/summary", methods=["GET"])
+@monitor_api_request("GET", "/metrics/summary")
+def metrics_summary() -> Any:
+    """Return enhanced service metrics summary."""
+    base_metrics = {"requests": REQUEST_COUNT, "predictions": PREDICTION_COUNT}
+    enhanced_metrics = metrics.get_summary()
+    return jsonify({**base_metrics, **enhanced_metrics})
 
 
 def main(argv: list[str] | None = None) -> None:

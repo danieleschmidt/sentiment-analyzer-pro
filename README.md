@@ -11,6 +11,29 @@ This project aims to develop an advanced sentiment analysis tool. It will start 
 - ✅ **Comprehensive model comparison framework with detailed performance metrics**.
 - ✅ Ensure code is well-documented and tested.
 
+## Quick Start
+
+1. **Set up the environment:**
+   ```bash
+   make setup
+   ```
+
+2. **Start the web server:**
+   ```bash
+   python -m src.webapp
+   ```
+
+3. **Make your first prediction:**
+   ```bash
+   curl -X POST http://localhost:5000/predict \
+     -H "Content-Type: application/json" \
+     -d '{"text": "I love this product!"}'
+   ```
+
+4. **View comprehensive documentation:**
+   - [Getting Started Guide](docs/GETTING_STARTED.md) - Complete setup and usage guide
+   - [API Reference](docs/API_REFERENCE.md) - Detailed API documentation
+
 ## Tech Stack (Planned)
 - Python
 - Scikit-learn
@@ -341,6 +364,24 @@ Optional extras provide advanced ML models and the web server:
 ```bash
 pip install sentiment-analyzer-pro[ml,web]
 ```
+
+## Documentation
+
+### User Guides
+- **[Getting Started](docs/GETTING_STARTED.md)** - Complete setup and tutorial guide
+- **[API Reference](docs/API_REFERENCE.md)** - REST API and CLI documentation
+- **[Security Guide](docs/SECURITY.md)** - Security features and best practices
+
+### Technical Documentation
+- [Data Handling](docs/DATA_HANDLING.md) - Data processing and validation
+- [Model Evaluation](docs/EVALUATION.md) - Model performance evaluation
+- [Model Results](docs/MODEL_RESULTS.md) - Comparative analysis of different models
+- [Aspect-based Sentiment](docs/ASPECT_SENTIMENT.md) - Advanced sentiment analysis features
+
+### Development
+- [Development Plan](DEVELOPMENT_PLAN.md) - Roadmap and architecture
+- [Contributing Guidelines](CONTRIBUTING.md) - How to contribute
+- [Code Review Guidelines](CODE_REVIEW.md) - Code review process
 
 ## Contributing
 
