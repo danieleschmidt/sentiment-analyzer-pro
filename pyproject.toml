@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools", "wheel"]
+requires = ["setuptools>=78.1.1", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -16,15 +16,22 @@ dependencies = [
     "nltk",
     "joblib",
     "pydantic>=1.10",
+    "cryptography>=42.0.5",
+    "pyjwt>=2.10.1",
 ]
 
 [project.optional-dependencies]
 ml = [
     "tensorflow",
-    "transformers",
+    "transformers", 
     "torch",
 ]
 web = [
+    "flask",
+]
+dev = [
+    "pytest",
+    "pytest-cov",
     "flask",
 ]
 
