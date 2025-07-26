@@ -23,10 +23,15 @@ dependencies = [
 [project.optional-dependencies]
 ml = [
     "tensorflow",
-    "transformers",
+    "transformers", 
     "torch",
 ]
 web = [
+    "flask",
+]
+dev = [
+    "pytest",
+    "pytest-cov",
     "flask",
 ]
 
