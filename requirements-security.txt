@@ -1,0 +1,12 @@
+# Security-focused requirements with minimum secure versions
+# Use: pip install -r requirements-security.txt
+
+# Core security dependencies with CVE fixes
+cryptography>=42.0.5      # Multiple CVEs fixed in 42.0.5+
+setuptools>=78.1.1        # CVE-2025-47273, CVE-2024-6345
+PyJWT>=2.10.1            # CVE-2024-53861
+pip>=25.0                # PVE-2025-75180
+
+# Additional security tools
+safety>=3.0.0            # Dependency vulnerability scanning
+bandit>=1.7.0            # Security linting

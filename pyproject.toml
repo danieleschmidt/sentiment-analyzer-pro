@@ -16,6 +16,8 @@ dependencies = [
     "nltk",
     "joblib",
     "pydantic>=1.10",
+    "cryptography>=42.0.5",  # Security: Multiple CVEs fixed in 42.0.5+
+    "setuptools>=78.1.1",    # Security: CVE-2025-47273, CVE-2024-6345
 ]
 
 [project.optional-dependencies]
