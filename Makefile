@@ -108,13 +108,33 @@ test-verbose: ## Run tests with verbose output
 	@echo "$(GREEN)Running tests with verbose output...$(NC)"
 	@$(PYTEST) -v --cov=$(SRC_DIR) --cov-report=term-missing || echo "$(RED)Tests failed or pytest not available$(NC)"
 
+test-unit: ## Run only unit tests
+	@echo "$(GREEN)Running unit tests...$(NC)"
+	@$(PYTEST) -v -m "unit" --cov=$(SRC_DIR) --cov-report=term-missing || echo "$(RED)Unit tests failed$(NC)"
+
+test-integration: ## Run only integration tests
+	@echo "$(GREEN)Running integration tests...$(NC)"
+	@$(PYTEST) -v -m "integration" --cov=$(SRC_DIR) --cov-report=term-missing || echo "$(RED)Integration tests failed$(NC)"
+
+test-performance: ## Run performance tests
+	@echo "$(GREEN)Running performance tests...$(NC)"
+	@$(PYTEST) -v -m "performance" --durations=10 || echo "$(RED)Performance tests failed$(NC)"
+
+test-slow: ## Run all tests including slow ones
+	@echo "$(GREEN)Running all tests including slow ones...$(NC)"
+	@$(PYTEST) -v --cov=$(SRC_DIR) --cov-report=term-missing --cov-report=html || echo "$(RED)Tests failed$(NC)"
+
 test-parallel: ## Run tests in parallel with pytest-xdist
 	@echo "$(GREEN)Running tests in parallel...$(NC)"
 	@$(PYTEST) -v --cov=$(SRC_DIR) --cov-report=term-missing --cov-report=html -n auto || echo "$(RED)Tests failed or pytest-xdist not available$(NC)"
 
 test-fast: ## Run tests without coverage for quick feedback
 	@echo "$(GREEN)Running fast tests...$(NC)"
-	@$(PYTEST) -x -v -n auto || echo "$(RED)Tests failed or pytest not available$(NC)"
+	@$(PYTEST) -x -v -m "not slow" || echo "$(RED)Tests failed or pytest not available$(NC)"
+
+test-watch: ## Run tests in watch mode
+	@echo "$(GREEN)Running tests in watch mode...$(NC)"
+	@$(PYTEST) -f --cov=$(SRC_DIR) --cov-report=term-missing || echo "$(RED)Test watch failed$(NC)"
 
 # Code Quality
 lint: ## Run linting checks with ruff

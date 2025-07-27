@@ -20,6 +20,7 @@ from .metrics import metrics, monitor_api_request, monitor_model_loading
 from .logging_config import setup_logging, get_logger, log_security_event, log_api_request
 
 app = Flask(__name__)
+app.start_time = time.time()  # Track application start time for uptime
 logger = get_logger(__name__)
 
 # Rate limiting - simple in-memory store
@@ -215,6 +216,109 @@ def metrics_summary() -> Any:
     base_metrics = {"requests": REQUEST_COUNT, "predictions": PREDICTION_COUNT}
     enhanced_metrics = metrics.get_summary()
     return jsonify({**base_metrics, **enhanced_metrics})
+
+
+@app.route("/health", methods=["GET"])
+def health_check():
+    """Comprehensive health check endpoint."""
+    import os
+    import psutil
+    
+    health_status = {
+        "status": "healthy",
+        "timestamp": time.time(),
+        "version": APP_VERSION,
+        "checks": {}
+    }
+    
+    # Model availability check
+    try:
+        model_path = getattr(load_model, '_test_model_path', None) or Config.MODEL_PATH
+        if os.path.exists(model_path):
+            # Quick model load test
+            model = load_model(model_path)
+            test_prediction = model.predict(["test"])
+            health_status["checks"]["model"] = {
+                "status": "healthy",
+                "path": model_path,
+                "test_prediction": test_prediction[0] if test_prediction else None
+            }
+        else:
+            health_status["checks"]["model"] = {
+                "status": "unhealthy",
+                "error": f"Model file not found: {model_path}"
+            }
+            health_status["status"] = "degraded"
+    except Exception as e:
+        health_status["checks"]["model"] = {
+            "status": "unhealthy",
+            "error": str(e)
+        }
+        health_status["status"] = "degraded"
+    
+    # System resource checks
+    try:
+        process = psutil.Process()
+        memory_info = process.memory_info()
+        health_status["checks"]["resources"] = {
+            "status": "healthy",
+            "memory_usage_mb": round(memory_info.rss / 1024 / 1024, 2),
+            "cpu_percent": round(process.cpu_percent(), 2),
+            "disk_usage_gb": round(psutil.disk_usage('/').used / 1024**3, 2)
+        }
+        
+        # Check if memory usage is too high (>500MB)
+        if memory_info.rss > 500 * 1024 * 1024:
+            health_status["checks"]["resources"]["status"] = "warning"
+            health_status["status"] = "degraded"
+            
+    except Exception as e:
+        health_status["checks"]["resources"] = {
+            "status": "unhealthy",
+            "error": str(e)
+        }
+    
+    # API performance check
+    health_status["checks"]["api"] = {
+        "status": "healthy",
+        "total_requests": REQUEST_COUNT,
+        "total_predictions": PREDICTION_COUNT,
+        "uptime_seconds": time.time() - app.start_time if hasattr(app, 'start_time') else 0
+    }
+    
+    # Overall status determination
+    unhealthy_checks = [check for check in health_status["checks"].values() 
+                       if check.get("status") == "unhealthy"]
+    
+    if unhealthy_checks:
+        health_status["status"] = "unhealthy"
+        return jsonify(health_status), 503
+    elif health_status["status"] == "degraded":
+        return jsonify(health_status), 200
+    else:
+        return jsonify(health_status), 200
+
+
+@app.route("/ready", methods=["GET"])
+def readiness_check():
+    """Kubernetes-style readiness probe."""
+    try:
+        model_path = getattr(load_model, '_test_model_path', None) or Config.MODEL_PATH
+        if not os.path.exists(model_path):
+            return jsonify({"status": "not ready", "reason": "model not found"}), 503
+        
+        # Quick model load test
+        model = load_model(model_path)
+        return jsonify({"status": "ready"}), 200
+        
+    except Exception as e:
+        return jsonify({"status": "not ready", "reason": str(e)}), 503
+
+
+@app.route("/live", methods=["GET"])
+def liveness_check():
+    """Kubernetes-style liveness probe."""
+    return jsonify({"status": "alive", "timestamp": time.time()}), 200
 
 
 def main(argv: list[str] | None = None) -> None:

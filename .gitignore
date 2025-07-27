@@ -172,3 +172,71 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Project-specific files
+models/
+*.joblib
+*.pkl
+*.h5
+*.onnx
+
+# Logs
+logs/
+*.log
+
+# Data files (example data is included, but real datasets should be excluded)
+data/large_datasets/
+data/private/
+data/*.csv.backup
+
+# IDE and editor files
+.vscode/launch.json
+.vscode/tasks.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Security files
+.secrets/
+*.pem
+*.key
+.env.local
+.env.production
+
+# Build and deployment
+docker-compose.override.yml
+k8s/secrets/
+deployment/secrets/
+
+# Monitoring and profiling
+*.prof
+*.profile
+.prof/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Pre-commit
+.pre-commit-config.yaml.backup
+
+# Coverage and security reports
+bandit-report.json
+security-report.json
+.coverage.*
+htmlcov/
+
+# Docker
+.dockerignore.backup

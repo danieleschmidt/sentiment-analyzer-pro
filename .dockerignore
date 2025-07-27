@@ -1,10 +1,140 @@
-__pycache__/
-pytest_cache/
-.git/
-*.py[cod]
-*.joblib
-data/
-notebooks/
-tests/
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Development environment
+.venv
+venv/
+env/
+ENV/
+.env.local
+.env.production
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
 .DS_Store
-*.pytest_cache
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+
+# Documentation
+docs/_build/
+site/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Ruff
+.ruff_cache/
+
+# Project-specific
+models/
+*.joblib
+*.pkl
+*.h5
+*.onnx
+logs/
+*.log
+data/large_datasets/
+data/private/
+data/*.csv.backup
+
+# Security
+.secrets/
+*.pem
+*.key
+security-report.json
+bandit-report.json
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Build artifacts
+*.prof
+*.profile
+.prof/
+
+# Docker
+.dockerignore.backup
+docker-compose.override.yml
+
+# CI/CD
+.github/
+.travis.yml
+.circleci/
+
+# Keep sample data for demos
+!data/sample_reviews.csv
+
+# Keep essential config files
+!requirements.txt
+!pyproject.toml
+!Makefile

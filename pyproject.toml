@@ -18,6 +18,7 @@ dependencies = [
     "pydantic>=1.10",
     "cryptography>=42.0.5",
     "pyjwt>=2.10.1",
+    "psutil",
 ]
 
 [project.optional-dependencies]
@@ -33,11 +34,25 @@ dev = [
     "pytest",
     "pytest-cov",
     "flask",
+    "black",
+    "isort",
+    "ruff",
+    "mypy",
+    "pre-commit",
+    "bandit",
+    "safety",
 ]
 
 [project.scripts]
 sentiment-cli = "src.cli:main"
 sentiment-web = "src.webapp:main"
+
+[project.urls]
+Homepage = "https://github.com/username/sentiment-analyzer-pro"
+Documentation = "https://github.com/username/sentiment-analyzer-pro/blob/main/README.md"
+Repository = "https://github.com/username/sentiment-analyzer-pro"
+Issues = "https://github.com/username/sentiment-analyzer-pro/issues"
+Changelog = "https://github.com/username/sentiment-analyzer-pro/blob/main/CHANGELOG.md"
 
 [tool.setuptools]
 package-dir = {"" = "src"}
@@ -104,3 +119,35 @@ ignore = [
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
 "tests/**/*" = ["B011", "B018"]
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["src", "sentiment_analyzer_pro"]
+
+[tool.mypy]
+python_version = "3.9"
+check_untyped_defs = true
+ignore_missing_imports = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unused_configs = true

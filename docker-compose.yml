@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  sentiment-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - LOG_LEVEL=INFO
+      - MODEL_PATH=/app/models/sentiment_model.joblib
+    volumes:
+      - ./models:/app/models:ro
+      - ./logs:/app/logs
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - sentiment-network
+
+  # Redis cache for improved performance (optional)
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - sentiment-network
+
+  # Nginx reverse proxy for production (optional)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - sentiment-analyzer
+    restart: unless-stopped
+    networks:
+      - sentiment-network
+    profiles:
+      - production
+
+  # Development database for advanced features (optional)
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: sentiment_db
+      POSTGRES_USER: sentiment_user
+      POSTGRES_PASSWORD: sentiment_pass
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sentiment_user -d sentiment_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    networks:
+      - sentiment-network
+    profiles:
+      - development
+      - production
+
+volumes:
+  redis-data:
+  postgres-data:
+
+networks:
+  sentiment-network:
+    driver: bridge
