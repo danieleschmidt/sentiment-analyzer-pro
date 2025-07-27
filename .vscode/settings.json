@@ -1,0 +1,130 @@
+{
+  "python.defaultInterpreterPath": "./venv/bin/python",
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.ruffEnabled": true,
+  "python.linting.ruffArgs": [
+    "--config=pyproject.toml"
+  ],
+  "python.formatting.provider": "black",
+  "python.formatting.blackArgs": [
+    "--line-length=88"
+  ],
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.pytestArgs": [
+    "tests"
+  ],
+  "python.testing.autoTestDiscoverOnSaveEnabled": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": true,
+    "source.fixAll": true
+  },
+  "editor.rulers": [88],
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/.pytest_cache": true,
+    "**/.coverage": true,
+    "**/htmlcov": true,
+    "**/.ruff_cache": true,
+    "**/dist": true,
+    "**/*.egg-info": true,
+    "**/build": true,
+    "**/.venv": true,
+    "**/venv": true,
+    "**/.env": true,
+    "**/models/*.joblib": true,
+    "**/models/*.pkl": true,
+    "**/logs/*.log": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/bower_components": true,
+    "**/*.code-search": true,
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/htmlcov": true,
+    "**/dist": true,
+    "**/*.egg-info": true,
+    "**/build": true,
+    "**/.venv": true,
+    "**/venv": true
+  },
+  "python.envFile": "${workspaceFolder}/.env",
+  "python.terminal.activateEnvironment": true,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.env.linux": {
+    "PYTHONPATH": "${workspaceFolder}/src"
+  },
+  "jupyter.notebookFileRoot": "${workspaceFolder}",
+  "autoDocstring.docstringFormat": "google",
+  "autoDocstring.generateDocstringOnEnter": true,
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-workflow.json": "/.github/workflows/*.yml",
+    "https://json.schemastore.org/github-action.json": "/.github/actions/*/action.yml",
+    "https://json.schemastore.org/pre-commit-config.json": "/.pre-commit-config.yaml"
+  },
+  "markdown.extension.toc.levels": "2..6",
+  "markdown.extension.preview.autoShowPreviewToSide": false,
+  "git.autofetch": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.postCommitCommand": "none",
+  "emmet.includeLanguages": {
+    "jinja2": "html"
+  },
+  "html.format.indentInnerHtml": true,
+  "css.validate": true,
+  "javascript.validate.enable": true,
+  "json.format.enable": true,
+  "peacock.favoriteColors": [
+    {
+      "name": "Python Blue",
+      "value": "#306998"
+    },
+    {
+      "name": "ML Orange",
+      "value": "#ff6b35"
+    }
+  ],
+  "errorLens.enabledDiagnosticLevels": [
+    "error",
+    "warning"
+  ],
+  "todo-tree.general.tags": [
+    "BUG",
+    "HACK",
+    "FIXME",
+    "TODO",
+    "XXX",
+    "[ ]",
+    "[x]"
+  ],
+  "todo-tree.regex.regex": "(//|#|<!--|;|/\\*|^|^\\s*(-|\\*|\\+|\\•|·)\\s)\\s*($TAGS)|^\\s*- \\[ \\]",
+  "coverage-gutters.coverageFileNames": [
+    "coverage.xml",
+    "coverage.json",
+    ".coverage",
+    "htmlcov/index.html"
+  ],
+  "coverage-gutters.showGutterCoverage": true,
+  "coverage-gutters.showLineCoverage": true,
+  "coverage-gutters.showRulerCoverage": true,
+  "cSpell.words": [
+    "sklearn",
+    "nltk",
+    "transformers",
+    "distilbert",
+    "joblib",
+    "pytest",
+    "fastapi",
+    "pydantic",
+    "uvicorn",
+    "gunicorn"
+  ]
+}

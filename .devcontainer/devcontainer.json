@@ -1,0 +1,69 @@
+{
+  "name": "Sentiment Analyzer Pro Development",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "black",
+        "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": true,
+          "source.fixAll": true
+        },
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-python.pylint",
+        "ms-python.black-formatter",
+        "charliermarsh.ruff",
+        "ms-python.pytest",
+        "ms-vscode.test-adapter-converter",
+        "tamasfe.even-better-toml",
+        "redhat.vscode-yaml",
+        "ms-vscode.vscode-json",
+        "github.vscode-pull-request-github",
+        "github.copilot",
+        "ms-vscode.vscode-docker",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+  "postCreateCommand": "pip install -e .[dev,ml,web] && pre-commit install",
+  "postStartCommand": "git config --global --add safe.directory /workspaces/sentiment-analyzer-pro",
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.devcontainer/cache,target=/home/vscode/.cache,type=bind,consistency=cached"
+  ],
+  "forwardPorts": [5000, 8000],
+  "portsAttributes": {
+    "5000": {
+      "label": "Flask Web API",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Development Server",
+      "onAutoForward": "notify"
+    }
+  },
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/sentiment-analyzer-pro/src",
+    "FLASK_ENV": "development",
+    "FLASK_DEBUG": "1"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/sentiment-analyzer-pro,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/sentiment-analyzer-pro"
+}
