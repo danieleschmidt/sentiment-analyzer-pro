@@ -1,4 +1,5 @@
-# Byte-compiled / optimized / DLL files
+# Python bytecode and cache files
+# Generated when Python compiles .py files to bytecode
 __pycache__/
 *.py[cod]
 *$py.class
@@ -127,7 +128,8 @@ celerybeat.pid
 # SageMath parsed files
 *.sage.py
 
-# Environments
+# Virtual environments and configuration
+# Contains sensitive environment variables and local configs
 .env
 .venv
 env/
