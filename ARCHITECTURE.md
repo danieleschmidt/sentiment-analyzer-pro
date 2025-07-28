@@ -236,4 +236,24 @@ Raw Text Input
 3. Update comparison framework
 4. Add visualization support
 
+## Development Workflow Integration
+
+### Continuous Integration
+- Automated testing on pull requests
+- Code quality checks with ruff linting
+- Security scanning with bandit and detect-secrets
+- Documentation updates validation
+
+### Deployment Pipeline  
+- Automated builds on version tags
+- Docker image creation and testing
+- Package publishing to PyPI
+- Environment-specific deployments
+
+### Quality Gates
+- All tests must pass before merge
+- Code coverage thresholds enforced
+- Security scans must be clean
+- Documentation must be up-to-date
+
 This architecture provides a robust foundation for sentiment analysis applications while maintaining flexibility for future enhancements and scaling requirements.
