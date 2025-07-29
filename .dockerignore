@@ -1,10 +1,74 @@
-__pycache__/
-pytest_cache/
+# Security: Exclude sensitive files and directories from Docker context
+.env
+.env.*
+*.env
+.envrc
+.secrets/
+secrets/
+.keys/
+keys/
+
+# Development and build artifacts
 .git/
+.gitignore
+.gitattributes
+.github/
+.vscode/
+.idea/
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Python artifacts
+__pycache__/
 *.py[cod]
+*$py.class
+.pytest_cache/
+pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.venv/
+venv/
+env/
+
+# Documentation and testing
+docs/
+tests/
+*.md
+!README.md
+notebooks/
+examples/
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+.eggs/
+target/
+
+# Model files and data (exclude by default for security)
 *.joblib
 data/
-notebooks/
-tests/
-.DS_Store
-*.pytest_cache
+
+# CI/CD and configuration files that don't belong in container
+Makefile
+docker-compose*.yml
+.dockerignore
+Dockerfile*
+.pre-commit-config.yaml
+
+# Security scan reports
+*-report.json
+security-*.json
+vulnerability-*.json
+audit-*.json
+sbom.json
+
+# Temporary and cache files
+*.swp
+*.swo
+*~
+.tmp/
+cache/
