@@ -1,0 +1,101 @@
+groups:
+  - name: sentiment_analyzer_alerts
+    rules:
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: rate(http_requests_total{status=~"5.."}[5m]) > 0.1
+        for: 2m
+        labels:
+          severity: critical
+          service: sentiment-analyzer
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} errors per second for {{ $labels.instance }}"
+
+      # High response time alert
+      - alert: HighResponseTime
+        expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket[5m])) > 1.0
+        for: 2m
+        labels:
+          severity: warning
+          service: sentiment-analyzer
+        annotations:
+          summary: "High response time detected"
+          description: "95th percentile response time is {{ $value }}s for {{ $labels.instance }}"
+
+      # Service down alert
+      - alert: ServiceDown
+        expr: up{job="sentiment-analyzer"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: sentiment-analyzer
+        annotations:
+          summary: "Sentiment Analyzer service is down"
+          description: "Sentiment Analyzer service has been down for more than 1 minute"
+
+      # High CPU usage alert
+      - alert: HighCPUUsage
+        expr: rate(container_cpu_usage_seconds_total{name="sentiment-analyzer"}[5m]) > 0.8
+        for: 5m
+        labels:
+          severity: warning
+          service: sentiment-analyzer
+        annotations:
+          summary: "High CPU usage detected"
+          description: "CPU usage is {{ $value }}% for {{ $labels.instance }}"
+
+      # High memory usage alert
+      - alert: HighMemoryUsage
+        expr: container_memory_usage_bytes{name="sentiment-analyzer"} / container_spec_memory_limit_bytes{name="sentiment-analyzer"} > 0.9
+        for: 5m
+        labels:
+          severity: critical
+          service: sentiment-analyzer
+        annotations:
+          summary: "High memory usage detected"
+          description: "Memory usage is {{ $value }}% for {{ $labels.instance }}"
+
+      # Model prediction latency alert
+      - alert: ModelPredictionLatency
+        expr: rate(model_prediction_duration_seconds_sum[5m]) / rate(model_prediction_duration_seconds_count[5m]) > 0.5
+        for: 3m
+        labels:
+          severity: warning
+          service: sentiment-analyzer
+        annotations:
+          summary: "Model prediction latency is high"
+          description: "Average model prediction time is {{ $value }}s"
+
+      # Database connection issues
+      - alert: DatabaseConnectionIssues
+        expr: rate(database_connection_errors_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          service: sentiment-analyzer
+        annotations:
+          summary: "Database connection errors detected"
+          description: "Database connection error rate is {{ $value }} errors per second"
+
+  - name: infrastructure_alerts
+    rules:
+      # Disk space alert
+      - alert: DiskSpaceLow
+        expr: (node_filesystem_avail_bytes / node_filesystem_size_bytes) < 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Disk space is running low"
+          description: "Disk space is below 10% on {{ $labels.instance }}"
+
+      # Prometheus target down
+      - alert: PrometheusTargetDown
+        expr: up == 0
+        for: 2m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Prometheus target is down"
+          description: "Target {{ $labels.instance }} of job {{ $labels.job }} is down"
