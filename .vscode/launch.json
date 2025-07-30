@@ -1,0 +1,53 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Python: Train Model",
+            "type": "python",
+            "request": "launch",
+            "module": "src.train",
+            "console": "integratedTerminal",
+            "args": ["--csv", "data/sample_reviews.csv"],
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Python: Web Server",
+            "type": "python",
+            "request": "launch",
+            "module": "src.webapp",
+            "console": "integratedTerminal",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Python: CLI",
+            "type": "python",
+            "request": "launch",
+            "module": "src.cli",
+            "console": "integratedTerminal",
+            "args": ["--help"],
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "name": "Python: Pytest",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "console": "integratedTerminal",
+            "args": [
+                "tests/",
+                "-v",
+                "--tb=short"
+            ],
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
