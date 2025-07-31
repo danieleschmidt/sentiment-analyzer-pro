@@ -1,0 +1,78 @@
+# Enhanced pre-commit configuration
+# To implement: replace existing .pre-commit-config.yaml
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-toml
+      - id: check-xml
+      - id: check-merge-conflict
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: mixed-line-ending
+      - id: pretty-format-json
+        args: ['--autofix']
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.4.1
+    hooks:
+      - id: mypy
+        additional_dependencies: [types-requests]
+        args: [--ignore-missing-imports]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        args: [-r, src]
+        exclude: ^tests/
+
+  - repo: https://github.com/adamchainz/django-upgrade
+    rev: 1.14.1
+    hooks:
+      - id: django-upgrade
+        args: [--target-version, "4.2"]
+
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.9.0
+    hooks:
+      - id: pyupgrade
+        args: [--py39-plus]
+
+  - repo: local
+    hooks:
+      - id: pytest-fast
+        name: pytest (fast tests only)
+        entry: pytest
+        language: system
+        args: [-m, "not slow", --tb=short]
+        pass_filenames: false
+        always_run: true
+        
+      - id: safety-check
+        name: safety dependency check
+        entry: safety
+        language: system
+        args: [check, --short-report]
+        pass_filenames: false
+        always_run: true

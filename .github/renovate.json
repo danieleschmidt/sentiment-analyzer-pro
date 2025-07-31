@@ -1,0 +1,52 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    "security:openssf-scorecard"
+  ],
+  "schedule": [
+    "before 6am on Monday"
+  ],
+  "timezone": "UTC",
+  "labels": ["dependencies", "automation"],
+  "assignees": ["terragon-ai"],
+  "reviewers": ["terragon-ai"],
+  "semanticCommits": "enabled",
+  "commitMessagePrefix": "chore(deps):",
+  "prHourlyLimit": 5,
+  "prConcurrentLimit": 10,
+  "packageRules": [
+    {
+      "matchManagers": ["pip_requirements"],
+      "groupName": "Python dependencies",
+      "schedule": ["before 6am on Monday"]
+    },
+    {
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "Development dependencies",
+      "schedule": ["before 6am on Monday"]
+    },
+    {
+      "matchPackagePatterns": ["security", "crypto"],
+      "labels": ["security", "priority-high"],
+      "schedule": ["at any time"],
+      "automerge": false
+    },
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security", "vulnerability"],
+    "assignees": ["terragon-ai"],
+    "schedule": ["at any time"]
+  },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on Monday"]
+  }
+}

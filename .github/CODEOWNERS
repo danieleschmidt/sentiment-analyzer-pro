@@ -1,1 +1,22 @@
-* @jules
+# Global ownership
+* @terragon-ai @jules
+
+# Critical files require multiple reviewers
+/.github/ @terragon-ai @jules
+/docs/SECURITY.md @terragon-ai @jules
+/SECURITY.md @terragon-ai @jules
+pyproject.toml @terragon-ai @jules
+requirements.txt @terragon-ai @jules
+
+# Source code ownership
+/src/ @terragon-ai @jules
+/tests/ @terragon-ai @jules
+
+# Infrastructure and deployment
+/Dockerfile @terragon-ai @jules
+/docker-compose*.yml @terragon-ai @jules
+/monitoring/ @terragon-ai @jules
+
+# Documentation
+/docs/ @terragon-ai @jules
+*.md @terragon-ai @jules
