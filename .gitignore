@@ -174,3 +174,32 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local development artifacts
+*.joblib
+models/
+checkpoints/
+logs/
+tmp/
+
+# Project-specific ignores
+data/processed/
+data/raw/
+experiments/
+outputs/
