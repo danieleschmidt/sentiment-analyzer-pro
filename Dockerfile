@@ -1,5 +1,29 @@
-# Use specific Python version for reproducible builds
-FROM python:3.10.15-slim@sha256:a3672a65581ea87cf8e9c0beed56f0e9b9f5c64b4cbde36cca1e8f4e8a0eda55
+# Multi-stage Docker build for optimized production image
+
+# Stage 1: Build stage
+FROM python:3.10.15-slim@sha256:a3672a65581ea87cf8e9c0beed56f0e9b9f5c64b4cbde36cca1e8f4e8a0eda55 AS builder
+
+# Install build dependencies
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        gcc \
+        g++ \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /build
+
+# Copy dependency files
+COPY pyproject.toml requirements.txt* ./
+
+# Install dependencies to local directory
+RUN python -m pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir --user .[web]
+
+# Stage 2: Production stage
+FROM python:3.10.15-slim@sha256:a3672a65581ea87cf8e9c0beed56f0e9b9f5c64b4cbde36cca1e8f4e8a0eda55 AS production
 
 # Security: Create non-root user
 RUN groupadd -r appuser && useradd -r -g appuser appuser
@@ -9,35 +33,33 @@ RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
         ca-certificates \
+        curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Security: Copy and install dependencies first for better layer caching
-COPY --chown=appuser:appuser pyproject.toml requirements.txt* ./
+# Copy Python packages from builder stage
+COPY --from=builder /root/.local /home/appuser/.local
 
-# Security: Install dependencies with specific versions and vulnerability checks
-RUN python -m pip install --no-cache-dir --upgrade pip \
-    && pip install --no-cache-dir safety \
-    && pip install --no-cache-dir .[web] \
-    && safety check --json --output /tmp/safety-report.json || true \
-    && chown -R appuser:appuser /app
+# Make sure scripts in .local are usable
+ENV PATH=/home/appuser/.local/bin:$PATH
 
 # Security: Copy application code
 COPY --chown=appuser:appuser . .
 
-# Security: Remove unnecessary files and permissions
+# Security: Remove unnecessary files and set permissions
 RUN find /app -type f -name "*.pyc" -delete \
     && find /app -type d -name "__pycache__" -exec rm -rf {} + \
     && chmod -R 755 /app \
-    && chmod 644 /app/src/*.py
+    && chmod 644 /app/src/*.py \
+    && chown -R appuser:appuser /app
 
 # Security: Switch to non-root user
 USER appuser
 
-# Security: Use non-privileged port and bind to localhost only
+# Security: Use non-privileged port
 EXPOSE 8080
 
 # Health check for container monitoring
