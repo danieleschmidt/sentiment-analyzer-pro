@@ -1,0 +1,2054 @@
+{
+  "timestamp": 1754341792.8651736,
+  "analysis_duration": 2.45658540725708,
+  "files_analyzed": 69,
+  "total_issues": 230,
+  "issue_summary": {
+    "by_type": {
+      "security": 48,
+      "complexity": 9,
+      "maintainability": 19,
+      "documentation": 154
+    },
+    "by_severity": {
+      "medium": 84,
+      "high": 8,
+      "low": 136,
+      "critical": 2
+    },
+    "auto_fixable": 154
+  },
+  "overall_metrics": {
+    "total_lines_of_code": 14252,
+    "total_lines": 19258,
+    "average_comment_ratio": 0.04481586643320249,
+    "total_functions": 916,
+    "total_classes": 171,
+    "average_complexity": 3.366416918135923,
+    "files_analyzed": 69
+  },
+  "recommendations": [
+    "\ud83d\udea8 Address 2 critical security issues immediately",
+    "\ud83d\udd27 Refactor 9 functions with high complexity",
+    "\ud83d\udcda Add documentation to 154 functions/classes",
+    "\ud83d\udd27 154 issues can be automatically fixed",
+    "\ud83d\udcdd Increase code documentation and comments"
+  ],
+  "issues_by_file": {
+    "quality_gates.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 79,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 164,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 429,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 575,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 56,
+        "message": "High cyclomatic complexity: 19",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 56,
+        "message": "Long function: 95 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 153,
+        "message": "High cyclomatic complexity: 16",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 153,
+        "message": "Long function: 82 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 375,
+        "message": "Long function: 102 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 489,
+        "message": "Long function: 91 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      }
+    ],
+    "validate_implementation.py": [
+      {
+        "type": "security",
+        "severity": "high",
+        "line": 118,
+        "message": "Dynamic code execution detected",
+        "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "high",
+        "line": 133,
+        "message": "Dynamic code execution detected",
+        "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 476,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 151,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 15,
+        "message": "Long function: 82 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 99,
+        "message": "High cyclomatic complexity: 17",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 171,
+        "message": "Long function: 81 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 398,
+        "message": "Long function: 90 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 182,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 195,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 218,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "examples/photonic_synthesis_examples.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 595,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 599,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 603,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 638,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 99,
+        "message": "Long function: 97 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 199,
+        "message": "Long function: 101 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "high",
+        "line": 303,
+        "message": "Long function: 139 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 445,
+        "message": "Long function: 78 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 526,
+        "message": "Long function: 85 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      }
+    ],
+    "observability/health_checks.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 269,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 324,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      }
+    ],
+    "observability/structured_logging.py": [
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 102,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 239,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 104,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "observability/tracing.py": [
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 162,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 265,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 163,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/__init__.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      }
+    ],
+    "src/aspect_sentiment.py": [
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 38,
+        "message": "High cyclomatic complexity: 16",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      }
+    ],
+    "src/cli.py": [
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 27,
+        "message": "High cyclomatic complexity: 17",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "high",
+        "line": 256,
+        "message": "Long function: 126 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 27,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 78,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 92,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 106,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 117,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 131,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 163,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 193,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 215,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 235,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 248,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 256,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 202,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/metrics.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 189,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 190,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 213,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 234,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 251,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 192,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 215,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 236,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 253,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/model_comparison.py": [
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 186,
+        "message": "Long function: 76 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      }
+    ],
+    "src/models.py": [
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 28,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 38,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 31,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 34,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/photonic_cli.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 166,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 176,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 312,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 484,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 553,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      }
+    ],
+    "src/photonic_mlir_bridge.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 655,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 658,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      }
+    ],
+    "src/photonic_monitoring.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 529,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      }
+    ],
+    "src/photonic_optimization.py": [
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 130,
+        "message": "High cyclomatic complexity: 17",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      },
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 307,
+        "message": "High cyclomatic complexity: 16",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      }
+    ],
+    "src/photonic_security.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 439,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 446,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      }
+    ],
+    "src/predict.py": [
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 9,
+        "message": "High cyclomatic complexity: 19",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      }
+    ],
+    "src/schemas.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 6,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 27,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/train.py": [
+      {
+        "type": "complexity",
+        "severity": "medium",
+        "line": 9,
+        "message": "High cyclomatic complexity: 22",
+        "suggestion": "Consider breaking function into smaller, focused functions",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 9,
+        "message": "Long function: 81 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      }
+    ],
+    "src/transformer_trainer.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 321,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 343,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "high",
+        "line": 170,
+        "message": "Long function: 113 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      }
+    ],
+    "src/webapp.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 53,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 60,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 86,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 111,
+        "message": "Long function: 77 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 111,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 220,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/photonic_validation.py": [
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 404,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 424,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 456,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 483,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 507,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 530,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 550,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 578,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 607,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 630,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 651,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 684,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 713,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 735,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 756,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 779,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 804,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/photonic_scaling.py": [
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 248,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/photonic_performance_suite.py": [
+      {
+        "type": "maintainability",
+        "severity": "medium",
+        "line": 285,
+        "message": "Long function: 77 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 663,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 693,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 665,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/photonic_quality_analyzer.py": [
+      {
+        "type": "security",
+        "severity": "high",
+        "line": 82,
+        "message": "Dynamic code execution detected",
+        "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "high",
+        "line": 82,
+        "message": "Dynamic code execution detected",
+        "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 127,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 199,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 324,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 443,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 656,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      }
+    ],
+    "tests/__init__.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_aspect_sentiment.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 7,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 13,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_cli.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 8,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 16,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 22,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 29,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 49,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 69,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 111,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 137,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 164,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 200,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 224,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 245,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 268,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 289,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 321,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 331,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 341,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 358,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 53,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 80,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 90,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 81,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 82,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 85,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_cross_validation.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 6,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 15,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 24,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 41,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 53,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 61,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 69,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 77,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_documentation.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 4,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 10,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_evaluate.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 6,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 12,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 18,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_makefile.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 86,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 129,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 148,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      }
+    ],
+    "tests/test_metrics.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 150,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 166,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 154,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 170,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 186,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 200,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 214,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 231,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 248,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 337,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_model_comparison.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 6,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_model_comparison_transformer.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 7,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 15,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 23,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 75,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 81,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 8,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 11,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 16,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 19,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 27,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 30,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 37,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 41,
+        "message": "Missing class docstring",
+        "suggestion": "Add docstring explaining class purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 38,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_models.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 13,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 37,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_nb_model.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 5,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 11,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 20,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_photonic_isolated.py": [
+      {
+        "type": "security",
+        "severity": "critical",
+        "line": 162,
+        "message": "Dynamic code execution detected",
+        "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "critical",
+        "line": 179,
+        "message": "Dynamic code execution detected",
+        "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls",
+        "auto_fixable": false
+      },
+      {
+        "type": "maintainability",
+        "severity": "high",
+        "line": 12,
+        "message": "Long function: 161 lines",
+        "suggestion": "Consider splitting into smaller functions or using helper methods",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 232,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_predict.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 489,
+        "message": "File operation without validation",
+        "suggestion": "Validate file paths and use Path.resolve() to prevent directory traversal",
+        "auto_fixable": false
+      },
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_preprocessing.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 7,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 12,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 37,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_schemas.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_security.py": [
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 65,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 72,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      },
+      {
+        "type": "security",
+        "severity": "medium",
+        "line": 84,
+        "message": "Network operation detected",
+        "suggestion": "Validate URLs, use timeouts, and implement proper error handling",
+        "auto_fixable": false
+      }
+    ],
+    "tests/test_train.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      }
+    ],
+    "tests/test_webapp.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 19,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 38,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 53,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 65,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 95,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      },
+      {
+        "type": "documentation",
+        "severity": "low",
+        "line": 110,
+        "message": "Missing function docstring",
+        "suggestion": "Add docstring explaining function purpose and parameters",
+        "auto_fixable": true
+      }
+    ],
+    "src/sentiment_analyzer_pro/__init__.py": [
+      {
+        "type": "documentation",
+        "severity": "medium",
+        "line": 1,
+        "message": "Missing module docstring",
+        "suggestion": "Add a module-level docstring",
+        "auto_fixable": true
+      }
+    ]
+  },
+  "top_issues": [
+    {
+      "file": "tests/test_photonic_isolated.py",
+      "line": 162,
+      "type": "security",
+      "severity": "critical",
+      "message": "Dynamic code execution detected",
+      "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls"
+    },
+    {
+      "file": "tests/test_photonic_isolated.py",
+      "line": 179,
+      "type": "security",
+      "severity": "critical",
+      "message": "Dynamic code execution detected",
+      "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls"
+    },
+    {
+      "file": "validate_implementation.py",
+      "line": 118,
+      "type": "security",
+      "severity": "high",
+      "message": "Dynamic code execution detected",
+      "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls"
+    },
+    {
+      "file": "validate_implementation.py",
+      "line": 133,
+      "type": "security",
+      "severity": "high",
+      "message": "Dynamic code execution detected",
+      "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls"
+    },
+    {
+      "file": "examples/photonic_synthesis_examples.py",
+      "line": 303,
+      "type": "maintainability",
+      "severity": "high",
+      "message": "Long function: 139 lines",
+      "suggestion": "Consider splitting into smaller functions or using helper methods"
+    },
+    {
+      "file": "src/cli.py",
+      "line": 256,
+      "type": "maintainability",
+      "severity": "high",
+      "message": "Long function: 126 lines",
+      "suggestion": "Consider splitting into smaller functions or using helper methods"
+    },
+    {
+      "file": "src/transformer_trainer.py",
+      "line": 170,
+      "type": "maintainability",
+      "severity": "high",
+      "message": "Long function: 113 lines",
+      "suggestion": "Consider splitting into smaller functions or using helper methods"
+    },
+    {
+      "file": "src/photonic_quality_analyzer.py",
+      "line": 82,
+      "type": "security",
+      "severity": "high",
+      "message": "Dynamic code execution detected",
+      "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls"
+    },
+    {
+      "file": "src/photonic_quality_analyzer.py",
+      "line": 82,
+      "type": "security",
+      "severity": "high",
+      "message": "Dynamic code execution detected",
+      "suggestion": "Replace with safer alternatives like ast.literal_eval or predefined function calls"
+    },
+    {
+      "file": "tests/test_photonic_isolated.py",
+      "line": 12,
+      "type": "maintainability",
+      "severity": "high",
+      "message": "Long function: 161 lines",
+      "suggestion": "Consider splitting into smaller functions or using helper methods"
+    }
+  ],
+  "improvement_score": 0.0
+}

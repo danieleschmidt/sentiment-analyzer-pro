@@ -1,6 +1,6 @@
 {
   "overall_status": "FAILED",
-  "total_duration_seconds": 0.7521984577178955,
+  "total_duration_seconds": 1.856241226196289,
   "gates_run": 5,
   "status_counts": {
     "passed": 3,
@@ -12,7 +12,7 @@
     {
       "name": "Security Import Check",
       "status": "failed",
-      "message": "Found 14 security issues including high-risk patterns",
+      "message": "Found 16 security issues including high-risk patterns",
       "details": {
         "issues": [
           {
@@ -31,6 +31,12 @@
             "file": "quality_gates.py",
             "pattern": "pickle\\.loads",
             "matches": 1,
+            "severity": "high"
+          },
+          {
+            "file": "validate_implementation.py",
+            "pattern": "eval\\s*\\(",
+            "matches": 2,
             "severity": "high"
           },
           {
@@ -54,7 +60,7 @@
           {
             "file": "src/__init__.py",
             "import": "from evaluate",
-            "line": 11,
+            "line": 13,
             "severity": "medium"
           },
           {
@@ -70,6 +76,12 @@
             "severity": "medium"
           },
           {
+            "file": "src/photonic_init.py",
+            "pattern": "__import__\\s*\\(",
+            "matches": 1,
+            "severity": "high"
+          },
+          {
             "file": "tests/test_cross_validation.py",
             "import": "from src.evaluate",
             "line": 3,
@@ -82,14 +94,14 @@
             "severity": "medium"
           },
           {
-            "file": "tests/test_predict.py",
-            "pattern": "subprocess\\.call",
+            "file": "tests/test_photonic_isolated.py",
+            "pattern": "exec\\s*\\(",
             "matches": 2,
             "severity": "high"
           },
           {
-            "file": "tests/test_photonic_isolated.py",
-            "pattern": "exec\\s*\\(",
+            "file": "tests/test_predict.py",
+            "pattern": "subprocess\\.call",
             "matches": 2,
             "severity": "high"
           },
@@ -100,15 +112,15 @@
             "severity": "medium"
           }
         ],
-        "files_scanned": 65,
+        "files_scanned": 71,
         "patterns_checked": 6
       },
-      "duration_seconds": 0.2828695774078369
+      "duration_seconds": 1.0788376331329346
     },
     {
       "name": "Code Complexity Check",
       "status": "warning",
-      "message": "Found 47 complexity issues",
+      "message": "Found 67 complexity issues",
       "details": {
         "issues": [
           {
@@ -168,6 +180,55 @@
             "limit": 10
           },
           {
+            "file": "validate_implementation.py",
+            "function": "validate_core_functionality",
+            "issue": "long_function",
+            "lines": 82,
+            "limit": 50
+          },
+          {
+            "file": "validate_implementation.py",
+            "function": "validate_security_features",
+            "issue": "long_function",
+            "lines": 70,
+            "limit": 50
+          },
+          {
+            "file": "validate_implementation.py",
+            "function": "validate_security_features",
+            "issue": "high_complexity",
+            "complexity": 14,
+            "limit": 10
+          },
+          {
+            "file": "validate_implementation.py",
+            "function": "validate_performance_optimization",
+            "issue": "long_function",
+            "lines": 81,
+            "limit": 50
+          },
+          {
+            "file": "validate_implementation.py",
+            "function": "validate_monitoring_capabilities",
+            "issue": "long_function",
+            "lines": 68,
+            "limit": 50
+          },
+          {
+            "file": "validate_implementation.py",
+            "function": "validate_deployment_readiness",
+            "issue": "long_function",
+            "lines": 72,
+            "limit": 50
+          },
+          {
+            "file": "validate_implementation.py",
+            "function": "run_final_validation",
+            "issue": "long_function",
+            "lines": 90,
+            "limit": 50
+          },
+          {
             "file": ".terragon/autonomous-scheduler.py",
             "class": "AutonomousScheduler",
             "issue": "too_many_methods",
@@ -194,13 +255,6 @@
             "issue": "long_function",
             "lines": 120,
             "limit": 50
-          },
-          {
-            "file": "examples/transformer_example.py",
-            "function": "main",
-            "issue": "high_complexity",
-            "complexity": 11,
-            "limit": 10
           },
           {
             "file": "examples/photonic_synthesis_examples.py",
@@ -250,6 +304,13 @@
             "issue": "long_function",
             "lines": 85,
             "limit": 50
+          },
+          {
+            "file": "examples/transformer_example.py",
+            "function": "main",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
           },
           {
             "file": "src/aspect_sentiment.py",
@@ -308,6 +369,83 @@
             "limit": 50
           },
           {
+            "file": "src/photonic_cli.py",
+            "function": "_create_parser",
+            "issue": "long_function",
+            "lines": 71,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_cli.py",
+            "function": "run",
+            "issue": "high_complexity",
+            "complexity": 12,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_cli.py",
+            "function": "_benchmark",
+            "issue": "long_function",
+            "lines": 67,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_cli.py",
+            "function": "_create_random_circuit",
+            "issue": "long_function",
+            "lines": 58,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_init.py",
+            "function": "_generate_recommendations",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_mlir_bridge.py",
+            "function": "_do_synthesis",
+            "issue": "long_function",
+            "lines": 69,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_optimization.py",
+            "function": "_evict",
+            "issue": "high_complexity",
+            "complexity": 15,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_optimization.py",
+            "function": "optimize_component_placement",
+            "issue": "high_complexity",
+            "complexity": 12,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_security.py",
+            "function": "validate_parameters",
+            "issue": "high_complexity",
+            "complexity": 15,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_security.py",
+            "function": "validate_metadata",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_security.py",
+            "function": "sanitize_parameters",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
+          },
+          {
             "file": "src/predict.py",
             "function": "main",
             "issue": "long_function",
@@ -357,80 +495,87 @@
             "limit": 10
           },
           {
-            "file": "src/photonic_mlir_bridge.py",
-            "function": "_do_synthesis",
+            "file": "src/photonic_error_handling.py",
+            "function": "handle_error",
             "issue": "long_function",
-            "lines": 69,
+            "lines": 54,
             "limit": 50
           },
           {
-            "file": "src/photonic_cli.py",
-            "function": "_create_parser",
+            "file": "src/photonic_error_handling.py",
+            "function": "retry_with_backoff",
             "issue": "long_function",
-            "lines": 71,
+            "lines": 52,
             "limit": 50
           },
           {
-            "file": "src/photonic_cli.py",
-            "function": "run",
-            "issue": "high_complexity",
-            "complexity": 12,
-            "limit": 10
-          },
-          {
-            "file": "src/photonic_cli.py",
-            "function": "_benchmark",
+            "file": "src/photonic_validation.py",
+            "function": "validate_circuit",
             "issue": "long_function",
-            "lines": 67,
+            "lines": 54,
             "limit": 50
           },
           {
-            "file": "src/photonic_cli.py",
-            "function": "_create_random_circuit",
+            "file": "src/photonic_resilience.py",
+            "class": "ResilienceManager",
+            "issue": "too_many_methods",
+            "methods": 24,
+            "limit": 20
+          },
+          {
+            "file": "src/photonic_resilience.py",
+            "function": "_initialize_resilience_framework",
             "issue": "long_function",
-            "lines": 58,
+            "lines": 62,
             "limit": 50
           },
           {
-            "file": "src/photonic_security.py",
-            "function": "validate_parameters",
-            "issue": "high_complexity",
-            "complexity": 15,
-            "limit": 10
-          },
-          {
-            "file": "src/photonic_security.py",
-            "function": "validate_metadata",
-            "issue": "high_complexity",
-            "complexity": 11,
-            "limit": 10
-          },
-          {
-            "file": "src/photonic_security.py",
-            "function": "sanitize_parameters",
-            "issue": "high_complexity",
-            "complexity": 11,
-            "limit": 10
-          },
-          {
-            "file": "src/photonic_optimization.py",
-            "function": "_evict",
-            "issue": "high_complexity",
-            "complexity": 15,
-            "limit": 10
-          },
-          {
-            "file": "src/photonic_optimization.py",
-            "function": "optimize_component_placement",
-            "issue": "high_complexity",
-            "complexity": 12,
-            "limit": 10
-          },
-          {
-            "file": "tests/test_predict.py",
-            "function": "test_direct_main_execution",
+            "file": "src/photonic_resilience.py",
+            "function": "_attempt_recovery",
             "issue": "long_function",
-            "lines": 74,
+            "lines": 52,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_resilience.py",
+            "function": "get_resilience_statistics",
+            "issue": "long_function",
+            "lines": 52,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_scaling.py",
+            "class": "PhotonicScalingManager",
+            "issue": "too_many_methods",
+            "methods": 24,
+            "limit": 20
+          },
+          {
+            "file": "src/photonic_performance_suite.py",
+            "function": "run_synthesis_throughput_benchmark",
+            "issue": "long_function",
+            "lines": 77,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_performance_suite.py",
+            "function": "run_validation_performance_benchmark",
+            "issue": "long_function",
+            "lines": 53,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_performance_suite.py",
+            "function": "run_concurrent_processing_benchmark",
+            "issue": "long_function",
+            "lines": 75,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_performance_suite.py",
+            "function": "run_memory_usage_benchmark",
+            "issue": "long_function",
+            "lines": 62,
             "limit": 50
           },
           {
@@ -438,6 +583,13 @@
             "function": "test_component_types",
             "issue": "long_function",
             "lines": 161,
+            "limit": 50
+          },
+          {
+            "file": "tests/test_predict.py",
+            "function": "test_direct_main_execution",
+            "issue": "long_function",
+            "lines": 74,
             "limit": 50
           }
         ],
@@ -447,7 +599,7 @@
           "max_class_methods": 20
         }
       },
-      "duration_seconds": 0.3813142776489258
+      "duration_seconds": 0.6207718849182129
     },
     {
       "name": "Isolated Tests",
@@ -458,16 +610,16 @@
         "stdout": "\ud83d\udd2c Running Isolated Photonic-MLIR Bridge Tests\n==================================================\n\u2705 Component types test passed\n\u2705 Basic functionality test passed\n\u2705 Validation logic test passed\n\u2705 Circuit structure test passed\n\n\ud83d\udcca Test Results: 4 passed, 0 failed\n\ud83c\udf89 All isolated tests passed!\n",
         "stderr": ""
       },
-      "duration_seconds": 0.06555891036987305
+      "duration_seconds": 0.12506365776062012
     },
     {
       "name": "Test Coverage Check",
       "status": "passed",
-      "message": "Good test coverage: 120.0%",
+      "message": "Good test coverage: 96.0%",
       "details": {
         "test_files": 24,
-        "source_modules": 20,
-        "coverage_ratio": 1.2,
+        "source_modules": 25,
+        "coverage_ratio": 0.96,
         "test_file_list": [
           "test_aspect_sentiment.py",
           "test_cli.py",
@@ -483,16 +635,16 @@
           "test_model_comparison_transformer.py",
           "test_models.py",
           "test_nb_model.py",
+          "test_photonic_basic.py",
+          "test_photonic_isolated.py",
+          "test_photonic_mlir_bridge.py",
           "test_predict.py",
           "test_preprocessing.py",
           "test_schemas.py",
           "test_security.py",
           "test_train.py",
           "test_transformer_trainer.py",
-          "test_webapp.py",
-          "test_photonic_mlir_bridge.py",
-          "test_photonic_basic.py",
-          "test_photonic_isolated.py"
+          "test_webapp.py"
         ],
         "source_file_list": [
           "aspect_sentiment.py",
@@ -503,33 +655,38 @@
           "metrics.py",
           "model_comparison.py",
           "models.py",
+          "photonic_cli.py",
+          "photonic_init.py",
+          "photonic_mlir_bridge.py",
+          "photonic_monitoring.py",
+          "photonic_optimization.py",
+          "photonic_security.py",
           "predict.py",
           "preprocessing.py",
           "schemas.py",
           "train.py",
           "transformer_trainer.py",
           "webapp.py",
-          "photonic_init.py",
-          "photonic_mlir_bridge.py",
-          "photonic_cli.py",
-          "photonic_security.py",
-          "photonic_monitoring.py",
-          "photonic_optimization.py"
+          "photonic_error_handling.py",
+          "photonic_validation.py",
+          "photonic_resilience.py",
+          "photonic_scaling.py",
+          "photonic_performance_suite.py"
         ]
       },
-      "duration_seconds": 0.0005407333374023438
+      "duration_seconds": 0.0008943080902099609
     },
     {
       "name": "Performance Benchmark",
       "status": "passed",
       "message": "Performance benchmarks met",
       "details": {
-        "stdout": "Processed 100 circuits in 0.002s\nRate: 63081.7 circuits/s\n",
+        "stdout": "Processed 100 circuits in 0.002s\nRate: 41449.8 circuits/s\n",
         "stderr": "",
         "return_code": 0
       },
-      "duration_seconds": 0.021638870239257812
+      "duration_seconds": 0.03025507926940918
     }
   ],
-  "timestamp": 1754323934.896666
+  "timestamp": 1754341633.3583627
 }

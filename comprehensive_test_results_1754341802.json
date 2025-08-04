@@ -1,0 +1,87 @@
+{
+  "test_suite": "Photonic-MLIR Bridge Comprehensive Tests",
+  "export_timestamp": 1754341802.7902777,
+  "summary": {
+    "total_tests": 9,
+    "passed": 0,
+    "failed": 9,
+    "success_rate": 0.0
+  },
+  "test_results": [
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Basic Bridge Functionality",
+      "duration": 2.6702880859375e-05,
+      "timestamp": 1754341802.7900224
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Security System Integration",
+      "duration": 7.62939453125e-06,
+      "timestamp": 1754341802.7900803
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Error Handling System",
+      "duration": 5.9604644775390625e-06,
+      "timestamp": 1754341802.7900956
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Validation Framework",
+      "duration": 5.245208740234375e-06,
+      "timestamp": 1754341802.7901084
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Resilience System",
+      "duration": 4.291534423828125e-06,
+      "timestamp": 1754341802.7901194
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Scaling System",
+      "duration": 3.814697265625e-06,
+      "timestamp": 1754341802.7901285
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Performance Suite",
+      "duration": 4.0531158447265625e-06,
+      "timestamp": 1754341802.7901373
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "Quality Analyzer",
+      "duration": 4.5299530029296875e-06,
+      "timestamp": 1754341802.7901454
+    },
+    {
+      "success": false,
+      "error": "attempted relative import with no known parent package",
+      "test_name": "End-to-End Integration",
+      "duration": 3.814697265625e-06,
+      "timestamp": 1754341802.7901542
+    }
+  ],
+  "passed_tests": [],
+  "failed_tests": [
+    "Basic Bridge Functionality",
+    "Security System Integration",
+    "Error Handling System",
+    "Validation Framework",
+    "Resilience System",
+    "Scaling System",
+    "Performance Suite",
+    "Quality Analyzer",
+    "End-to-End Integration"
+  ]
+}
