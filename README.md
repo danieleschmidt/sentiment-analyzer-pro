@@ -42,6 +42,8 @@ This project aims to develop an advanced sentiment analysis tool. It will start 
 - Pandas, NumPy
 
 ## Initial File Structure
+
+```bash
 sentiment-analyzer-pro/
 ├── data/ # For datasets (e.g., sample CSVs)
 │   └── sample_reviews.csv
@@ -60,6 +62,7 @@ sentiment-analyzer-pro/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+```
 
 ## How to Contribute (and test Jules)
 New features, bug fixes, and improvements will be requested via GitHub Issues and assigned to Jules, our Async Development Agent.
