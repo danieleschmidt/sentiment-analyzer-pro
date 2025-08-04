@@ -1,0 +1,535 @@
+{
+  "overall_status": "FAILED",
+  "total_duration_seconds": 0.7521984577178955,
+  "gates_run": 5,
+  "status_counts": {
+    "passed": 3,
+    "failed": 1,
+    "warning": 1,
+    "skipped": 0
+  },
+  "results": [
+    {
+      "name": "Security Import Check",
+      "status": "failed",
+      "message": "Found 14 security issues including high-risk patterns",
+      "details": {
+        "issues": [
+          {
+            "file": "quality_gates.py",
+            "pattern": "subprocess\\.call",
+            "matches": 1,
+            "severity": "high"
+          },
+          {
+            "file": "quality_gates.py",
+            "pattern": "os\\.system",
+            "matches": 1,
+            "severity": "high"
+          },
+          {
+            "file": "quality_gates.py",
+            "pattern": "pickle\\.loads",
+            "matches": 1,
+            "severity": "high"
+          },
+          {
+            "file": ".terragon/autonomous-scheduler.py",
+            "pattern": "subprocess\\.call",
+            "matches": 2,
+            "severity": "high"
+          },
+          {
+            "file": ".terragon/discovery-engine.py",
+            "pattern": "subprocess\\.call",
+            "matches": 2,
+            "severity": "high"
+          },
+          {
+            "file": ".terragon/simple-discovery.py",
+            "pattern": "subprocess\\.call",
+            "matches": 3,
+            "severity": "high"
+          },
+          {
+            "file": "src/__init__.py",
+            "import": "from evaluate",
+            "line": 11,
+            "severity": "medium"
+          },
+          {
+            "file": "src/cli.py",
+            "pattern": "eval\\s*\\(",
+            "matches": 1,
+            "severity": "high"
+          },
+          {
+            "file": "src/cli.py",
+            "import": "from evaluate",
+            "line": 10,
+            "severity": "medium"
+          },
+          {
+            "file": "tests/test_cross_validation.py",
+            "import": "from src.evaluate",
+            "line": 3,
+            "severity": "medium"
+          },
+          {
+            "file": "tests/test_evaluate.py",
+            "import": "from src.evaluate",
+            "line": 3,
+            "severity": "medium"
+          },
+          {
+            "file": "tests/test_predict.py",
+            "pattern": "subprocess\\.call",
+            "matches": 2,
+            "severity": "high"
+          },
+          {
+            "file": "tests/test_photonic_isolated.py",
+            "pattern": "exec\\s*\\(",
+            "matches": 2,
+            "severity": "high"
+          },
+          {
+            "file": "tests/integration/test_full_pipeline.py",
+            "import": "from src.evaluate",
+            "line": 11,
+            "severity": "medium"
+          }
+        ],
+        "files_scanned": 65,
+        "patterns_checked": 6
+      },
+      "duration_seconds": 0.2828695774078369
+    },
+    {
+      "name": "Code Complexity Check",
+      "status": "warning",
+      "message": "Found 47 complexity issues",
+      "details": {
+        "issues": [
+          {
+            "file": "quality_gates.py",
+            "function": "check_imports",
+            "issue": "long_function",
+            "lines": 95,
+            "limit": 50
+          },
+          {
+            "file": "quality_gates.py",
+            "function": "check_imports",
+            "issue": "high_complexity",
+            "complexity": 17,
+            "limit": 10
+          },
+          {
+            "file": "quality_gates.py",
+            "function": "check_code_complexity",
+            "issue": "long_function",
+            "lines": 82,
+            "limit": 50
+          },
+          {
+            "file": "quality_gates.py",
+            "function": "check_code_complexity",
+            "issue": "high_complexity",
+            "complexity": 15,
+            "limit": 10
+          },
+          {
+            "file": "quality_gates.py",
+            "function": "run_isolated_tests",
+            "issue": "long_function",
+            "lines": 62,
+            "limit": 50
+          },
+          {
+            "file": "quality_gates.py",
+            "function": "benchmark_synthesis",
+            "issue": "long_function",
+            "lines": 102,
+            "limit": 50
+          },
+          {
+            "file": "quality_gates.py",
+            "function": "run_all_gates",
+            "issue": "long_function",
+            "lines": 91,
+            "limit": 50
+          },
+          {
+            "file": "quality_gates.py",
+            "function": "run_all_gates",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
+          },
+          {
+            "file": ".terragon/autonomous-scheduler.py",
+            "class": "AutonomousScheduler",
+            "issue": "too_many_methods",
+            "methods": 23,
+            "limit": 20
+          },
+          {
+            "file": ".terragon/discovery-engine.py",
+            "class": "AdvancedValueDiscoveryEngine",
+            "issue": "too_many_methods",
+            "methods": 24,
+            "limit": 20
+          },
+          {
+            "file": ".terragon/discovery-engine.py",
+            "function": "generate_backlog_report",
+            "issue": "long_function",
+            "lines": 91,
+            "limit": 50
+          },
+          {
+            "file": ".terragon/simple-discovery.py",
+            "function": "generate_backlog_report",
+            "issue": "long_function",
+            "lines": 120,
+            "limit": 50
+          },
+          {
+            "file": "examples/transformer_example.py",
+            "function": "main",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
+          },
+          {
+            "file": "examples/photonic_synthesis_examples.py",
+            "function": "create_ring_resonator_filter",
+            "issue": "long_function",
+            "lines": 75,
+            "limit": 50
+          },
+          {
+            "file": "examples/photonic_synthesis_examples.py",
+            "function": "create_4x4_optical_switch",
+            "issue": "long_function",
+            "lines": 97,
+            "limit": 50
+          },
+          {
+            "file": "examples/photonic_synthesis_examples.py",
+            "function": "create_wavelength_division_multiplexer",
+            "issue": "long_function",
+            "lines": 101,
+            "limit": 50
+          },
+          {
+            "file": "examples/photonic_synthesis_examples.py",
+            "function": "create_optical_neural_network_layer",
+            "issue": "long_function",
+            "lines": 139,
+            "limit": 50
+          },
+          {
+            "file": "examples/photonic_synthesis_examples.py",
+            "function": "create_optical_neural_network_layer",
+            "issue": "high_complexity",
+            "complexity": 12,
+            "limit": 10
+          },
+          {
+            "file": "examples/photonic_synthesis_examples.py",
+            "function": "benchmark_synthesis_performance",
+            "issue": "long_function",
+            "lines": 78,
+            "limit": 50
+          },
+          {
+            "file": "examples/photonic_synthesis_examples.py",
+            "function": "demonstrate_advanced_features",
+            "issue": "long_function",
+            "lines": 85,
+            "limit": 50
+          },
+          {
+            "file": "src/aspect_sentiment.py",
+            "function": "extract_aspects",
+            "issue": "high_complexity",
+            "complexity": 13,
+            "limit": 10
+          },
+          {
+            "file": "src/cli.py",
+            "function": "load_csv",
+            "issue": "high_complexity",
+            "complexity": 16,
+            "limit": 10
+          },
+          {
+            "file": "src/cli.py",
+            "function": "cmd_preprocess",
+            "issue": "high_complexity",
+            "complexity": 12,
+            "limit": 10
+          },
+          {
+            "file": "src/cli.py",
+            "function": "main",
+            "issue": "long_function",
+            "lines": 126,
+            "limit": 50
+          },
+          {
+            "file": "src/evaluate.py",
+            "function": "cross_validate",
+            "issue": "long_function",
+            "lines": 54,
+            "limit": 50
+          },
+          {
+            "file": "src/metrics.py",
+            "function": "_init_prometheus_metrics",
+            "issue": "long_function",
+            "lines": 52,
+            "limit": 50
+          },
+          {
+            "file": "src/model_comparison.py",
+            "function": "compare_models",
+            "issue": "long_function",
+            "lines": 64,
+            "limit": 50
+          },
+          {
+            "file": "src/model_comparison.py",
+            "function": "evaluate_transformer_model",
+            "issue": "long_function",
+            "lines": 76,
+            "limit": 50
+          },
+          {
+            "file": "src/predict.py",
+            "function": "main",
+            "issue": "long_function",
+            "lines": 65,
+            "limit": 50
+          },
+          {
+            "file": "src/predict.py",
+            "function": "main",
+            "issue": "high_complexity",
+            "complexity": 19,
+            "limit": 10
+          },
+          {
+            "file": "src/train.py",
+            "function": "main",
+            "issue": "long_function",
+            "lines": 81,
+            "limit": 50
+          },
+          {
+            "file": "src/train.py",
+            "function": "main",
+            "issue": "high_complexity",
+            "complexity": 21,
+            "limit": 10
+          },
+          {
+            "file": "src/transformer_trainer.py",
+            "function": "train",
+            "issue": "long_function",
+            "lines": 113,
+            "limit": 50
+          },
+          {
+            "file": "src/webapp.py",
+            "function": "predict",
+            "issue": "long_function",
+            "lines": 77,
+            "limit": 50
+          },
+          {
+            "file": "src/webapp.py",
+            "function": "predict",
+            "issue": "high_complexity",
+            "complexity": 12,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_mlir_bridge.py",
+            "function": "_do_synthesis",
+            "issue": "long_function",
+            "lines": 69,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_cli.py",
+            "function": "_create_parser",
+            "issue": "long_function",
+            "lines": 71,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_cli.py",
+            "function": "run",
+            "issue": "high_complexity",
+            "complexity": 12,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_cli.py",
+            "function": "_benchmark",
+            "issue": "long_function",
+            "lines": 67,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_cli.py",
+            "function": "_create_random_circuit",
+            "issue": "long_function",
+            "lines": 58,
+            "limit": 50
+          },
+          {
+            "file": "src/photonic_security.py",
+            "function": "validate_parameters",
+            "issue": "high_complexity",
+            "complexity": 15,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_security.py",
+            "function": "validate_metadata",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_security.py",
+            "function": "sanitize_parameters",
+            "issue": "high_complexity",
+            "complexity": 11,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_optimization.py",
+            "function": "_evict",
+            "issue": "high_complexity",
+            "complexity": 15,
+            "limit": 10
+          },
+          {
+            "file": "src/photonic_optimization.py",
+            "function": "optimize_component_placement",
+            "issue": "high_complexity",
+            "complexity": 12,
+            "limit": 10
+          },
+          {
+            "file": "tests/test_predict.py",
+            "function": "test_direct_main_execution",
+            "issue": "long_function",
+            "lines": 74,
+            "limit": 50
+          },
+          {
+            "file": "tests/test_photonic_isolated.py",
+            "function": "test_component_types",
+            "issue": "long_function",
+            "lines": 161,
+            "limit": 50
+          }
+        ],
+        "limits": {
+          "max_complexity": 10,
+          "max_function_lines": 50,
+          "max_class_methods": 20
+        }
+      },
+      "duration_seconds": 0.3813142776489258
+    },
+    {
+      "name": "Isolated Tests",
+      "status": "passed",
+      "message": "All isolated tests passed",
+      "details": {
+        "return_code": 0,
+        "stdout": "\ud83d\udd2c Running Isolated Photonic-MLIR Bridge Tests\n==================================================\n\u2705 Component types test passed\n\u2705 Basic functionality test passed\n\u2705 Validation logic test passed\n\u2705 Circuit structure test passed\n\n\ud83d\udcca Test Results: 4 passed, 0 failed\n\ud83c\udf89 All isolated tests passed!\n",
+        "stderr": ""
+      },
+      "duration_seconds": 0.06555891036987305
+    },
+    {
+      "name": "Test Coverage Check",
+      "status": "passed",
+      "message": "Good test coverage: 120.0%",
+      "details": {
+        "test_files": 24,
+        "source_modules": 20,
+        "coverage_ratio": 1.2,
+        "test_file_list": [
+          "test_aspect_sentiment.py",
+          "test_cli.py",
+          "test_comprehensive_model_comparison.py",
+          "test_config.py",
+          "test_cross_validation.py",
+          "test_documentation.py",
+          "test_evaluate.py",
+          "test_logging.py",
+          "test_makefile.py",
+          "test_metrics.py",
+          "test_model_comparison.py",
+          "test_model_comparison_transformer.py",
+          "test_models.py",
+          "test_nb_model.py",
+          "test_predict.py",
+          "test_preprocessing.py",
+          "test_schemas.py",
+          "test_security.py",
+          "test_train.py",
+          "test_transformer_trainer.py",
+          "test_webapp.py",
+          "test_photonic_mlir_bridge.py",
+          "test_photonic_basic.py",
+          "test_photonic_isolated.py"
+        ],
+        "source_file_list": [
+          "aspect_sentiment.py",
+          "cli.py",
+          "config.py",
+          "evaluate.py",
+          "logging_config.py",
+          "metrics.py",
+          "model_comparison.py",
+          "models.py",
+          "predict.py",
+          "preprocessing.py",
+          "schemas.py",
+          "train.py",
+          "transformer_trainer.py",
+          "webapp.py",
+          "photonic_init.py",
+          "photonic_mlir_bridge.py",
+          "photonic_cli.py",
+          "photonic_security.py",
+          "photonic_monitoring.py",
+          "photonic_optimization.py"
+        ]
+      },
+      "duration_seconds": 0.0005407333374023438
+    },
+    {
+      "name": "Performance Benchmark",
+      "status": "passed",
+      "message": "Performance benchmarks met",
+      "details": {
+        "stdout": "Processed 100 circuits in 0.002s\nRate: 63081.7 circuits/s\n",
+        "stderr": "",
+        "return_code": 0
+      },
+      "duration_seconds": 0.021638870239257812
+    }
+  ],
+  "timestamp": 1754323934.896666
+}
