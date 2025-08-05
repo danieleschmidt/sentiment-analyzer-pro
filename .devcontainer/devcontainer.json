@@ -1,53 +1,64 @@
+```json
 {
   "name": "Sentiment Analyzer Pro Development",
-  "dockerFile": "../Dockerfile.dev",
-  "context": "..",
-  "workspaceFolder": "/workspace",
-  
+  "image": "mcr.microsoft.com/devcontainers/python:3.11-bullseye",
   "features": {
     "ghcr.io/devcontainers/features/python:1": {
       "version": "3.11",
       "installTools": true
     },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  
   "customizations": {
     "vscode": {
       "extensions": [
         "ms-python.python",
+        "ms-python.pylint",
         "ms-python.flake8",
         "ms-python.black-formatter",
         "charliermarsh.ruff",
         "ms-python.pytest",
+        "ms-vscode.test-adapter-converter",
+        "tamasfe.even-better-toml",
         "redhat.vscode-yaml",
         "ms-vscode.vscode-json",
         "streetsidesoftware.code-spell-checker",
         "GitHub.vscode-pull-request-github",
-        "eamodio.gitlens"
+        "github.copilot",
+        "eamodio.gitlens",
+        "ms-vscode.vscode-docker",
+        "ms-azuretools.vscode-docker"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python",
         "python.linting.enabled": true,
+        "python.linting.pylintEnabled": false,
         "python.linting.ruffEnabled": true,
         "python.formatting.provider": "black",
         "python.testing.pytestEnabled": true,
+        "python.testing.unittestEnabled": false,
         "python.testing.pytestPath": "pytest",
         "editor.formatOnSave": true,
         "editor.codeActionsOnSave": {
-          "source.organizeImports": true
+          "source.organizeImports": true,
+          "source.fixAll": true
         },
         "files.trimTrailingWhitespace": true,
-        "files.insertFinalNewline": true
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true
       }
     }
   },
-  
-  "forwardPorts": [5000, 8080],
+  "forwardPorts": [5000, 8000, 8080],
   "portsAttributes": {
     "5000": {
-      "label": "Flask API",
+      "label": "Flask Web API",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Development Server",
       "onAutoForward": "notify"
     },
     "8080": {
@@ -55,13 +66,19 @@
       "onAutoForward": "silent"
     }
   },
-  
   "postCreateCommand": "pip install -e .[dev,ml,web] && pre-commit install",
-  "postStartCommand": "git config --global --add safe.directory /workspace",
-  
+  "postStartCommand": "git config --global --add safe.directory /workspaces/sentiment-analyzer-pro",
+  "remoteUser": "vscode",
   "mounts": [
-    "source=${localWorkspaceFolder}/.git,target=/workspace/.git,type=bind"
+    "source=${localWorkspaceFolder}/.devcontainer/cache,target=/home/vscode/.cache,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/.git,target=/workspaces/sentiment-analyzer-pro/.git,type=bind"
   ],
-  
-  "remoteUser": "vscode"
+  "containerEnv": {
+    "PYTHONPATH": "/workspaces/sentiment-analyzer-pro/src",
+    "FLASK_ENV": "development",
+    "FLASK_DEBUG": "1"
+  },
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/sentiment-analyzer-pro,type=bind,consistency=cached",
+  "workspaceFolder": "/workspaces/sentiment-analyzer-pro"
 }
+```
