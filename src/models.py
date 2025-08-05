@@ -23,6 +23,12 @@ except Exception:  # pragma: no cover - optional dependency
     DistilBertConfig = None
     DistilBertForSequenceClassification = None
 
+try:
+    from .neuromorphic_spikeformer import NeuromorphicSentimentAnalyzer, SpikeformerConfig
+except Exception:  # pragma: no cover - optional dependency
+    NeuromorphicSentimentAnalyzer = None
+    SpikeformerConfig = None
+
 
 @dataclass
 class SentimentModel:
@@ -88,3 +94,53 @@ def build_transformer_model(num_labels: int = 2) -> DistilBertForSequenceClassif
     config = DistilBertConfig(vocab_size=30522, num_labels=num_labels)
     model = DistilBertForSequenceClassification(config)
     return model
+
+
+def build_neuromorphic_model(config: dict = None) -> NeuromorphicSentimentAnalyzer:
+    """
+    Return a neuromorphic spikeformer model for bio-inspired sentiment analysis.
+    
+    Args:
+        config: Optional configuration dictionary for spikeformer parameters
+        
+    Returns:
+        NeuromorphicSentimentAnalyzer instance
+        
+    Raises:
+        ImportError: If neuromorphic dependencies are not available
+    """
+    if NeuromorphicSentimentAnalyzer is None:
+        raise ImportError("Neuromorphic spikeformer dependencies are required")
+    
+    # Configure neuromorphic model
+    if config:
+        spikeformer_config = SpikeformerConfig(**config)
+        analyzer = NeuromorphicSentimentAnalyzer(spikeformer_config)
+    else:
+        analyzer = NeuromorphicSentimentAnalyzer()
+    
+    return analyzer
+
+
+def get_available_models() -> list[str]:
+    """
+    Return list of available model types based on installed dependencies.
+    
+    Returns:
+        List of available model names
+    """
+    available = []
+    
+    if Pipeline is not None:
+        available.extend(["logistic_regression", "naive_bayes"])
+    
+    if keras is not None:
+        available.append("lstm")
+    
+    if DistilBertForSequenceClassification is not None:
+        available.append("transformer")
+    
+    if NeuromorphicSentimentAnalyzer is not None:
+        available.append("neuromorphic")
+    
+    return available
