@@ -159,8 +159,14 @@ def test_sentiment_model_dataclass():
     labels = ["positive", "negative"]
     
     model.fit(texts, labels)
-    predictions = model.predict(["joyful"])
-    assert len(predictions) == 1
+    prediction = model.predict("joyful")
+    assert isinstance(prediction, str)
+    assert prediction in ["positive", "negative"]
+    
+    # Test batch prediction
+    batch_predictions = model.predict(["joyful", "sad"])
+    assert len(batch_predictions) == 2
+    assert all(pred in ["positive", "negative"] for pred in batch_predictions)
 
 
 def test_model_pipeline_components():

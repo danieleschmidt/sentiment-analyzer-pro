@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
+import threading
+from typing import Dict, Any, Optional
+import time
 
 try:
     from sklearn.feature_extraction.text import TfidfVectorizer
@@ -30,15 +34,123 @@ except Exception:  # pragma: no cover - optional dependency
     SpikeformerConfig = None
 
 
+class ModelCache:
+    """Thread-safe model cache with performance monitoring."""
+    
+    def __init__(self, max_size: int = 128, ttl_seconds: int = 3600):
+        self._cache: Dict[str, Any] = {}
+        self._timestamps: Dict[str, float] = {}
+        self._lock = threading.RLock()
+        self._max_size = max_size
+        self._ttl = ttl_seconds
+        self._hits = 0
+        self._misses = 0
+    
+    def get(self, key: str) -> Optional[Any]:
+        with self._lock:
+            current_time = time.time()
+            
+            if key in self._cache:
+                # Check TTL
+                if current_time - self._timestamps[key] < self._ttl:
+                    self._hits += 1
+                    return self._cache[key]
+                else:
+                    # Expired
+                    del self._cache[key]
+                    del self._timestamps[key]
+            
+            self._misses += 1
+            return None
+    
+    def put(self, key: str, value: Any) -> None:
+        with self._lock:
+            current_time = time.time()
+            
+            # Evict oldest entries if cache is full
+            if len(self._cache) >= self._max_size:
+                oldest_key = min(self._timestamps.keys(), key=lambda k: self._timestamps[k])
+                del self._cache[oldest_key]
+                del self._timestamps[oldest_key]
+            
+            self._cache[key] = value
+            self._timestamps[key] = current_time
+    
+    def get_stats(self) -> Dict[str, Any]:
+        with self._lock:
+            total_requests = self._hits + self._misses
+            hit_rate = self._hits / total_requests if total_requests > 0 else 0
+            return {
+                'hits': self._hits,
+                'misses': self._misses,
+                'hit_rate': hit_rate,
+                'cache_size': len(self._cache)
+            }
+
+
+# Global caches
+_prediction_cache = ModelCache(max_size=1000, ttl_seconds=300)  # 5 min TTL for predictions
+_model_cache = ModelCache(max_size=10, ttl_seconds=3600)  # 1 hour TTL for models
+
+
 @dataclass
 class SentimentModel:
     pipeline: Pipeline
+    _prediction_cache: Optional[ModelCache] = None
+
+    def __post_init__(self):
+        if self._prediction_cache is None:
+            self._prediction_cache = _prediction_cache
 
     def fit(self, texts, labels):
         self.pipeline.fit(texts, labels)
+        # Clear cache when model is retrained
+        if self._prediction_cache:
+            self._prediction_cache._cache.clear()
+
+    @lru_cache(maxsize=1000)
+    def _predict_single_cached(self, text: str) -> str:
+        """Cache single predictions using LRU cache."""
+        return self.pipeline.predict([text])[0]
 
     def predict(self, texts):
-        return self.pipeline.predict(texts)
+        """Optimized prediction with caching for repeated inputs."""
+        if isinstance(texts, str):
+            texts = [texts]
+        
+        results = []
+        for text in texts:
+            # For single text prediction, use caching
+            if len(texts) == 1:
+                cache_key = f"pred_{hash(text)}"
+                cached_result = self._prediction_cache.get(cache_key) if self._prediction_cache else None
+                
+                if cached_result is not None:
+                    results.append(cached_result)
+                else:
+                    prediction = self.pipeline.predict([text])[0]
+                    if self._prediction_cache:
+                        self._prediction_cache.put(cache_key, prediction)
+                    results.append(prediction)
+            else:
+                # For batch predictions, skip caching to avoid overhead
+                results.append(self.pipeline.predict([text])[0])
+        
+        # Return single result for single input, list for multiple inputs
+        if len(texts) == 1:
+            return results[0]
+        else:
+            return results
+    
+    def predict_proba(self, texts):
+        """Get prediction probabilities if available."""
+        if hasattr(self.pipeline, 'predict_proba'):
+            return self.pipeline.predict_proba(texts)
+        return None
+    
+    def get_cache_stats(self) -> Dict[str, Any]:
+        """Get caching performance statistics."""
+        return self._prediction_cache.get_stats() if self._prediction_cache else {}
 
 
 def build_model() -> SentimentModel:
