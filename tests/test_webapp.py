@@ -74,6 +74,7 @@ def test_webapp_metrics_endpoint(tmp_path):
 
     webapp.load_model.cache_clear()
     webapp.load_model._test_model_path = str(model_file)
+    webapp._reset_counters()  # Reset counters for clean test
 
     with webapp.app.test_client() as client:
         client.post('/predict', json={'text': 'good'})

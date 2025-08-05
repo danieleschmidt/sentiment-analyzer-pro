@@ -85,3 +85,34 @@ def lemmatize_tokens(tokens: List[str]) -> List[str]:
         return [_lemmatizer.lemmatize(t, "v") for t in tokens]
     except LookupError:  # pragma: no cover - missing wordnet
         return tokens
+
+
+def preprocess_text(text: str, remove_stopwords_flag: bool = True, lemmatize: bool = False) -> str:
+    """Complete text preprocessing pipeline."""
+    # Clean and tokenize text
+    cleaned = clean_text(text)
+    tokens = cleaned.split()
+    
+    # Remove stopwords if requested
+    if remove_stopwords_flag:
+        tokens = remove_stopwords(tokens)
+    
+    # Lemmatize if requested
+    if lemmatize:
+        tokens = lemmatize_tokens(tokens)
+    
+    return " ".join(tokens)
+
+
+def prepare_data_for_training(data: pd.DataFrame, text_column: str = "text", 
+                            label_column: str = "label") -> tuple[List[str], List[str]]:
+    """Prepare data for training by extracting texts and labels."""
+    if text_column not in data.columns:
+        raise ValueError(f"Column '{text_column}' not found in data")
+    if label_column not in data.columns:
+        raise ValueError(f"Column '{label_column}' not found in data")
+    
+    texts = data[text_column].astype(str).tolist()
+    labels = data[label_column].astype(str).tolist()
+    
+    return texts, labels

@@ -2,8 +2,53 @@
 
 import logging
 import os
+from typing import Union
 
-from .models import build_model
+import pandas as pd
+import joblib
+
+from .models import build_model, SentimentModel
+from .preprocessing import prepare_data_for_training
+
+
+def train_model(data: Union[pd.DataFrame, str], model_path: str = None, 
+                text_column: str = "text", label_column: str = "label") -> SentimentModel:
+    """Train a sentiment analysis model on provided data.
+    
+    Args:
+        data: DataFrame with training data or path to CSV file
+        model_path: Optional path to save the trained model
+        text_column: Name of the text column in the data
+        label_column: Name of the label column in the data
+        
+    Returns:
+        Trained SentimentModel
+    """
+    logger = logging.getLogger(__name__)
+    
+    # Load data if path provided
+    if isinstance(data, str):
+        data = pd.read_csv(data)
+    
+    # Prepare training data
+    texts, labels = prepare_data_for_training(data, text_column, label_column)
+    
+    # Build and train model
+    model = build_model()
+    logger.info(f"Training model on {len(texts)} samples...")
+    model.fit(texts, labels)
+    
+    # Save model if path provided
+    if model_path:
+        # Ensure the directory exists
+        model_dir = os.path.dirname(model_path)
+        if model_dir and not os.path.exists(model_dir):
+            os.makedirs(model_dir, exist_ok=True)
+        
+        joblib.dump(model, model_path)
+        logger.info(f"Model saved to {model_path}")
+    
+    return model
 
 
 def main(csv_path: str = "data/sample_reviews.csv", model_path: str = os.getenv("MODEL_PATH", "model.joblib")):
