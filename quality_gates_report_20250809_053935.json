@@ -1,0 +1,186 @@
+{
+  "overall_status": "PASSED",
+  "summary": {
+    "total_gates": 17,
+    "passed": 16,
+    "failed": 1,
+    "pass_rate": 94.11764705882352,
+    "total_execution_time": 42.59271049499512,
+    "avg_gate_time": 2.5051661940181957,
+    "max_gate_time": 8.553201913833618,
+    "min_gate_time": 0.01161336898803711,
+    "timestamp": "2025-08-09T05:39:35.836467"
+  },
+  "detailed_results": [
+    {
+      "name": "Python Environment Check",
+      "command": "source venv/bin/activate && python --version && pip --version",
+      "return_code": 0,
+      "stdout": "Python 3.12.3\npip 24.0 from /root/repo/venv/lib/python3.12/site-packages/pip (python 3.12)\n",
+      "stderr": "",
+      "execution_time": 0.4329097270965576,
+      "passed": true,
+      "timestamp": "2025-08-09T05:38:53.676696"
+    },
+    {
+      "name": "Python Syntax Check",
+      "command": "source venv/bin/activate && python -m py_compile src/*.py",
+      "return_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "execution_time": 0.35073375701904297,
+      "passed": true,
+      "timestamp": "2025-08-09T05:38:54.027669"
+    },
+    {
+      "name": "Core Model Tests",
+      "command": "source venv/bin/activate && python -m pytest tests/test_models.py -v --tb=short",
+      "return_code": 0,
+      "stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0 -- /root/repo/venv/bin/python\ncachedir: .pytest_cache\nrootdir: /root/repo\nconfigfile: pytest.ini\nplugins: cov-6.2.1\ncollecting ... collected 12 items\n\ntests/test_models.py::test_model_fit_predict PASSED                      [  8%]\ntests/test_models.py::test_build_lstm_model SKIPPED (could not impor...) [ 16%]\ntests/test_models.py::test_build_transformer_model SKIPPED (could no...) [ 25%]\ntests/test_models.py::test_build_nb_model PASSED                         [ 33%]\ntests/test_models.py::test_build_model_missing_sklearn PASSED            [ 41%]\ntests/test_models.py::test_build_nb_model_missing_sklearn PASSED         [ 50%]\ntests/test_models.py::test_build_lstm_model_missing_tensorflow PASSED    [ 58%]\ntests/test_models.py::test_build_transformer_model_missing_transformers PASSED [ 66%]\ntests/test_models.py::test_build_lstm_model_custom_parameters SKIPPED    [ 75%]\ntests/test_models.py::test_build_transformer_model_custom_labels SKIPPED [ 83%]\ntests/test_models.py::test_sentiment_model_dataclass PASSED              [ 91%]\ntests/test_models.py::test_model_pipeline_components PASSED              [100%]\n\n========================= 8 passed, 4 skipped in 1.78s =========================\n",
+      "stderr": "",
+      "execution_time": 3.6768405437469482,
+      "passed": true,
+      "timestamp": "2025-08-09T05:38:57.704782"
+    },
+    {
+      "name": "Preprocessing Tests",
+      "command": "source venv/bin/activate && python -m pytest tests/test_preprocessing.py -v --tb=short",
+      "return_code": 0,
+      "stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0 -- /root/repo/venv/bin/python\ncachedir: .pytest_cache\nrootdir: /root/repo\nconfigfile: pytest.ini\nplugins: cov-6.2.1\ncollecting ... collected 18 items\n\ntests/test_preprocessing.py::test_clean_text PASSED                      [  5%]\ntests/test_preprocessing.py::test_clean_text_collapses_spaces PASSED     [ 11%]\ntests/test_preprocessing.py::test_clean_text_lemmatizes_running PASSED   [ 16%]\ntests/test_preprocessing.py::test_remove_stopwords PASSED                [ 22%]\ntests/test_preprocessing.py::test_clean_series_vectorized PASSED         [ 27%]\ntests/test_preprocessing.py::test_clean_series_with_special_characters PASSED [ 33%]\ntests/test_preprocessing.py::test_clean_series_with_empty_strings PASSED [ 38%]\ntests/test_preprocessing.py::test_ensure_nltk_with_nltk_available PASSED [ 44%]\ntests/test_preprocessing.py::test_ensure_nltk_without_nltk PASSED        [ 50%]\ntests/test_preprocessing.py::test_remove_stopwords_with_nltk_setup PASSED [ 55%]\ntests/test_preprocessing.py::test_remove_stopwords_with_custom_stopwords PASSED [ 61%]\ntests/test_preprocessing.py::test_lemmatize_tokens_without_nltk PASSED   [ 66%]\ntests/test_preprocessing.py::test_lemmatize_tokens_fallback_edge_cases PASSED [ 72%]\ntests/test_preprocessing.py::test_lemmatize_tokens_with_nltk_error PASSED [ 77%]\ntests/test_preprocessing.py::test_lemmatize_tokens_with_nltk_success PASSED [ 83%]\ntests/test_preprocessing.py::test_clean_text_edge_cases PASSED           [ 88%]\ntests/test_preprocessing.py::test_preprocessing_integration PASSED       [ 94%]\ntests/test_preprocessing.py::test_global_variables_initialization PASSED [100%]\n\n============================== 18 passed in 5.70s ==============================\n",
+      "stderr": "",
+      "execution_time": 8.553201913833618,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:06.258236"
+    },
+    {
+      "name": "Internationalization Tests",
+      "command": "source venv/bin/activate && python -m pytest tests/test_advanced_features.py::TestInternationalization -v --tb=short",
+      "return_code": 0,
+      "stdout": "============================= test session starts ==============================\nplatform linux -- Python 3.12.3, pytest-8.4.1, pluggy-1.6.0 -- /root/repo/venv/bin/python\ncachedir: .pytest_cache\nrootdir: /root/repo\nconfigfile: pytest.ini\nplugins: cov-6.2.1\ncollecting ... collected 4 items\n\ntests/test_advanced_features.py::TestInternationalization::test_supported_languages PASSED [ 25%]\ntests/test_advanced_features.py::TestInternationalization::test_language_switching PASSED [ 50%]\ntests/test_advanced_features.py::TestInternationalization::test_translation_keys PASSED [ 75%]\ntests/test_advanced_features.py::TestInternationalization::test_enum_values PASSED [100%]\n\n=============================== warnings summary ===============================\ntests/test_advanced_features.py:640\n  /root/repo/tests/test_advanced_features.py:640: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n    @pytest.mark.integration\n\ntests/test_advanced_features.py:740\n  /root/repo/tests/test_advanced_features.py:740: PytestUnknownMarkWarning: Unknown pytest.mark.performance - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html\n    @pytest.mark.performance\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n======================== 4 passed, 2 warnings in 2.03s =========================\n",
+      "stderr": "",
+      "execution_time": 3.9009976387023926,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:10.159528"
+    },
+    {
+      "name": "Import Structure Check",
+      "command": "source venv/bin/activate && python -c \"from src.models import build_nb_model; print('✓ Core imports work')\"",
+      "return_code": 0,
+      "stdout": "✓ Core imports work\n",
+      "stderr": "2025-08-09 05:39:11,778 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:11,781 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:11,782 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:11,782 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:11,782 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.4685022830963135,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:12.628277"
+    },
+    {
+      "name": "Configuration Validation",
+      "command": "source venv/bin/activate && python -c \"from src.config import Config; print(f'✓ Model path: {Config.MODEL_PATH}')\"",
+      "return_code": 0,
+      "stdout": "✓ Model path: model.joblib\n",
+      "stderr": "2025-08-09 05:39:14,220 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:14,224 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:14,224 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:14,224 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:14,224 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.4026870727539062,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:15.031267"
+    },
+    {
+      "name": "Web App Import Check",
+      "command": "source venv/bin/activate && python -c \"from src.webapp import app; print('✓ Flask app can be imported')\"",
+      "return_code": 1,
+      "stdout": "",
+      "stderr": "2025-08-09 05:39:16,638 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:16,642 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:16,642 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:16,642 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:16,642 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/root/repo/src/webapp.py\", line 798, in <module>\n    @app.route('/compliance/data/<user_id>')\n     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/repo/venv/lib/python3.12/site-packages/flask/sansio/scaffold.py\", line 362, in decorator\n    self.add_url_rule(rule, endpoint, f, **options)\n  File \"/root/repo/venv/lib/python3.12/site-packages/flask/sansio/scaffold.py\", line 47, in wrapper_func\n    return f(self, *args, **kwargs)\n           ^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/root/repo/venv/lib/python3.12/site-packages/flask/sansio/app.py\", line 657, in add_url_rule\n    raise AssertionError(\nAssertionError: View function mapping is overwriting an existing endpoint function: decorator\n",
+      "execution_time": 2.523256301879883,
+      "passed": false,
+      "timestamp": "2025-08-09T05:39:17.554844"
+    },
+    {
+      "name": "CLI Import Check",
+      "command": "source venv/bin/activate && python -c \"from src.cli import main; print('✓ CLI can be imported')\"",
+      "return_code": 0,
+      "stdout": "✓ CLI can be imported\n",
+      "stderr": "2025-08-09 05:39:19,170 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:19,174 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:19,174 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:19,174 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:19,174 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.4782638549804688,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:20.033451"
+    },
+    {
+      "name": "Advanced Features Import",
+      "command": "source venv/bin/activate && python -c \"from src.i18n import t; from src.compliance import get_compliance_manager; print('✓ Advanced features importable')\"",
+      "return_code": 0,
+      "stdout": "✓ Advanced features importable\n",
+      "stderr": "2025-08-09 05:39:21,667 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:21,671 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:21,671 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:21,671 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:21,671 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.5128767490386963,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:22.546582"
+    },
+    {
+      "name": "Performance Modules Check",
+      "command": "source venv/bin/activate && python -c \"from src.advanced_caching import get_cache_manager; from src.auto_scaling_advanced import get_advanced_auto_scaler; print('✓ Performance modules work')\"",
+      "return_code": 0,
+      "stdout": "✓ Performance modules work\n",
+      "stderr": "2025-08-09 05:39:24,184 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:24,187 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:24,188 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:24,188 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:24,188 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.9286794662475586,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:25.475528"
+    },
+    {
+      "name": "Research Framework Check",
+      "command": "source venv/bin/activate && python -c \"from src.quantum_research_framework import get_research_manager, setup_quantum_sentiment_experiment; print('✓ Research framework operational')\"",
+      "return_code": 0,
+      "stdout": "✓ Research framework operational\n",
+      "stderr": "2025-08-09 05:39:27,182 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:27,185 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:27,185 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:27,186 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:27,186 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.7029502391815186,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:28.178806"
+    },
+    {
+      "name": "Security Modules Check",
+      "command": "source venv/bin/activate && python -c \"from src.security_hardening import get_threat_detector; from src.health_monitoring import get_health_monitor; print('✓ Security and monitoring ready')\"",
+      "return_code": 0,
+      "stdout": "✓ Security and monitoring ready\n",
+      "stderr": "2025-08-09 05:39:29,824 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:29,828 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:29,828 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:29,828 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:29,828 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.6356916427612305,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:30.814790"
+    },
+    {
+      "name": "Data Pipeline Test",
+      "command": "source venv/bin/activate && python -c \"import pandas as pd; from src.preprocessing import clean_text; print('✓ Data pipeline functional')\"",
+      "return_code": 0,
+      "stdout": "✓ Data pipeline functional\n",
+      "stderr": "2025-08-09 05:39:32,394 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:32,398 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:32,398 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:32,398 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:32,398 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.3880486488342285,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:33.203153"
+    },
+    {
+      "name": "ML Pipeline Test",
+      "command": "source venv/bin/activate && python -c \"from src.models import build_nb_model; model = build_nb_model(); print('✓ ML pipeline functional')\"",
+      "return_code": 0,
+      "stdout": "✓ ML pipeline functional\n",
+      "stderr": "2025-08-09 05:39:34,875 - src.photonic_mlir_bridge - INFO - _initialize_base_operations:335 - Initialized 4 base photonic operations\n2025-08-09 05:39:34,879 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: system\n2025-08-09 05:39:34,879 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: memory\n2025-08-09 05:39:34,879 - src.photonic_monitoring - INFO - register_check:258 - Registered health check: synthesis\n2025-08-09 05:39:34,879 - src.photonic_monitoring - INFO - __init__:335 - Photonic monitor initialized\n",
+      "execution_time": 2.559753656387329,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:35.763234"
+    },
+    {
+      "name": "File System Check",
+      "command": "ls -la data/ && ls -la src/ && ls -la tests/ && echo '✓ File system accessible'",
+      "return_code": 0,
+      "stdout": "total 12\ndrwxr-xr-x  2 root root 4096 Aug  9 02:40 .\ndrwxr-xr-x 23 root root 4096 Aug  9 05:38 ..\n-rw-r--r--  1 root root  119 Aug  9 02:40 sample_reviews.csv\ntotal 1200\ndrwxr-xr-x  6 root root  4096 Aug  9 05:38 .\ndrwxr-xr-x 23 root root  4096 Aug  9 05:38 ..\n-rw-r--r--  1 root root  2477 Aug  9 02:40 __init__.py\ndrwxr-xr-x  2 root root  4096 Aug  9 05:38 __pycache__\n-rw-r--r--  1 root root 20653 Aug  9 05:31 advanced_caching.py\n-rw-r--r--  1 root root 14867 Aug  9 05:27 advanced_error_handling.py\n-rw-r--r--  1 root root  2365 Aug  9 02:40 aspect_sentiment.py\n-rw-r--r--  1 root root 11110 Aug  9 02:40 auto_scaling.py\n-rw-r--r--  1 root root 22820 Aug  9 05:32 auto_scaling_advanced.py\n-rw-r--r--  1 root root 13638 Aug  9 02:40 cli.py\n-rw-r--r--  1 root root  9975 Aug  9 05:25 compliance.py\n-rw-r--r--  1 root root  2587 Aug  9 02:40 config.py\n-rw-r--r--  1 root root  4564 Aug  9 02:40 evaluate.py\n-rw-r--r--  1 root root 20899 Aug  9 05:29 health_monitoring.py\n-rw-r--r--  1 root root 30704 Aug  9 02:40 hybrid_qnp_architecture.py\n-rw-r--r--  1 root root  8022 Aug  9 05:24 i18n.py\n-rw-r--r--  1 root root  4975 Aug  9 02:40 logging_config.py\n-rw-r--r--  1 root root  9789 Aug  9 02:40 metrics.py\n-rw-r--r--  1 root root 16972 Aug  9 02:40 model_comparison.py\n-rw-r--r--  1 root root  8778 Aug  9 02:40 models.py\n-rw-r--r--  1 root root 12167 Aug  9 05:26 multi_region_deployment.py\n-rw-r--r--  1 root root 24893 Aug  9 02:40 neuromorphic_optimization.py\n-rw-r--r--  1 root root 34113 Aug  9 02:40 neuromorphic_quantum_memory.py\n-rw-r--r--  1 root root 26514 Aug  9 02:40 neuromorphic_spikeformer.py\n-rw-r--r--  1 root root 22459 Aug  9 02:40 neuromorphic_validation.py\n-rw-r--r--  1 root root 11324 Aug  9 02:40 performance_optimization.py\n-rw-r--r--  1 root root 24349 Aug  9 02:40 photonic_cli.py\n-rw-r--r--  1 root root 20924 Aug  9 02:40 photonic_comprehensive_tests.py\n-rw-r--r--  1 root root 22614 Aug  9 02:40 photonic_error_handling.py\n-rw-r--r--  1 root root 16105 Aug  9 02:40 photonic_init.py\n-rw-r--r--  1 root root 25906 Aug  9 02:40 photonic_mlir_bridge.py\n-rw-r--r--  1 root root 21142 Aug  9 02:40 photonic_monitoring.py\n-rw-r--r--  1 root root 24400 Aug  9 02:40 photonic_optimization.py\n-rw-r--r--  1 root root 28946 Aug  9 02:40 photonic_performance_suite.py\n-rw-r--r--  1 root root 28822 Aug  9 02:40 photonic_quality_analyzer.py\n-rw-r--r--  1 root root 27825 Aug  9 02:40 photonic_resilience.py\n-rw-r--r--  1 root root 27920 Aug  9 02:40 photonic_scaling.py\n-rw-r--r--  1 root root 19205 Aug  9 02:40 photonic_security.py\n-rw-r--r--  1 root root 31170 Aug  9 02:40 photonic_validation.py\n-rw-r--r--  1 root root  3771 Aug  9 02:40 predict.py\n-rw-r--r--  1 root root  3932 Aug  9 02:40 preprocessing.py\n-rw-r--r--  1 root root 31937 Aug  9 02:40 qnp_research_validation.py\n-rw-r--r--  1 root root 30686 Aug  9 02:40 quantum_benchmarking.py\n-rw-r--r--  1 root root 22419 Aug  9 02:40 quantum_inspired_sentiment.py\n-rw-r--r--  1 root root 23215 Aug  9 02:40 quantum_photonic_fusion.py\n-rw-r--r--  1 root root 19590 Aug  9 02:40 quantum_photonic_fusion_minimal.py\n-rw-r--r--  1 root root 53987 Aug  9 02:40 quantum_photonic_optimization.py\n-rw-r--r--  1 root root 43838 Aug  9 02:40 quantum_photonic_resilience.py\n-rw-r--r--  1 root root 52183 Aug  9 02:40 quantum_photonic_security.py\n-rw-r--r--  1 root root 28482 Aug  9 05:33 quantum_research_framework.py\n-rw-r--r--  1 root root  6784 Aug  9 05:38 schemas.py\n-rw-r--r--  1 root root 18261 Aug  9 02:40 security_enhancements.py\n-rw-r--r--  1 root root 19175 Aug  9 05:28 security_hardening.py\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 sentiment_analyzer_pro\ndrwxr-xr-x  2 root root  4096 Aug  9 05:22 sentiment_analyzer_pro.egg-info\n-rw-r--r--  1 root root  6047 Aug  9 02:40 train.py\n-rw-r--r--  1 root root 13381 Aug  9 02:40 transformer_trainer.py\ndrwxr-xr-x  2 root root  4096 Aug  9 05:36 translations\n-rw-r--r--  1 root root 31791 Aug  9 02:40 wdm_quantum_multimodal.py\n-rw-r--r--  1 root root 35909 Aug  9 05:26 webapp.py\ntotal 432\ndrwxr-xr-x  8 root root  4096 Aug  9 05:35 .\ndrwxr-xr-x 23 root root  4096 Aug  9 05:38 ..\n-rw-r--r--  1 root root     1 Aug  9 02:40 __init__.py\ndrwxr-xr-x  2 root root  4096 Aug  9 05:36 __pycache__\n-rw-r--r--  1 root root  1199 Aug  9 05:24 conftest.py\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 e2e\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 fixtures\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 integration\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 performance\n-rw-r--r--  1 root root  1341 Aug  9 02:40 sprint_acceptance_criteria.json\n-rw-r--r--  1 root root 28058 Aug  9 05:35 test_advanced_features.py\n-rw-r--r--  1 root root   665 Aug  9 02:40 test_aspect_sentiment.py\n-rw-r--r--  1 root root 10735 Aug  9 02:40 test_auto_scaling.py\n-rw-r--r--  1 root root  8827 Aug  9 02:40 test_batch_prediction.py\n-rw-r--r--  1 root root  9456 Aug  9 02:40 test_cli.py\n-rw-r--r--  1 root root 15539 Aug  9 02:40 test_comprehensive_model_comparison.py\n-rw-r--r--  1 root root  7076 Aug  9 02:40 test_config.py\n-rw-r--r--  1 root root  2447 Aug  9 02:40 test_cross_validation.py\n-rw-r--r--  1 root root   423 Aug  9 02:40 test_documentation.py\n-rw-r--r--  1 root root   646 Aug  9 02:40 test_evaluate.py\n-rw-r--r--  1 root root 20843 Aug  9 02:40 test_hybrid_qnp_architecture.py\n-rw-r--r--  1 root root  8678 Aug  9 02:40 test_logging.py\n-rw-r--r--  1 root root  6250 Aug  9 02:40 test_makefile.py\n-rw-r--r--  1 root root 13436 Aug  9 02:40 test_metrics.py\n-rw-r--r--  1 root root   388 Aug  9 02:40 test_model_comparison.py\n-rw-r--r--  1 root root  2500 Aug  9 02:40 test_model_comparison_transformer.py\n-rw-r--r--  1 root root  6243 Aug  9 02:40 test_models.py\n-rw-r--r--  1 root root   774 Aug  9 02:40 test_nb_model.py\n-rw-r--r--  1 root root 21573 Aug  9 02:40 test_neuromorphic_spikeformer.py\n-rw-r--r--  1 root root  4117 Aug  9 02:40 test_photonic_basic.py\n-rw-r--r--  1 root root 12414 Aug  9 02:40 test_photonic_isolated.py\n-rw-r--r--  1 root root 19982 Aug  9 02:40 test_photonic_mlir_bridge.py\n-rw-r--r--  1 root root 20771 Aug  9 02:40 test_predict.py\n-rw-r--r--  1 root root 10169 Aug  9 02:40 test_preprocessing.py\n-rw-r--r--  1 root root 20931 Aug  9 02:40 test_quantum_benchmarking.py\n-rw-r--r--  1 root root 20012 Aug  9 02:40 test_quantum_inspired_sentiment.py\n-rw-r--r--  1 root root  9681 Aug  9 02:40 test_schemas.py\n-rw-r--r--  1 root root  6931 Aug  9 02:40 test_security.py\n-rw-r--r--  1 root root 17274 Aug  9 02:40 test_train.py\n-rw-r--r--  1 root root  9945 Aug  9 02:40 test_transformer_trainer.py\n-rw-r--r--  1 root root  4062 Aug  9 02:40 test_webapp.py\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 unit\n✓ File system accessible\n",
+      "stderr": "",
+      "execution_time": 0.01161336898803711,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:35.775132"
+    },
+    {
+      "name": "Resource Check",
+      "command": "source venv/bin/activate && python -c \"import psutil; print(f'✓ Memory: {psutil.virtual_memory().percent}% used, CPU: {psutil.cpu_percent()}%')\"",
+      "return_code": 0,
+      "stdout": "✓ Memory: 14.5% used, CPU: 0.0%\n",
+      "stderr": "",
+      "execution_time": 0.06081843376159668,
+      "passed": true,
+      "timestamp": "2025-08-09T05:39:35.836209"
+    }
+  ]
+}

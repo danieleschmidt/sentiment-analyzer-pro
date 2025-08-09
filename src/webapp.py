@@ -31,6 +31,9 @@ from .security_enhancements import (
     security_middleware, secure_endpoint, security_audit_logger,
     input_validator, compliance_manager
 )
+from .i18n import t, set_language, get_supported_languages
+from .compliance import get_compliance_manager, DataProcessingPurpose
+from .multi_region_deployment import route_request, get_load_balancer
 
 app = Flask(__name__)
 logger = get_logger(__name__)
@@ -738,6 +741,104 @@ def health_detailed():
     health_status["resources"] = resource_stats
     
     return jsonify(health_status)
+
+
+@app.route('/i18n/languages')
+def get_languages():
+    """Get supported languages."""
+    return jsonify({
+        "supported_languages": get_supported_languages(),
+        "message": t("processing")
+    })
+
+
+@app.route('/i18n/set/<language>')
+def set_app_language(language):
+    """Set application language."""
+    try:
+        set_language(language)
+        return jsonify({
+            "success": True,
+            "language": language,
+            "message": t("processing")
+        })
+    except Exception as e:
+        return jsonify({
+            "success": False,
+            "error": str(e)
+        }), 400
+
+
+@app.route('/compliance/consent', methods=['POST'])
+@secure_endpoint
+def record_user_consent():
+    """Record user consent for data processing."""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": t("invalid_input")}), 400
+        
+        compliance_mgr = get_compliance_manager()
+        consent = compliance_mgr.record_consent(
+            user_id=data.get('user_id'),
+            purpose=DataProcessingPurpose(data.get('purpose', 'sentiment_analysis')),
+            granted=data.get('granted', False)
+        )
+        
+        return jsonify({
+            "success": True,
+            "consent_id": consent.user_id,
+            "message": t("processing")
+        })
+    except Exception as e:
+        logger.error(f"Consent recording failed: {e}")
+        return jsonify({"error": t("error_occurred")}), 500
+
+
+@app.route('/compliance/data/<user_id>')
+@secure_endpoint
+def get_user_compliance_data(user_id):
+    """Get user's data for compliance (data portability)."""
+    try:
+        compliance_mgr = get_compliance_manager()
+        user_data = compliance_mgr.get_user_data(user_id)
+        return jsonify(user_data)
+    except Exception as e:
+        logger.error(f"Data retrieval failed: {e}")
+        return jsonify({"error": t("error_occurred")}), 500
+
+
+@app.route('/regions/route', methods=['POST'])
+def route_global_request():
+    """Route request to optimal region."""
+    try:
+        data = request.get_json()
+        user_location = data.get('location') if data else None
+        
+        routing_info = route_request(
+            request_data=data or {},
+            user_location=user_location
+        )
+        
+        return jsonify({
+            "routing": routing_info,
+            "message": t("processing")
+        })
+    except Exception as e:
+        logger.error(f"Request routing failed: {e}")
+        return jsonify({"error": t("error_occurred")}), 500
+
+
+@app.route('/regions/stats')
+def get_region_stats():
+    """Get global region statistics."""
+    try:
+        load_balancer = get_load_balancer()
+        stats = load_balancer.get_load_balancer_stats()
+        return jsonify(stats)
+    except Exception as e:
+        logger.error(f"Stats retrieval failed: {e}")
+        return jsonify({"error": t("error_occurred")}), 500
 
 
 @app.route("/security/audit", methods=["GET"])

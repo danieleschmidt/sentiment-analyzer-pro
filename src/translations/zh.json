@@ -1,0 +1,14 @@
+{
+  "model_training": "模型训练",
+  "model_trained": "模型训练完成",
+  "prediction_started": "开始预测",
+  "prediction_completed": "预测完成",
+  "positive_sentiment": "积极",
+  "negative_sentiment": "消极",
+  "neutral_sentiment": "中性",
+  "error_occurred": "发生错误",
+  "processing": "处理中...",
+  "validation_error": "验证错误",
+  "file_not_found": "文件未找到",
+  "invalid_input": "无效输入"
+}

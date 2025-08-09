@@ -1,0 +1,186 @@
+{
+  "overall_status": "FAILED",
+  "summary": {
+    "total_gates": 17,
+    "passed": 1,
+    "failed": 16,
+    "pass_rate": 5.88235294117647,
+    "total_execution_time": 0.04593038558959961,
+    "avg_gate_time": 0.0025296491735121783,
+    "max_gate_time": 0.015636444091796875,
+    "min_gate_time": 0.0015709400177001953,
+    "timestamp": "2025-08-09T05:37:41.613857"
+  },
+  "detailed_results": [
+    {
+      "name": "Python Environment Check",
+      "command": "source venv/bin/activate && python --version && pip --version",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.002098560333251953,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.570055"
+    },
+    {
+      "name": "Python Syntax Check",
+      "command": "source venv/bin/activate && python -m py_compile src/*.py",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.001725912094116211,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.571996"
+    },
+    {
+      "name": "Core Model Tests",
+      "command": "source venv/bin/activate && python -m pytest tests/test_models.py -v --tb=short",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0017206668853759766,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.573891"
+    },
+    {
+      "name": "Preprocessing Tests",
+      "command": "source venv/bin/activate && python -m pytest tests/test_preprocessing.py -v --tb=short",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.001650094985961914,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.575709"
+    },
+    {
+      "name": "Internationalization Tests",
+      "command": "source venv/bin/activate && python -m pytest tests/test_advanced_features.py::TestInternationalization -v --tb=short",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.001734018325805664,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.577597"
+    },
+    {
+      "name": "Import Structure Check",
+      "command": "source venv/bin/activate && python -c \"from src.models import build_nb_model; print('✓ Core imports work')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.001631021499633789,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.579375"
+    },
+    {
+      "name": "Configuration Validation",
+      "command": "source venv/bin/activate && python -c \"from src.config import Config; print(f'✓ Model path: {Config.MODEL_PATH}')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0016622543334960938,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.581215"
+    },
+    {
+      "name": "Web App Import Check",
+      "command": "source venv/bin/activate && python -c \"from src.webapp import app; print('✓ Flask app can be imported')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0016236305236816406,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.582979"
+    },
+    {
+      "name": "CLI Import Check",
+      "command": "source venv/bin/activate && python -c \"from src.cli import main; print('✓ CLI can be imported')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0016629695892333984,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.584795"
+    },
+    {
+      "name": "Advanced Features Import",
+      "command": "source venv/bin/activate && python -c \"from src.i18n import t; from src.compliance import get_compliance_manager; print('✓ Advanced features importable')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0017278194427490234,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.586662"
+    },
+    {
+      "name": "Performance Modules Check",
+      "command": "source venv/bin/activate && python -c \"from src.advanced_caching import get_cache_manager; from src.auto_scaling_advanced import get_advanced_auto_scaler; print('✓ Performance modules work')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.001605987548828125,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.588406"
+    },
+    {
+      "name": "Research Framework Check",
+      "command": "source venv/bin/activate && python -c \"from src.quantum_research_framework import get_research_manager, setup_quantum_sentiment_experiment; print('✓ Research framework operational')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0017714500427246094,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.590346"
+    },
+    {
+      "name": "Security Modules Check",
+      "command": "source venv/bin/activate && python -c \"from src.security_hardening import get_threat_detector; from src.health_monitoring import get_health_monitor; print('✓ Security and monitoring ready')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0015709400177001953,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.592073"
+    },
+    {
+      "name": "Data Pipeline Test",
+      "command": "source venv/bin/activate && python -c \"import pandas as pd; from src.preprocessing import clean_text; print('✓ Data pipeline functional')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0016794204711914062,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.593892"
+    },
+    {
+      "name": "ML Pipeline Test",
+      "command": "source venv/bin/activate && python -c \"from src.models import build_nb_model; model = build_nb_model(); print('✓ ML pipeline functional')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0016179084777832031,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.595674"
+    },
+    {
+      "name": "File System Check",
+      "command": "ls -la data/ && ls -la src/ && ls -la tests/ && echo '✓ File system accessible'",
+      "return_code": 0,
+      "stdout": "total 12\ndrwxr-xr-x  2 root root 4096 Aug  9 02:40 .\ndrwxr-xr-x 23 root root 4096 Aug  9 05:37 ..\n-rw-r--r--  1 root root  119 Aug  9 02:40 sample_reviews.csv\ntotal 1200\ndrwxr-xr-x  6 root root  4096 Aug  9 05:36 .\ndrwxr-xr-x 23 root root  4096 Aug  9 05:37 ..\n-rw-r--r--  1 root root  2477 Aug  9 02:40 __init__.py\ndrwxr-xr-x  2 root root  4096 Aug  9 05:36 __pycache__\n-rw-r--r--  1 root root 20653 Aug  9 05:31 advanced_caching.py\n-rw-r--r--  1 root root 14867 Aug  9 05:27 advanced_error_handling.py\n-rw-r--r--  1 root root  2365 Aug  9 02:40 aspect_sentiment.py\n-rw-r--r--  1 root root 11110 Aug  9 02:40 auto_scaling.py\n-rw-r--r--  1 root root 22820 Aug  9 05:32 auto_scaling_advanced.py\n-rw-r--r--  1 root root 13638 Aug  9 02:40 cli.py\n-rw-r--r--  1 root root  9975 Aug  9 05:25 compliance.py\n-rw-r--r--  1 root root  2587 Aug  9 02:40 config.py\n-rw-r--r--  1 root root  4564 Aug  9 02:40 evaluate.py\n-rw-r--r--  1 root root 20899 Aug  9 05:29 health_monitoring.py\n-rw-r--r--  1 root root 30704 Aug  9 02:40 hybrid_qnp_architecture.py\n-rw-r--r--  1 root root  8022 Aug  9 05:24 i18n.py\n-rw-r--r--  1 root root  4975 Aug  9 02:40 logging_config.py\n-rw-r--r--  1 root root  9789 Aug  9 02:40 metrics.py\n-rw-r--r--  1 root root 16972 Aug  9 02:40 model_comparison.py\n-rw-r--r--  1 root root  8778 Aug  9 02:40 models.py\n-rw-r--r--  1 root root 12167 Aug  9 05:26 multi_region_deployment.py\n-rw-r--r--  1 root root 24893 Aug  9 02:40 neuromorphic_optimization.py\n-rw-r--r--  1 root root 34113 Aug  9 02:40 neuromorphic_quantum_memory.py\n-rw-r--r--  1 root root 26514 Aug  9 02:40 neuromorphic_spikeformer.py\n-rw-r--r--  1 root root 22459 Aug  9 02:40 neuromorphic_validation.py\n-rw-r--r--  1 root root 11324 Aug  9 02:40 performance_optimization.py\n-rw-r--r--  1 root root 24349 Aug  9 02:40 photonic_cli.py\n-rw-r--r--  1 root root 20924 Aug  9 02:40 photonic_comprehensive_tests.py\n-rw-r--r--  1 root root 22614 Aug  9 02:40 photonic_error_handling.py\n-rw-r--r--  1 root root 16105 Aug  9 02:40 photonic_init.py\n-rw-r--r--  1 root root 25906 Aug  9 02:40 photonic_mlir_bridge.py\n-rw-r--r--  1 root root 21142 Aug  9 02:40 photonic_monitoring.py\n-rw-r--r--  1 root root 24400 Aug  9 02:40 photonic_optimization.py\n-rw-r--r--  1 root root 28946 Aug  9 02:40 photonic_performance_suite.py\n-rw-r--r--  1 root root 28822 Aug  9 02:40 photonic_quality_analyzer.py\n-rw-r--r--  1 root root 27825 Aug  9 02:40 photonic_resilience.py\n-rw-r--r--  1 root root 27920 Aug  9 02:40 photonic_scaling.py\n-rw-r--r--  1 root root 19205 Aug  9 02:40 photonic_security.py\n-rw-r--r--  1 root root 31170 Aug  9 02:40 photonic_validation.py\n-rw-r--r--  1 root root  3771 Aug  9 02:40 predict.py\n-rw-r--r--  1 root root  3932 Aug  9 02:40 preprocessing.py\n-rw-r--r--  1 root root 31937 Aug  9 02:40 qnp_research_validation.py\n-rw-r--r--  1 root root 30686 Aug  9 02:40 quantum_benchmarking.py\n-rw-r--r--  1 root root 22419 Aug  9 02:40 quantum_inspired_sentiment.py\n-rw-r--r--  1 root root 23215 Aug  9 02:40 quantum_photonic_fusion.py\n-rw-r--r--  1 root root 19590 Aug  9 02:40 quantum_photonic_fusion_minimal.py\n-rw-r--r--  1 root root 53987 Aug  9 02:40 quantum_photonic_optimization.py\n-rw-r--r--  1 root root 43838 Aug  9 02:40 quantum_photonic_resilience.py\n-rw-r--r--  1 root root 52183 Aug  9 02:40 quantum_photonic_security.py\n-rw-r--r--  1 root root 28482 Aug  9 05:33 quantum_research_framework.py\n-rw-r--r--  1 root root  6798 Aug  9 02:40 schemas.py\n-rw-r--r--  1 root root 18261 Aug  9 02:40 security_enhancements.py\n-rw-r--r--  1 root root 19175 Aug  9 05:28 security_hardening.py\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 sentiment_analyzer_pro\ndrwxr-xr-x  2 root root  4096 Aug  9 05:22 sentiment_analyzer_pro.egg-info\n-rw-r--r--  1 root root  6047 Aug  9 02:40 train.py\n-rw-r--r--  1 root root 13381 Aug  9 02:40 transformer_trainer.py\ndrwxr-xr-x  2 root root  4096 Aug  9 05:36 translations\n-rw-r--r--  1 root root 31791 Aug  9 02:40 wdm_quantum_multimodal.py\n-rw-r--r--  1 root root 35909 Aug  9 05:26 webapp.py\ntotal 432\ndrwxr-xr-x  8 root root  4096 Aug  9 05:35 .\ndrwxr-xr-x 23 root root  4096 Aug  9 05:37 ..\n-rw-r--r--  1 root root     1 Aug  9 02:40 __init__.py\ndrwxr-xr-x  2 root root  4096 Aug  9 05:36 __pycache__\n-rw-r--r--  1 root root  1199 Aug  9 05:24 conftest.py\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 e2e\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 fixtures\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 integration\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 performance\n-rw-r--r--  1 root root  1341 Aug  9 02:40 sprint_acceptance_criteria.json\n-rw-r--r--  1 root root 28058 Aug  9 05:35 test_advanced_features.py\n-rw-r--r--  1 root root   665 Aug  9 02:40 test_aspect_sentiment.py\n-rw-r--r--  1 root root 10735 Aug  9 02:40 test_auto_scaling.py\n-rw-r--r--  1 root root  8827 Aug  9 02:40 test_batch_prediction.py\n-rw-r--r--  1 root root  9456 Aug  9 02:40 test_cli.py\n-rw-r--r--  1 root root 15539 Aug  9 02:40 test_comprehensive_model_comparison.py\n-rw-r--r--  1 root root  7076 Aug  9 02:40 test_config.py\n-rw-r--r--  1 root root  2447 Aug  9 02:40 test_cross_validation.py\n-rw-r--r--  1 root root   423 Aug  9 02:40 test_documentation.py\n-rw-r--r--  1 root root   646 Aug  9 02:40 test_evaluate.py\n-rw-r--r--  1 root root 20843 Aug  9 02:40 test_hybrid_qnp_architecture.py\n-rw-r--r--  1 root root  8678 Aug  9 02:40 test_logging.py\n-rw-r--r--  1 root root  6250 Aug  9 02:40 test_makefile.py\n-rw-r--r--  1 root root 13436 Aug  9 02:40 test_metrics.py\n-rw-r--r--  1 root root   388 Aug  9 02:40 test_model_comparison.py\n-rw-r--r--  1 root root  2500 Aug  9 02:40 test_model_comparison_transformer.py\n-rw-r--r--  1 root root  6243 Aug  9 02:40 test_models.py\n-rw-r--r--  1 root root   774 Aug  9 02:40 test_nb_model.py\n-rw-r--r--  1 root root 21573 Aug  9 02:40 test_neuromorphic_spikeformer.py\n-rw-r--r--  1 root root  4117 Aug  9 02:40 test_photonic_basic.py\n-rw-r--r--  1 root root 12414 Aug  9 02:40 test_photonic_isolated.py\n-rw-r--r--  1 root root 19982 Aug  9 02:40 test_photonic_mlir_bridge.py\n-rw-r--r--  1 root root 20771 Aug  9 02:40 test_predict.py\n-rw-r--r--  1 root root 10169 Aug  9 02:40 test_preprocessing.py\n-rw-r--r--  1 root root 20931 Aug  9 02:40 test_quantum_benchmarking.py\n-rw-r--r--  1 root root 20012 Aug  9 02:40 test_quantum_inspired_sentiment.py\n-rw-r--r--  1 root root  9681 Aug  9 02:40 test_schemas.py\n-rw-r--r--  1 root root  6931 Aug  9 02:40 test_security.py\n-rw-r--r--  1 root root 17274 Aug  9 02:40 test_train.py\n-rw-r--r--  1 root root  9945 Aug  9 02:40 test_transformer_trainer.py\n-rw-r--r--  1 root root  4062 Aug  9 02:40 test_webapp.py\ndrwxr-xr-x  2 root root  4096 Aug  9 02:40 unit\n✓ File system accessible\n",
+      "stderr": "",
+      "execution_time": 0.015636444091796875,
+      "passed": true,
+      "timestamp": "2025-08-09T05:37:41.611456"
+    },
+    {
+      "name": "Resource Check",
+      "command": "source venv/bin/activate && python -c \"import psutil; print(f'✓ Memory: {psutil.virtual_memory().percent}% used, CPU: {psutil.cpu_percent()}%')\"",
+      "return_code": 127,
+      "stdout": "",
+      "stderr": "/bin/sh: 1: source: not found\n",
+      "execution_time": 0.0018849372863769531,
+      "passed": false,
+      "timestamp": "2025-08-09T05:37:41.613616"
+    }
+  ]
+}

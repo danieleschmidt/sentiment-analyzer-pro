@@ -1,4 +1,3 @@
-```python
 from pydantic import BaseModel, Field, field_validator
 from typing import Iterable, List, Optional, Dict, Any
 import re
@@ -160,4 +159,3 @@ class SecurityError(Exception):
         self.message = message
         self.error_code = error_code
         self.details = details or {}
-```
