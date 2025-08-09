@@ -1,0 +1,14 @@
+{
+  "model_training": "モデル訓練",
+  "model_trained": "モデル訓練完了",
+  "prediction_started": "予測開始",
+  "prediction_completed": "予測完了",
+  "positive_sentiment": "ポジティブ",
+  "negative_sentiment": "ネガティブ",
+  "neutral_sentiment": "ニュートラル",
+  "error_occurred": "エラーが発生しました",
+  "processing": "処理中...",
+  "validation_error": "検証エラー",
+  "file_not_found": "ファイルが見つかりません",
+  "invalid_input": "無効な入力"
+}

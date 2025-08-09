@@ -1,0 +1,14 @@
+{
+  "model_training": "Entraînement du modèle",
+  "model_trained": "Entraînement du modèle terminé",
+  "prediction_started": "Démarrage de la prédiction",
+  "prediction_completed": "Prédiction terminée",
+  "positive_sentiment": "Positif",
+  "negative_sentiment": "Négatif",
+  "neutral_sentiment": "Neutre",
+  "error_occurred": "Une erreur s'est produite",
+  "processing": "Traitement...",
+  "validation_error": "Erreur de validation",
+  "file_not_found": "Fichier non trouvé",
+  "invalid_input": "Entrée invalide"
+}

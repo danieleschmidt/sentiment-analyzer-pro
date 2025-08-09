@@ -1,4 +1,3 @@
-```python
 """Pytest configuration and fixtures for sentiment analyzer tests."""
 
 import pytest
@@ -46,4 +45,3 @@ def temp_csv_file(tmp_path, sample_data):
     csv_file = tmp_path / "test_data.csv"
     sample_data.to_csv(csv_file, index=False)
     return str(csv_file)
-```
