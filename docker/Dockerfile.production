@@ -1,0 +1,105 @@
+# Multi-stage production Docker build for Sentiment Analyzer Pro
+# Generation 3: Production-ready deployment with optimizations
+
+# Stage 1: Build dependencies and compile
+FROM python:3.12-slim as builder
+
+# Set build arguments
+ARG BUILD_DATE
+ARG VERSION=1.0.0
+ARG VCS_REF
+
+# Install system dependencies for building
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    curl \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create build user
+RUN groupadd -r builder && useradd -r -g builder builder
+
+# Set up Python environment
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Create and set working directory
+WORKDIR /app
+
+# Copy requirements and install Python dependencies
+COPY requirements.txt pyproject.toml ./
+RUN pip install --user --no-warn-script-location -e .
+
+# Copy application code
+COPY src/ ./src/
+COPY tests/ ./tests/
+COPY data/ ./data/
+COPY docs/ ./docs/
+
+# Stage 2: Production runtime
+FROM python:3.12-slim as production
+
+# Set labels
+LABEL maintainer="Terragon Labs" \
+      version="${VERSION}" \
+      description="High-performance sentiment analysis service" \
+      build-date="${BUILD_DATE}" \
+      vcs-ref="${VCS_REF}"
+
+# Install runtime dependencies only
+RUN apt-get update && apt-get install -y \
+    curl \
+    tini \
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create application user and group
+RUN groupadd -r appuser && useradd -r -g appuser -d /app -s /bin/bash appuser
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PATH="/home/appuser/.local/bin:$PATH" \
+    ENVIRONMENT=production \
+    SERVER_HOST=0.0.0.0 \
+    SERVER_PORT=8000 \
+    SERVER_WORKERS=4 \
+    LOG_LEVEL=INFO
+
+# Create directories
+RUN mkdir -p /app/logs /app/cache /app/models /app/data \
+    && chown -R appuser:appuser /app
+
+# Switch to application user
+USER appuser
+WORKDIR /app
+
+# Copy Python dependencies from builder
+COPY --from=builder --chown=appuser:appuser /root/.local /home/appuser/.local
+
+# Copy application code
+COPY --from=builder --chown=appuser:appuser /app/src ./src
+COPY --from=builder --chown=appuser:appuser /app/data ./data
+COPY --chown=appuser:appuser requirements.txt pyproject.toml ./
+
+# Install production dependencies
+RUN pip install --user --no-warn-script-location -e .
+
+# Create production config
+COPY --chown=appuser:appuser docker/config.production.json ./config.json
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:${SERVER_PORT}/health || exit 1
+
+# Expose port
+EXPOSE ${SERVER_PORT}
+
+# Use tini as init system
+ENTRYPOINT ["tini", "--"]
+
+# Default command
+CMD ["python", "-m", "src.scalable_architecture"]
