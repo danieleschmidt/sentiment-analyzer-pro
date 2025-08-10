@@ -1,0 +1,33 @@
+{
+  "environment": "production",
+  "server": {
+    "host": "0.0.0.0",
+    "port": 8000,
+    "debug": false,
+    "workers": 4,
+    "timeout": 60
+  },
+  "model": {
+    "nb_alpha": 1.0,
+    "max_features": 10000,
+    "min_df": 2,
+    "max_df": 0.95,
+    "use_stemming": false,
+    "use_lemmatization": true
+  },
+  "logging": {
+    "level": "INFO",
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(funcName)s:%(lineno)d - %(message)s",
+    "file": "/app/logs/sentiment-analyzer.log",
+    "console": true
+  },
+  "security": {
+    "jwt_expiry_hours": 24,
+    "rate_limit_per_minute": 100,
+    "enable_cors": true,
+    "allowed_origins": ["*"]
+  },
+  "data_dir": "/app/data",
+  "models_dir": "/app/models",
+  "cache_dir": "/app/cache"
+}
