@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sentiment-analyzer
+    version: PLACEHOLDER_VERSION
+  name: sentiment-analyzer
+  namespace: sentiment-analyzer
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: sentiment-analyzer
+  template:
+    metadata:
+      labels:
+        app: sentiment-analyzer
+        version: PLACEHOLDER_VERSION
+    spec:
+      containers:
+      - env:
+        - name: ENVIRONMENT
+          value: PLACEHOLDER_ENVIRONMENT
+        - name: LOG_LEVEL
+          value: INFO
+        - name: METRICS_ENABLED
+          value: 'true'
+        image: PLACEHOLDER_IMAGE
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /health
+            port: 5000
+          periodSeconds: 30
+          timeoutSeconds: 30
+        name: sentiment-analyzer
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /ready
+            port: 5000
+          periodSeconds: 10
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        startupProbe:
+          failureThreshold: 10
+          httpGet:
+            path: /startup
+            port: 5000
+          periodSeconds: 10
+          timeoutSeconds: 60

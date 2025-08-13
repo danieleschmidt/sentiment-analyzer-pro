@@ -6,13 +6,29 @@ import os
 from .models import SentimentModel
 
 
+def predict_sentiment(
+    text: str, model_path: str = os.getenv("MODEL_PATH", "model.joblib")
+) -> str:
+    """Predict sentiment for a single text input."""
+    import joblib
+
+    if not text or text.strip() == "":
+        return "neutral"
+
+    try:
+        model: SentimentModel = joblib.load(model_path)
+        return model.predict([text])[0]
+    except Exception:
+        return "neutral"
+
+
 def main(input_csv: str, model_path: str = os.getenv("MODEL_PATH", "model.joblib")):
     """Load a trained model and print predictions for a CSV file."""
     import joblib
     import pandas as pd
 
     logger = logging.getLogger(__name__)
-    
+
     # Load and validate input CSV
     try:
         data = pd.read_csv(input_csv)
@@ -28,16 +44,18 @@ def main(input_csv: str, model_path: str = os.getenv("MODEL_PATH", "model.joblib
     except PermissionError:
         logger.error(f"Permission denied reading {input_csv}")
         raise SystemExit(f"Permission denied reading {input_csv}")
-    
+
     # Validate required columns
     if "text" not in data.columns:
-        logger.error(f"Required 'text' column not found in {input_csv}. Available columns: {list(data.columns)}")
+        logger.error(
+            f"Required 'text' column not found in {input_csv}. Available columns: {list(data.columns)}"
+        )
         raise SystemExit(f"Required 'text' column not found in {input_csv}")
-    
+
     if len(data) == 0 or data["text"].isna().all():
         logger.error(f"No valid text data found in {input_csv}")
         raise SystemExit(f"No valid text data found in {input_csv}")
-    
+
     # Load trained model
     try:
         model: SentimentModel = joblib.load(model_path)
@@ -50,7 +68,7 @@ def main(input_csv: str, model_path: str = os.getenv("MODEL_PATH", "model.joblib
     except PermissionError:
         logger.error(f"Permission denied reading model file: {model_path}")
         raise SystemExit(f"Permission denied reading model file: {model_path}")
-    
+
     # Make predictions
     try:
         # Filter out null text values for prediction
@@ -58,14 +76,16 @@ def main(input_csv: str, model_path: str = os.getenv("MODEL_PATH", "model.joblib
         if len(valid_data) == 0:
             logger.warning("No valid text data found for prediction")
             return
-        
+
         predictions = model.predict(valid_data["text"])
         for text, pred in zip(valid_data["text"], predictions):
             logger.info("%s => %s", text, pred)
-            
+
         if len(valid_data) < len(data):
-            logger.warning(f"Skipped {len(data) - len(valid_data)} rows with missing text values")
-            
+            logger.warning(
+                f"Skipped {len(data) - len(valid_data)} rows with missing text values"
+            )
+
     except (ValueError, AttributeError) as exc:
         logger.error(f"Model prediction failed: {exc}")
         raise SystemExit(f"Model prediction failed: {exc}")
@@ -79,7 +99,11 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="Predict sentiment for reviews.")
     parser.add_argument("csv", help="CSV file with a 'text' column")
-    parser.add_argument("--model", default=os.getenv("MODEL_PATH", "model.joblib"), help="Trained model path")
+    parser.add_argument(
+        "--model",
+        default=os.getenv("MODEL_PATH", "model.joblib"),
+        help="Trained model path",
+    )
     args = parser.parse_args()
     logging.basicConfig(format="%(message)s", level=logging.INFO, force=True)
     try:
