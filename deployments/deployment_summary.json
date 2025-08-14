@@ -1,0 +1,32 @@
+{
+  "deployment_artifacts": {
+    "dockerfile": "/root/repo/Dockerfile.production",
+    "k8s_manifests": [
+      "/root/repo/deployments/configs/deployment.yaml",
+      "/root/repo/deployments/configs/service.yaml",
+      "/root/repo/deployments/configs/hpa.yaml"
+    ],
+    "monitoring": "/root/repo/deployments/configs/prometheus.yml",
+    "scripts": [
+      "/root/repo/deployments/scripts/build.sh",
+      "/root/repo/deployments/scripts/deploy.sh",
+      "/root/repo/deployments/scripts/smoke_tests.sh"
+    ],
+    "security": "/root/repo/deployments/configs/security.yaml",
+    "webapp": "/root/repo/src/production_webapp.py",
+    "documentation": "/root/repo/deployments/DEPLOYMENT_GUIDE.md"
+  },
+  "summary": {
+    "status": "success",
+    "execution_time": 0.011677026748657227,
+    "artifacts_created": 7,
+    "deployment_ready": true,
+    "next_steps": [
+      "Review generated configurations",
+      "Customize for your environment",
+      "Run ./deployments/scripts/build.sh",
+      "Deploy with ./deployments/scripts/deploy.sh"
+    ]
+  },
+  "timestamp": "2025-08-14 23:18:18"
+}
