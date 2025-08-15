@@ -45,8 +45,18 @@ def train_model(data: Union[pd.DataFrame, str], model_path: str = None,
         if model_dir and not os.path.exists(model_dir):
             os.makedirs(model_dir, exist_ok=True)
         
-        joblib.dump(model, model_path)
-        logger.info(f"Model saved to {model_path}")
+        try:
+            joblib.dump(model, model_path)
+            logger.info(f"Model saved to {model_path}")
+        except Exception as e:
+            logger.error(f"Unexpected error saving model to {model_path}: {e}")
+            # Try saving just the pipeline without cache
+            if hasattr(model, 'pipeline'):
+                joblib.dump(model.pipeline, model_path)
+                logger.info(f"Model pipeline saved to {model_path}")
+            else:
+                logger.error(f"Cannot save model to {model_path}")
+                raise
     
     return model
 

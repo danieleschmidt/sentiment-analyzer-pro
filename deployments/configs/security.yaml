@@ -1,0 +1,39 @@
+network_policies:
+  apiVersion: networking.k8s.io/v1
+  kind: NetworkPolicy
+  metadata:
+    name: sentiment-analyzer-netpol
+  spec:
+    egress:
+    - ports:
+      - port: 443
+        protocol: TCP
+      - port: 53
+        protocol: UDP
+      to: []
+    ingress:
+    - from:
+      - podSelector:
+          matchLabels:
+            app: allowed-client
+      ports:
+      - port: 5000
+        protocol: TCP
+    podSelector:
+      matchLabels:
+        app: sentiment-analyzer-pro
+    policyTypes:
+    - Ingress
+    - Egress
+pod_security:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+    - ALL
+  fsGroup: 1000
+  readOnlyRootFilesystem: true
+  runAsGroup: 1000
+  runAsNonRoot: true
+  runAsUser: 1000
+  seccompProfile:
+    type: RuntimeDefault
