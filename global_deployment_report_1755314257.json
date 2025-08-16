@@ -1,0 +1,1101 @@
+{
+  "global_deployment": {
+    "version": "1.0.0",
+    "start_time": 1755314252.9977553,
+    "regions": {
+      "us-east-1": {
+        "deployment_plan": {
+          "region": "us-east-1",
+          "version": "1.0.0",
+          "timestamp": 1755314252.9977746,
+          "compliance_frameworks": [
+            "ccpa"
+          ],
+          "supported_languages": [
+            "en",
+            "es"
+          ],
+          "encryption": [
+            "TLS",
+            "AES-256"
+          ],
+          "sla_targets": {
+            "latency_ms": 100,
+            "availability_percent": 99.9
+          }
+        },
+        "deployment_result": {
+          "status": "success",
+          "steps_completed": [
+            {
+              "step": "Validating compliance requirements",
+              "timestamp": 1755314252.9977975,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up infrastructure",
+              "timestamp": 1755314253.0979726,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring load balancers",
+              "timestamp": 1755314253.1982045,
+              "status": "completed"
+            },
+            {
+              "step": "Deploying application containers",
+              "timestamp": 1755314253.298437,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up monitoring",
+              "timestamp": 1755314253.3986766,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring auto-scaling",
+              "timestamp": 1755314253.4988456,
+              "status": "completed"
+            },
+            {
+              "step": "Running health checks",
+              "timestamp": 1755314253.5990736,
+              "status": "completed"
+            },
+            {
+              "step": "Enabling traffic routing",
+              "timestamp": 1755314253.6993103,
+              "status": "completed"
+            }
+          ],
+          "infrastructure": {
+            "compute": {
+              "min_instances": 2,
+              "max_instances": 20,
+              "instance_type": "m5.large",
+              "auto_scaling_enabled": true
+            },
+            "storage": {
+              "type": "encrypted_ssd",
+              "encryption": [
+                "TLS",
+                "AES-256"
+              ],
+              "backup_retention_days": 30,
+              "data_residency": false
+            },
+            "networking": {
+              "vpc_enabled": true,
+              "private_subnets": true,
+              "cdn_enabled": true,
+              "ddos_protection": true
+            },
+            "security": {
+              "waf_enabled": true,
+              "ssl_termination": true,
+              "api_rate_limiting": true,
+              "security_groups": [
+                "sentiment-api",
+                "monitoring"
+              ]
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "request_latency",
+              "request_rate",
+              "error_rate",
+              "cpu_utilization",
+              "memory_utilization",
+              "disk_io",
+              "network_io"
+            ],
+            "alerts": [
+              {
+                "metric": "request_latency",
+                "threshold": 100,
+                "action": "scale_up"
+              },
+              {
+                "metric": "error_rate",
+                "threshold": 5.0,
+                "action": "alert_on_call"
+              },
+              {
+                "metric": "availability",
+                "threshold": 99.9,
+                "action": "critical_alert"
+              }
+            ],
+            "dashboards": [
+              "operational_overview",
+              "performance_metrics",
+              "compliance_metrics",
+              "security_events"
+            ]
+          },
+          "compliance": {
+            "frameworks": {
+              "ccpa": {
+                "consumer_rights": true,
+                "opt_out_sale": true,
+                "data_disclosure": true,
+                "non_discrimination": true
+              }
+            },
+            "data_protection": {
+              "encryption_at_rest": true,
+              "encryption_in_transit": true,
+              "data_minimization": true,
+              "retention_policies": true
+            },
+            "audit_logging": {
+              "enabled": true,
+              "log_retention_days": 2555,
+              "real_time_monitoring": true
+            }
+          }
+        }
+      },
+      "eu-west-1": {
+        "deployment_plan": {
+          "region": "eu-west-1",
+          "version": "1.0.0",
+          "timestamp": 1755314253.7995856,
+          "compliance_frameworks": [
+            "gdpr"
+          ],
+          "supported_languages": [
+            "en",
+            "de",
+            "fr",
+            "es"
+          ],
+          "encryption": [
+            "TLS",
+            "AES-256",
+            "PGP"
+          ],
+          "sla_targets": {
+            "latency_ms": 80,
+            "availability_percent": 99.95
+          }
+        },
+        "deployment_result": {
+          "status": "success",
+          "steps_completed": [
+            {
+              "step": "Validating compliance requirements",
+              "timestamp": 1755314253.79963,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up infrastructure",
+              "timestamp": 1755314253.8998406,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring load balancers",
+              "timestamp": 1755314254.0000637,
+              "status": "completed"
+            },
+            {
+              "step": "Deploying application containers",
+              "timestamp": 1755314254.1002812,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up monitoring",
+              "timestamp": 1755314254.2004976,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring auto-scaling",
+              "timestamp": 1755314254.300662,
+              "status": "completed"
+            },
+            {
+              "step": "Running health checks",
+              "timestamp": 1755314254.4009252,
+              "status": "completed"
+            },
+            {
+              "step": "Enabling traffic routing",
+              "timestamp": 1755314254.5011113,
+              "status": "completed"
+            }
+          ],
+          "infrastructure": {
+            "compute": {
+              "min_instances": 2,
+              "max_instances": 20,
+              "instance_type": "m5.large",
+              "auto_scaling_enabled": true
+            },
+            "storage": {
+              "type": "encrypted_ssd",
+              "encryption": [
+                "TLS",
+                "AES-256",
+                "PGP"
+              ],
+              "backup_retention_days": 30,
+              "data_residency": true
+            },
+            "networking": {
+              "vpc_enabled": true,
+              "private_subnets": true,
+              "cdn_enabled": true,
+              "ddos_protection": true
+            },
+            "security": {
+              "waf_enabled": true,
+              "ssl_termination": true,
+              "api_rate_limiting": true,
+              "security_groups": [
+                "sentiment-api",
+                "monitoring"
+              ]
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "request_latency",
+              "request_rate",
+              "error_rate",
+              "cpu_utilization",
+              "memory_utilization",
+              "disk_io",
+              "network_io"
+            ],
+            "alerts": [
+              {
+                "metric": "request_latency",
+                "threshold": 80,
+                "action": "scale_up"
+              },
+              {
+                "metric": "error_rate",
+                "threshold": 5.0,
+                "action": "alert_on_call"
+              },
+              {
+                "metric": "availability",
+                "threshold": 99.95,
+                "action": "critical_alert"
+              }
+            ],
+            "dashboards": [
+              "operational_overview",
+              "performance_metrics",
+              "compliance_metrics",
+              "security_events"
+            ]
+          },
+          "compliance": {
+            "frameworks": {
+              "gdpr": {
+                "data_subject_rights": true,
+                "consent_management": true,
+                "data_portability": true,
+                "right_to_erasure": true,
+                "privacy_by_design": true
+              }
+            },
+            "data_protection": {
+              "encryption_at_rest": true,
+              "encryption_in_transit": true,
+              "data_minimization": true,
+              "retention_policies": true
+            },
+            "audit_logging": {
+              "enabled": true,
+              "log_retention_days": 2555,
+              "real_time_monitoring": true
+            }
+          }
+        }
+      },
+      "us-west-2": {
+        "deployment_plan": {
+          "region": "us-west-2",
+          "version": "1.0.0",
+          "timestamp": 1755314254.6013849,
+          "compliance_frameworks": [
+            "ccpa"
+          ],
+          "supported_languages": [
+            "en",
+            "es"
+          ],
+          "encryption": [
+            "TLS",
+            "AES-256"
+          ],
+          "sla_targets": {
+            "latency_ms": 50,
+            "availability_percent": 99.9
+          }
+        },
+        "deployment_result": {
+          "status": "success",
+          "steps_completed": [
+            {
+              "step": "Validating compliance requirements",
+              "timestamp": 1755314254.6014333,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up infrastructure",
+              "timestamp": 1755314254.7016413,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring load balancers",
+              "timestamp": 1755314254.801842,
+              "status": "completed"
+            },
+            {
+              "step": "Deploying application containers",
+              "timestamp": 1755314254.9020593,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up monitoring",
+              "timestamp": 1755314255.002253,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring auto-scaling",
+              "timestamp": 1755314255.1024761,
+              "status": "completed"
+            },
+            {
+              "step": "Running health checks",
+              "timestamp": 1755314255.202706,
+              "status": "completed"
+            },
+            {
+              "step": "Enabling traffic routing",
+              "timestamp": 1755314255.3028696,
+              "status": "completed"
+            }
+          ],
+          "infrastructure": {
+            "compute": {
+              "min_instances": 2,
+              "max_instances": 20,
+              "instance_type": "m5.large",
+              "auto_scaling_enabled": true
+            },
+            "storage": {
+              "type": "encrypted_ssd",
+              "encryption": [
+                "TLS",
+                "AES-256"
+              ],
+              "backup_retention_days": 30,
+              "data_residency": false
+            },
+            "networking": {
+              "vpc_enabled": true,
+              "private_subnets": true,
+              "cdn_enabled": true,
+              "ddos_protection": true
+            },
+            "security": {
+              "waf_enabled": true,
+              "ssl_termination": true,
+              "api_rate_limiting": true,
+              "security_groups": [
+                "sentiment-api",
+                "monitoring"
+              ]
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "request_latency",
+              "request_rate",
+              "error_rate",
+              "cpu_utilization",
+              "memory_utilization",
+              "disk_io",
+              "network_io"
+            ],
+            "alerts": [
+              {
+                "metric": "request_latency",
+                "threshold": 50,
+                "action": "scale_up"
+              },
+              {
+                "metric": "error_rate",
+                "threshold": 5.0,
+                "action": "alert_on_call"
+              },
+              {
+                "metric": "availability",
+                "threshold": 99.9,
+                "action": "critical_alert"
+              }
+            ],
+            "dashboards": [
+              "operational_overview",
+              "performance_metrics",
+              "compliance_metrics",
+              "security_events"
+            ]
+          },
+          "compliance": {
+            "frameworks": {
+              "ccpa": {
+                "consumer_rights": true,
+                "opt_out_sale": true,
+                "data_disclosure": true,
+                "non_discrimination": true
+              }
+            },
+            "data_protection": {
+              "encryption_at_rest": true,
+              "encryption_in_transit": true,
+              "data_minimization": true,
+              "retention_policies": true
+            },
+            "audit_logging": {
+              "enabled": true,
+              "log_retention_days": 2555,
+              "real_time_monitoring": true
+            }
+          }
+        }
+      },
+      "ap-southeast-1": {
+        "deployment_plan": {
+          "region": "ap-southeast-1",
+          "version": "1.0.0",
+          "timestamp": 1755314255.403274,
+          "compliance_frameworks": [
+            "pdpa"
+          ],
+          "supported_languages": [
+            "en",
+            "zh",
+            "ja"
+          ],
+          "encryption": [
+            "TLS",
+            "AES-256"
+          ],
+          "sla_targets": {
+            "latency_ms": 120,
+            "availability_percent": 99.5
+          }
+        },
+        "deployment_result": {
+          "status": "success",
+          "steps_completed": [
+            {
+              "step": "Validating compliance requirements",
+              "timestamp": 1755314255.4032998,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up infrastructure",
+              "timestamp": 1755314255.5034509,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring load balancers",
+              "timestamp": 1755314255.6036935,
+              "status": "completed"
+            },
+            {
+              "step": "Deploying application containers",
+              "timestamp": 1755314255.703986,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up monitoring",
+              "timestamp": 1755314255.8042269,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring auto-scaling",
+              "timestamp": 1755314255.9044635,
+              "status": "completed"
+            },
+            {
+              "step": "Running health checks",
+              "timestamp": 1755314256.0047016,
+              "status": "completed"
+            },
+            {
+              "step": "Enabling traffic routing",
+              "timestamp": 1755314256.1049669,
+              "status": "completed"
+            }
+          ],
+          "infrastructure": {
+            "compute": {
+              "min_instances": 2,
+              "max_instances": 20,
+              "instance_type": "m5.large",
+              "auto_scaling_enabled": true
+            },
+            "storage": {
+              "type": "encrypted_ssd",
+              "encryption": [
+                "TLS",
+                "AES-256"
+              ],
+              "backup_retention_days": 30,
+              "data_residency": true
+            },
+            "networking": {
+              "vpc_enabled": true,
+              "private_subnets": true,
+              "cdn_enabled": true,
+              "ddos_protection": true
+            },
+            "security": {
+              "waf_enabled": true,
+              "ssl_termination": true,
+              "api_rate_limiting": true,
+              "security_groups": [
+                "sentiment-api",
+                "monitoring"
+              ]
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "request_latency",
+              "request_rate",
+              "error_rate",
+              "cpu_utilization",
+              "memory_utilization",
+              "disk_io",
+              "network_io"
+            ],
+            "alerts": [
+              {
+                "metric": "request_latency",
+                "threshold": 120,
+                "action": "scale_up"
+              },
+              {
+                "metric": "error_rate",
+                "threshold": 5.0,
+                "action": "alert_on_call"
+              },
+              {
+                "metric": "availability",
+                "threshold": 99.5,
+                "action": "critical_alert"
+              }
+            ],
+            "dashboards": [
+              "operational_overview",
+              "performance_metrics",
+              "compliance_metrics",
+              "security_events"
+            ]
+          },
+          "compliance": {
+            "frameworks": {
+              "pdpa": {
+                "consent_required": true,
+                "data_protection_officer": true,
+                "breach_notification": true
+              }
+            },
+            "data_protection": {
+              "encryption_at_rest": true,
+              "encryption_in_transit": true,
+              "data_minimization": true,
+              "retention_policies": true
+            },
+            "audit_logging": {
+              "enabled": true,
+              "log_retention_days": 2555,
+              "real_time_monitoring": true
+            }
+          }
+        }
+      },
+      "ca-central-1": {
+        "deployment_plan": {
+          "region": "ca-central-1",
+          "version": "1.0.0",
+          "timestamp": 1755314256.2052662,
+          "compliance_frameworks": [
+            "pipeda"
+          ],
+          "supported_languages": [
+            "en",
+            "fr"
+          ],
+          "encryption": [
+            "TLS",
+            "AES-256"
+          ],
+          "sla_targets": {
+            "latency_ms": 75,
+            "availability_percent": 99.9
+          }
+        },
+        "deployment_result": {
+          "status": "success",
+          "steps_completed": [
+            {
+              "step": "Validating compliance requirements",
+              "timestamp": 1755314256.2053118,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up infrastructure",
+              "timestamp": 1755314256.3055391,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring load balancers",
+              "timestamp": 1755314256.405762,
+              "status": "completed"
+            },
+            {
+              "step": "Deploying application containers",
+              "timestamp": 1755314256.5059326,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up monitoring",
+              "timestamp": 1755314256.6061466,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring auto-scaling",
+              "timestamp": 1755314256.7062752,
+              "status": "completed"
+            },
+            {
+              "step": "Running health checks",
+              "timestamp": 1755314256.8065016,
+              "status": "completed"
+            },
+            {
+              "step": "Enabling traffic routing",
+              "timestamp": 1755314256.9067636,
+              "status": "completed"
+            }
+          ],
+          "infrastructure": {
+            "compute": {
+              "min_instances": 2,
+              "max_instances": 20,
+              "instance_type": "m5.large",
+              "auto_scaling_enabled": true
+            },
+            "storage": {
+              "type": "encrypted_ssd",
+              "encryption": [
+                "TLS",
+                "AES-256"
+              ],
+              "backup_retention_days": 30,
+              "data_residency": true
+            },
+            "networking": {
+              "vpc_enabled": true,
+              "private_subnets": true,
+              "cdn_enabled": true,
+              "ddos_protection": true
+            },
+            "security": {
+              "waf_enabled": true,
+              "ssl_termination": true,
+              "api_rate_limiting": true,
+              "security_groups": [
+                "sentiment-api",
+                "monitoring"
+              ]
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "request_latency",
+              "request_rate",
+              "error_rate",
+              "cpu_utilization",
+              "memory_utilization",
+              "disk_io",
+              "network_io"
+            ],
+            "alerts": [
+              {
+                "metric": "request_latency",
+                "threshold": 75,
+                "action": "scale_up"
+              },
+              {
+                "metric": "error_rate",
+                "threshold": 5.0,
+                "action": "alert_on_call"
+              },
+              {
+                "metric": "availability",
+                "threshold": 99.9,
+                "action": "critical_alert"
+              }
+            ],
+            "dashboards": [
+              "operational_overview",
+              "performance_metrics",
+              "compliance_metrics",
+              "security_events"
+            ]
+          },
+          "compliance": {
+            "frameworks": {},
+            "data_protection": {
+              "encryption_at_rest": true,
+              "encryption_in_transit": true,
+              "data_minimization": true,
+              "retention_policies": true
+            },
+            "audit_logging": {
+              "enabled": true,
+              "log_retention_days": 2555,
+              "real_time_monitoring": true
+            }
+          }
+        }
+      },
+      "sa-east-1": {
+        "deployment_plan": {
+          "region": "sa-east-1",
+          "version": "1.0.0",
+          "timestamp": 1755314257.007052,
+          "compliance_frameworks": [
+            "lgpd"
+          ],
+          "supported_languages": [
+            "pt",
+            "es",
+            "en"
+          ],
+          "encryption": [
+            "TLS",
+            "AES-256"
+          ],
+          "sla_targets": {
+            "latency_ms": 150,
+            "availability_percent": 99.5
+          }
+        },
+        "deployment_result": {
+          "status": "success",
+          "steps_completed": [
+            {
+              "step": "Validating compliance requirements",
+              "timestamp": 1755314257.0070968,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up infrastructure",
+              "timestamp": 1755314257.107299,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring load balancers",
+              "timestamp": 1755314257.2075284,
+              "status": "completed"
+            },
+            {
+              "step": "Deploying application containers",
+              "timestamp": 1755314257.3077734,
+              "status": "completed"
+            },
+            {
+              "step": "Setting up monitoring",
+              "timestamp": 1755314257.408059,
+              "status": "completed"
+            },
+            {
+              "step": "Configuring auto-scaling",
+              "timestamp": 1755314257.5082648,
+              "status": "completed"
+            },
+            {
+              "step": "Running health checks",
+              "timestamp": 1755314257.608528,
+              "status": "completed"
+            },
+            {
+              "step": "Enabling traffic routing",
+              "timestamp": 1755314257.708771,
+              "status": "completed"
+            }
+          ],
+          "infrastructure": {
+            "compute": {
+              "min_instances": 2,
+              "max_instances": 20,
+              "instance_type": "m5.large",
+              "auto_scaling_enabled": true
+            },
+            "storage": {
+              "type": "encrypted_ssd",
+              "encryption": [
+                "TLS",
+                "AES-256"
+              ],
+              "backup_retention_days": 30,
+              "data_residency": true
+            },
+            "networking": {
+              "vpc_enabled": true,
+              "private_subnets": true,
+              "cdn_enabled": true,
+              "ddos_protection": true
+            },
+            "security": {
+              "waf_enabled": true,
+              "ssl_termination": true,
+              "api_rate_limiting": true,
+              "security_groups": [
+                "sentiment-api",
+                "monitoring"
+              ]
+            }
+          },
+          "monitoring": {
+            "metrics": [
+              "request_latency",
+              "request_rate",
+              "error_rate",
+              "cpu_utilization",
+              "memory_utilization",
+              "disk_io",
+              "network_io"
+            ],
+            "alerts": [
+              {
+                "metric": "request_latency",
+                "threshold": 150,
+                "action": "scale_up"
+              },
+              {
+                "metric": "error_rate",
+                "threshold": 5.0,
+                "action": "alert_on_call"
+              },
+              {
+                "metric": "availability",
+                "threshold": 99.5,
+                "action": "critical_alert"
+              }
+            ],
+            "dashboards": [
+              "operational_overview",
+              "performance_metrics",
+              "compliance_metrics",
+              "security_events"
+            ]
+          },
+          "compliance": {
+            "frameworks": {},
+            "data_protection": {
+              "encryption_at_rest": true,
+              "encryption_in_transit": true,
+              "data_minimization": true,
+              "retention_policies": true
+            },
+            "audit_logging": {
+              "enabled": true,
+              "log_retention_days": 2555,
+              "real_time_monitoring": true
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "total_regions": 6,
+      "successful_deployments": 6,
+      "failed_deployments": 0
+    },
+    "end_time": 1755314257.8091552,
+    "total_time": 4.811399936676025
+  },
+  "global_status": {
+    "total_regions": 6,
+    "active_regions": 6,
+    "regions": {
+      "us-east-1": {
+        "deployed": true,
+        "compliance_frameworks": [
+          "ccpa"
+        ],
+        "supported_languages": [
+          "en",
+          "es"
+        ],
+        "data_residency": false,
+        "sla_targets": {
+          "latency_ms": 100,
+          "availability": 99.9
+        },
+        "status": "success",
+        "last_deployment": 0
+      },
+      "us-west-2": {
+        "deployed": true,
+        "compliance_frameworks": [
+          "ccpa"
+        ],
+        "supported_languages": [
+          "en",
+          "es"
+        ],
+        "data_residency": false,
+        "sla_targets": {
+          "latency_ms": 50,
+          "availability": 99.9
+        },
+        "status": "success",
+        "last_deployment": 0
+      },
+      "eu-west-1": {
+        "deployed": true,
+        "compliance_frameworks": [
+          "gdpr"
+        ],
+        "supported_languages": [
+          "en",
+          "de",
+          "fr",
+          "es"
+        ],
+        "data_residency": true,
+        "sla_targets": {
+          "latency_ms": 80,
+          "availability": 99.95
+        },
+        "status": "success",
+        "last_deployment": 0
+      },
+      "ap-southeast-1": {
+        "deployed": true,
+        "compliance_frameworks": [
+          "pdpa"
+        ],
+        "supported_languages": [
+          "en",
+          "zh",
+          "ja"
+        ],
+        "data_residency": true,
+        "sla_targets": {
+          "latency_ms": 120,
+          "availability": 99.5
+        },
+        "status": "success",
+        "last_deployment": 0
+      },
+      "ca-central-1": {
+        "deployed": true,
+        "compliance_frameworks": [
+          "pipeda"
+        ],
+        "supported_languages": [
+          "en",
+          "fr"
+        ],
+        "data_residency": true,
+        "sla_targets": {
+          "latency_ms": 75,
+          "availability": 99.9
+        },
+        "status": "success",
+        "last_deployment": 0
+      },
+      "sa-east-1": {
+        "deployed": true,
+        "compliance_frameworks": [
+          "lgpd"
+        ],
+        "supported_languages": [
+          "pt",
+          "es",
+          "en"
+        ],
+        "data_residency": true,
+        "sla_targets": {
+          "latency_ms": 150,
+          "availability": 99.5
+        },
+        "status": "success",
+        "last_deployment": 0
+      }
+    },
+    "global_health": "healthy",
+    "compliance_status": {
+      "gdpr": {
+        "regions": [
+          "eu-west-1"
+        ],
+        "coverage": 1
+      },
+      "ccpa": {
+        "regions": [
+          "us-east-1",
+          "us-west-2"
+        ],
+        "coverage": 2
+      },
+      "pdpa": {
+        "regions": [
+          "ap-southeast-1"
+        ],
+        "coverage": 1
+      },
+      "pipeda": {
+        "regions": [
+          "ca-central-1"
+        ],
+        "coverage": 1
+      },
+      "lgpd": {
+        "regions": [
+          "sa-east-1"
+        ],
+        "coverage": 1
+      }
+    },
+    "performance_metrics": {}
+  },
+  "i18n_languages": [
+    "de",
+    "en",
+    "es",
+    "fr",
+    "ja",
+    "zh"
+  ],
+  "compliance_frameworks": [
+    "gdpr",
+    "ccpa",
+    "pdpa",
+    "pipeda",
+    "lgpd"
+  ],
+  "regions": [
+    "us-east-1",
+    "us-west-2",
+    "eu-west-1",
+    "ap-southeast-1",
+    "ca-central-1",
+    "sa-east-1"
+  ]
+}

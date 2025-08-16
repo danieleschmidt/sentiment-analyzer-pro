@@ -1,0 +1,140 @@
+{
+  "overall_status": "FAIL",
+  "overall_score": 58.30078844178752,
+  "execution_time": 24.802968502044678,
+  "gates_passed": 1,
+  "gates_warned": 1,
+  "gates_failed": 4,
+  "total_gates": 6,
+  "results": [
+    {
+      "gate_name": "Test Coverage",
+      "status": "FAIL",
+      "score": 6.300286376653484,
+      "details": {
+        "coverage_percent": 6.300286376653484,
+        "tests_passed": true,
+        "test_output_lines": 127,
+        "coverage_threshold": 85.0
+      },
+      "execution_time": 24.798452138900757,
+      "recommendations": [
+        "Increase test coverage to 85.0%",
+        "Add integration tests for critical paths",
+        "Add edge case testing for error scenarios"
+      ]
+    },
+    {
+      "gate_name": "Security Assessment",
+      "status": "FAIL",
+      "score": 39.88095238095238,
+      "details": {
+        "security_threats_detected": 8,
+        "compliance_violations": 2,
+        "avg_risk_score": 82.14285714285714,
+        "threat_score": 61.904761904761905,
+        "risk_score": 17.85714285714286,
+        "security_threshold": 90.0
+      },
+      "execution_time": 0.002667665481567383,
+      "recommendations": [
+        "Implement additional input sanitization",
+        "Add rate limiting and DDoS protection",
+        "Enable security headers and HTTPS",
+        "Regular security audits and penetration testing"
+      ]
+    },
+    {
+      "gate_name": "Performance Benchmark",
+      "status": "FAIL",
+      "score": 51.623491893119215,
+      "details": {
+        "concurrent_speedup": 5.487047567935764,
+        "cache_speedup": 507.02714920043945,
+        "cache_hit_rate": 0.5,
+        "cpu_usage": 50.0,
+        "memory_usage": 15.5,
+        "speedup_score": 54.87047567935764,
+        "cache_score": 50.0,
+        "resource_score": 50.0,
+        "performance_threshold": 80.0
+      },
+      "execution_time": 0.7080962657928467,
+      "recommendations": [
+        "Optimize database queries and indexing",
+        "Implement connection pooling",
+        "Add CDN for static content",
+        "Optimize model inference pipeline"
+      ]
+    },
+    {
+      "gate_name": "Compliance Assessment",
+      "status": "WARNING",
+      "score": 94.0,
+      "details": {
+        "personal_data_detections": 4,
+        "avg_compliance_score": 84.0,
+        "privacy_controls_detected": true,
+        "compliance_threshold": 95.0
+      },
+      "execution_time": 9.369850158691406e-05,
+      "recommendations": [
+        "Implement GDPR data subject rights",
+        "Add privacy impact assessments",
+        "Create data retention policies",
+        "Enable audit logging for data access"
+      ]
+    },
+    {
+      "gate_name": "Code Quality",
+      "status": "FAIL",
+      "score": 58,
+      "details": {
+        "files_analyzed": 3,
+        "functions_analyzed": 55,
+        "complexity_violations": 4,
+        "style_violations": 11,
+        "style_penalty": 22,
+        "complexity_penalty": 20,
+        "code_quality_threshold": 85.0
+      },
+      "execution_time": 0.0012001991271972656,
+      "recommendations": [
+        "Follow PEP 8 style guidelines",
+        "Reduce function complexity",
+        "Add comprehensive docstrings",
+        "Use linting tools (flake8, pylint)"
+      ]
+    },
+    {
+      "gate_name": "Documentation Quality",
+      "status": "PASS",
+      "score": 100,
+      "details": {
+        "readme_exists": true,
+        "api_docs_exist": true,
+        "getting_started_exists": true,
+        "total_doc_files": 37,
+        "total_doc_lines": 8007,
+        "readme_score": 100,
+        "existence_score": 100,
+        "content_score": 50,
+        "documentation_threshold": 80.0
+      },
+      "execution_time": 0.002705812454223633,
+      "recommendations": []
+    }
+  ],
+  "recommendations": [
+    "Increase test coverage to 85.0%",
+    "Add integration tests for critical paths",
+    "Add edge case testing for error scenarios",
+    "Implement additional input sanitization",
+    "Add rate limiting and DDoS protection",
+    "Enable security headers and HTTPS",
+    "Regular security audits and penetration testing",
+    "Optimize database queries and indexing",
+    "Implement connection pooling",
+    "Add CDN for static content"
+  ]
+}
