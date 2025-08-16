@@ -796,7 +796,7 @@ def record_user_consent():
 
 
 @app.route('/compliance/data/<user_id>')
-@secure_endpoint
+@secure_endpoint()
 def get_user_compliance_data(user_id):
     """Get user's data for compliance (data portability)."""
     try:
