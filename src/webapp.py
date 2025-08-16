@@ -770,7 +770,7 @@ def set_app_language(language):
 
 
 @app.route('/compliance/consent', methods=['POST'])
-@secure_endpoint
+@secure_endpoint()
 def record_user_consent():
     """Record user consent for data processing."""
     try:
