@@ -1,0 +1,61 @@
+{
+  "timestamp": "2025-08-17T18:09:42.890346",
+  "overall_status": "NEEDS_IMPROVEMENT",
+  "success_rate_percent": 66.7,
+  "tests_passed": 4,
+  "total_tests": 6,
+  "execution_time_seconds": 16.23,
+  "test_results": {
+    "basic_functionality": {
+      "status": "PASS",
+      "model_training": true,
+      "prediction": true,
+      "web_app_health": true,
+      "web_app_prediction": false,
+      "details": "Prediction: n"
+    },
+    "unit_tests": {
+      "status": "FAIL",
+      "return_code": 1,
+      "stdout_preview": "ocs.pytest.org/en/stable/how-to/mark.html\n    @pytest.mark.integration\n\n-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html\n=========================== short test summary info ============================\nERROR tests/integration/test_end_to_end.py::TestEndToEndWorkflow::test_complete_training_and_prediction_workflow\n!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!!\n======================== 14 warnings, 1 error in 2.20s =========================\n",
+      "stderr_preview": ""
+    },
+    "security_scan": {
+      "status": "WARN",
+      "bandit_return_code": 1,
+      "note": "JSON parsing failed, used return code"
+    },
+    "performance_benchmarks": {
+      "status": "PASS",
+      "training_time_seconds": 0.005,
+      "avg_prediction_time_ms": 0.538,
+      "throughput_predictions_per_sec": 1857.9,
+      "thresholds": {
+        "training_time_max": 10.0,
+        "avg_prediction_time_max": 100.0,
+        "throughput_min": 10.0
+      }
+    },
+    "integration_tests": {
+      "status": "FAIL",
+      "health_check": true,
+      "prediction_api": false,
+      "metrics_api": true,
+      "prediction_result": "N/A"
+    },
+    "documentation_check": {
+      "status": "PASS",
+      "existing_docs": [
+        "README.md",
+        "docs/GETTING_STARTED.md",
+        "docs/API_REFERENCE.md",
+        "CONTRIBUTING.md"
+      ],
+      "missing_docs": [],
+      "coverage_percent": 100.0
+    }
+  },
+  "recommendations": [
+    "Fix failing unit tests for better code reliability"
+  ]
+}
