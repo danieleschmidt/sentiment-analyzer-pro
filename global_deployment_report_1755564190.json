@@ -1,0 +1,1727 @@
+{
+  "deployment_id": "agi-deploy-1755564185",
+  "timestamp": 1755564185.0087514,
+  "config": {
+    "project_name": "agi-sentiment-analyzer-pro",
+    "version": "2.0.0",
+    "environment": "production",
+    "health_check_path": "/health",
+    "metrics_path": "/metrics",
+    "security_level": "high",
+    "encryption_enabled": true,
+    "backup_enabled": true,
+    "cdn_enabled": true,
+    "load_balancing": "round_robin",
+    "failover_enabled": true
+  },
+  "regions": {
+    "us-east-1": {
+      "status": "SUCCESS",
+      "region": "US East (Virginia)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-us-east-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-us-east-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-us-east-1.agi-sentiment.ai",
+          "health_check": "https://web_api-us-east-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-us-east-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-us-east-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-us-east.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "SOC2",
+        "HIPAA",
+        "CCPA"
+      ]
+    },
+    "sa-east-1": {
+      "status": "SUCCESS",
+      "region": "South America (S\u00e3o Paulo)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-sa-east-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-sa-east-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-sa-east-1.agi-sentiment.ai",
+          "health_check": "https://web_api-sa-east-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-sa-east-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-sa-east-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-sa.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "LGPD"
+      ]
+    },
+    "us-west-1": {
+      "status": "SUCCESS",
+      "region": "US West (California)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-us-west-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-us-west-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-us-west-1.agi-sentiment.ai",
+          "health_check": "https://web_api-us-west-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-us-west-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-us-west-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-us-west.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "SOC2",
+        "CCPA"
+      ]
+    },
+    "eu-west-1": {
+      "status": "SUCCESS",
+      "region": "Europe (Ireland)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-eu-west-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-eu-west-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-eu-west-1.agi-sentiment.ai",
+          "health_check": "https://web_api-eu-west-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-eu-west-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-eu-west-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-eu.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "GDPR",
+        "ISO27001"
+      ]
+    },
+    "eu-central-1": {
+      "status": "SUCCESS",
+      "region": "Europe (Frankfurt)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-eu-central-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-eu-central-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-eu-central-1.agi-sentiment.ai",
+          "health_check": "https://web_api-eu-central-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-eu-central-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-eu-central-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-eu-central.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "GDPR",
+        "ISO27001",
+        "BSI"
+      ]
+    },
+    "ap-southeast-1": {
+      "status": "SUCCESS",
+      "region": "Asia Pacific (Singapore)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-ap-southeast-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-ap-southeast-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-ap-southeast-1.agi-sentiment.ai",
+          "health_check": "https://web_api-ap-southeast-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-ap-southeast-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-ap-southeast-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-ap-se.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "PDPA",
+        "MTCS"
+      ]
+    },
+    "ap-northeast-1": {
+      "status": "SUCCESS",
+      "region": "Asia Pacific (Tokyo)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-ap-northeast-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-ap-northeast-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-ap-northeast-1.agi-sentiment.ai",
+          "health_check": "https://web_api-ap-northeast-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-ap-northeast-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-ap-northeast-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-ap-ne.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "APPI",
+        "PIPA"
+      ]
+    },
+    "ap-southeast-2": {
+      "status": "SUCCESS",
+      "region": "Asia Pacific (Sydney)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-ap-southeast-2.agi-sentiment.ai",
+          "health_check": "https://agi_engine-ap-southeast-2.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-ap-southeast-2.agi-sentiment.ai",
+          "health_check": "https://web_api-ap-southeast-2.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-ap-southeast-2.agi-sentiment.ai",
+          "health_check": "https://monitoring-ap-southeast-2.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-ap-au.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "Privacy Act",
+        "NOTAMS"
+      ]
+    },
+    "me-south-1": {
+      "status": "SUCCESS",
+      "region": "Middle East (Dubai)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-me-south-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-me-south-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-me-south-1.agi-sentiment.ai",
+          "health_check": "https://web_api-me-south-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-me-south-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-me-south-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-me.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "UAE DPA"
+      ]
+    },
+    "af-south-1": {
+      "status": "SUCCESS",
+      "region": "Africa (Cape Town)",
+      "services": [
+        {
+          "name": "agi_engine",
+          "status": "RUNNING",
+          "replicas": 3,
+          "endpoint": "https://agi_engine-af-south-1.agi-sentiment.ai",
+          "health_check": "https://agi_engine-af-south-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "web_api",
+          "status": "RUNNING",
+          "replicas": 5,
+          "endpoint": "https://web_api-af-south-1.agi-sentiment.ai",
+          "health_check": "https://web_api-af-south-1.agi-sentiment.ai/health"
+        },
+        {
+          "name": "monitoring",
+          "status": "RUNNING",
+          "replicas": 2,
+          "endpoint": "https://monitoring-af-south-1.agi-sentiment.ai",
+          "health_check": "https://monitoring-af-south-1.agi-sentiment.ai/health"
+        }
+      ],
+      "endpoint": "https://api-af.agi-sentiment.ai",
+      "data_residency_compliant": true,
+      "compliance_frameworks": [
+        "POPIA"
+      ]
+    }
+  },
+  "overall_status": "SUCCESS",
+  "deployment_phases": [
+    {
+      "phase": "validation",
+      "status": "PASS",
+      "duration": 1.4853765964508057,
+      "details": {
+        "status": "PASS",
+        "checks": [
+          {
+            "name": "Docker availability",
+            "status": "PASS",
+            "details": {}
+          },
+          {
+            "name": "Container registry access",
+            "status": "PASS",
+            "details": {}
+          },
+          {
+            "name": "Environment variables",
+            "status": "PASS",
+            "details": {}
+          },
+          {
+            "name": "SSL certificates",
+            "status": "PASS",
+            "details": {}
+          },
+          {
+            "name": "Database connectivity",
+            "status": "PASS",
+            "details": {}
+          },
+          {
+            "name": "External dependencies",
+            "status": "PASS",
+            "details": {}
+          },
+          {
+            "name": "Security compliance",
+            "status": "PASS",
+            "details": {}
+          },
+          {
+            "name": "Resource quotas",
+            "status": "PASS",
+            "details": {}
+          }
+        ],
+        "duration": 1.4853765964508057
+      }
+    },
+    {
+      "phase": "infrastructure",
+      "status": "SUCCESS",
+      "duration": 0.5062153339385986,
+      "details": {
+        "status": "SUCCESS",
+        "regions": {
+          "us-east-1": {
+            "status": "SUCCESS",
+            "region": "US East (Virginia)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-us-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-us-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-us-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-us-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-us-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-us-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-us-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-us-east-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "SOC2",
+              "HIPAA",
+              "CCPA"
+            ],
+            "data_residency": [
+              "US",
+              "CA"
+            ]
+          },
+          "us-west-1": {
+            "status": "SUCCESS",
+            "region": "US West (California)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-us-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-us-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-us-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-us-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-us-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-us-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-us-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-us-west-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "SOC2",
+              "CCPA"
+            ],
+            "data_residency": [
+              "US",
+              "CA"
+            ]
+          },
+          "sa-east-1": {
+            "status": "SUCCESS",
+            "region": "South America (S\u00e3o Paulo)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-sa-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-sa-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-sa-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-sa-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-sa-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-sa-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-sa-east-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-sa-east-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "LGPD"
+            ],
+            "data_residency": [
+              "BR",
+              "AR",
+              "CL"
+            ]
+          },
+          "eu-west-1": {
+            "status": "SUCCESS",
+            "region": "Europe (Ireland)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-eu-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-eu-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-eu-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-eu-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-eu-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-eu-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-eu-west-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-eu-west-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "GDPR",
+              "ISO27001"
+            ],
+            "data_residency": [
+              "IE",
+              "GB",
+              "FR",
+              "DE",
+              "ES",
+              "IT"
+            ]
+          },
+          "eu-central-1": {
+            "status": "SUCCESS",
+            "region": "Europe (Frankfurt)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-eu-central-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-eu-central-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-eu-central-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-eu-central-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-eu-central-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-eu-central-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-eu-central-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-eu-central-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "GDPR",
+              "ISO27001",
+              "BSI"
+            ],
+            "data_residency": [
+              "DE",
+              "AT",
+              "CH"
+            ]
+          },
+          "ap-southeast-1": {
+            "status": "SUCCESS",
+            "region": "Asia Pacific (Singapore)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-ap-southeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-ap-southeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-ap-southeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-ap-southeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-ap-southeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-ap-southeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-ap-southeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-ap-southeast-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "PDPA",
+              "MTCS"
+            ],
+            "data_residency": [
+              "SG",
+              "MY",
+              "TH",
+              "ID"
+            ]
+          },
+          "ap-northeast-1": {
+            "status": "SUCCESS",
+            "region": "Asia Pacific (Tokyo)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-ap-northeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-ap-northeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-ap-northeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-ap-northeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-ap-northeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-ap-northeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-ap-northeast-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-ap-northeast-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "APPI",
+              "PIPA"
+            ],
+            "data_residency": [
+              "JP",
+              "KR"
+            ]
+          },
+          "ap-southeast-2": {
+            "status": "SUCCESS",
+            "region": "Asia Pacific (Sydney)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-ap-southeast-2.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-ap-southeast-2.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-ap-southeast-2.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-ap-southeast-2.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-ap-southeast-2.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-ap-southeast-2.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-ap-southeast-2.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-ap-southeast-2.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "Privacy Act",
+              "NOTAMS"
+            ],
+            "data_residency": [
+              "AU",
+              "NZ"
+            ]
+          },
+          "me-south-1": {
+            "status": "SUCCESS",
+            "region": "Middle East (Dubai)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-me-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-me-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-me-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-me-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-me-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-me-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-me-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-me-south-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "UAE DPA"
+            ],
+            "data_residency": [
+              "AE",
+              "SA",
+              "QA"
+            ]
+          },
+          "af-south-1": {
+            "status": "SUCCESS",
+            "region": "Africa (Cape Town)",
+            "components": [
+              {
+                "name": "Load Balancer",
+                "status": "ACTIVE",
+                "endpoint": "load-balancer-af-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Auto Scaling Group",
+                "status": "ACTIVE",
+                "endpoint": "auto-scaling-group-af-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Database Cluster",
+                "status": "ACTIVE",
+                "endpoint": "database-cluster-af-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Redis Cache",
+                "status": "ACTIVE",
+                "endpoint": "redis-cache-af-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "CDN Distribution",
+                "status": "ACTIVE",
+                "endpoint": "cdn-distribution-af-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Monitoring Stack",
+                "status": "ACTIVE",
+                "endpoint": "monitoring-stack-af-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "Security Groups",
+                "status": "ACTIVE",
+                "endpoint": "security-groups-af-south-1.agi-sentiment.ai"
+              },
+              {
+                "name": "SSL Certificates",
+                "status": "ACTIVE",
+                "endpoint": "ssl-certificates-af-south-1.agi-sentiment.ai"
+              }
+            ],
+            "compliance": [
+              "POPIA"
+            ],
+            "data_residency": [
+              "ZA",
+              "NG",
+              "KE"
+            ]
+          }
+        },
+        "duration": 0.5062153339385986
+      }
+    },
+    {
+      "phase": "applications",
+      "status": "SUCCESS",
+      "duration": 1.0052363872528076,
+      "details": {
+        "status": "SUCCESS",
+        "regions": {
+          "us-east-1": {
+            "status": "SUCCESS",
+            "region": "US East (Virginia)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-us-east-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-us-east-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-us-east-1.agi-sentiment.ai",
+                "health_check": "https://web_api-us-east-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-us-east-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-us-east-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-us-east.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "SOC2",
+              "HIPAA",
+              "CCPA"
+            ]
+          },
+          "sa-east-1": {
+            "status": "SUCCESS",
+            "region": "South America (S\u00e3o Paulo)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-sa-east-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-sa-east-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-sa-east-1.agi-sentiment.ai",
+                "health_check": "https://web_api-sa-east-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-sa-east-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-sa-east-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-sa.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "LGPD"
+            ]
+          },
+          "us-west-1": {
+            "status": "SUCCESS",
+            "region": "US West (California)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-us-west-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-us-west-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-us-west-1.agi-sentiment.ai",
+                "health_check": "https://web_api-us-west-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-us-west-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-us-west-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-us-west.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "SOC2",
+              "CCPA"
+            ]
+          },
+          "eu-west-1": {
+            "status": "SUCCESS",
+            "region": "Europe (Ireland)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-eu-west-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-eu-west-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-eu-west-1.agi-sentiment.ai",
+                "health_check": "https://web_api-eu-west-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-eu-west-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-eu-west-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-eu.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "GDPR",
+              "ISO27001"
+            ]
+          },
+          "eu-central-1": {
+            "status": "SUCCESS",
+            "region": "Europe (Frankfurt)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-eu-central-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-eu-central-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-eu-central-1.agi-sentiment.ai",
+                "health_check": "https://web_api-eu-central-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-eu-central-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-eu-central-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-eu-central.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "GDPR",
+              "ISO27001",
+              "BSI"
+            ]
+          },
+          "ap-southeast-1": {
+            "status": "SUCCESS",
+            "region": "Asia Pacific (Singapore)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-ap-southeast-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-ap-southeast-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-ap-southeast-1.agi-sentiment.ai",
+                "health_check": "https://web_api-ap-southeast-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-ap-southeast-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-ap-southeast-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-ap-se.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "PDPA",
+              "MTCS"
+            ]
+          },
+          "ap-northeast-1": {
+            "status": "SUCCESS",
+            "region": "Asia Pacific (Tokyo)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-ap-northeast-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-ap-northeast-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-ap-northeast-1.agi-sentiment.ai",
+                "health_check": "https://web_api-ap-northeast-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-ap-northeast-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-ap-northeast-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-ap-ne.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "APPI",
+              "PIPA"
+            ]
+          },
+          "ap-southeast-2": {
+            "status": "SUCCESS",
+            "region": "Asia Pacific (Sydney)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-ap-southeast-2.agi-sentiment.ai",
+                "health_check": "https://agi_engine-ap-southeast-2.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-ap-southeast-2.agi-sentiment.ai",
+                "health_check": "https://web_api-ap-southeast-2.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-ap-southeast-2.agi-sentiment.ai",
+                "health_check": "https://monitoring-ap-southeast-2.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-ap-au.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "Privacy Act",
+              "NOTAMS"
+            ]
+          },
+          "me-south-1": {
+            "status": "SUCCESS",
+            "region": "Middle East (Dubai)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-me-south-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-me-south-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-me-south-1.agi-sentiment.ai",
+                "health_check": "https://web_api-me-south-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-me-south-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-me-south-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-me.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "UAE DPA"
+            ]
+          },
+          "af-south-1": {
+            "status": "SUCCESS",
+            "region": "Africa (Cape Town)",
+            "services": [
+              {
+                "name": "agi_engine",
+                "status": "RUNNING",
+                "replicas": 3,
+                "endpoint": "https://agi_engine-af-south-1.agi-sentiment.ai",
+                "health_check": "https://agi_engine-af-south-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "web_api",
+                "status": "RUNNING",
+                "replicas": 5,
+                "endpoint": "https://web_api-af-south-1.agi-sentiment.ai",
+                "health_check": "https://web_api-af-south-1.agi-sentiment.ai/health"
+              },
+              {
+                "name": "monitoring",
+                "status": "RUNNING",
+                "replicas": 2,
+                "endpoint": "https://monitoring-af-south-1.agi-sentiment.ai",
+                "health_check": "https://monitoring-af-south-1.agi-sentiment.ai/health"
+              }
+            ],
+            "endpoint": "https://api-af.agi-sentiment.ai",
+            "data_residency_compliant": true,
+            "compliance_frameworks": [
+              "POPIA"
+            ]
+          }
+        },
+        "duration": 1.0052363872528076
+      }
+    },
+    {
+      "phase": "global_config",
+      "status": "SUCCESS",
+      "duration": 0.00012183189392089844,
+      "details": {
+        "status": "SUCCESS",
+        "services": [
+          {
+            "name": "Global Load Balancer",
+            "status": "ACTIVE",
+            "algorithm": "round_robin",
+            "health_checks": true,
+            "failover": true,
+            "endpoints": [
+              "api-us-east.agi-sentiment.ai",
+              "api-us-west.agi-sentiment.ai",
+              "api-sa.agi-sentiment.ai",
+              "api-eu.agi-sentiment.ai",
+              "api-eu-central.agi-sentiment.ai",
+              "api-ap-se.agi-sentiment.ai",
+              "api-ap-ne.agi-sentiment.ai",
+              "api-ap-au.agi-sentiment.ai",
+              "api-me.agi-sentiment.ai",
+              "api-af.agi-sentiment.ai"
+            ]
+          },
+          {
+            "name": "Content Delivery Network",
+            "status": "ACTIVE",
+            "edge_locations": 30,
+            "cache_policies": [
+              "static_assets",
+              "api_responses"
+            ],
+            "ssl_enabled": true
+          },
+          {
+            "name": "Global DNS",
+            "status": "ACTIVE",
+            "primary_domain": "agi-sentiment.ai",
+            "regional_routing": true,
+            "failover_enabled": true,
+            "health_check_enabled": true
+          },
+          {
+            "name": "Global Monitoring",
+            "status": "ACTIVE",
+            "metrics_collection": true,
+            "alerting": true,
+            "dashboards": [
+              "performance",
+              "security",
+              "compliance"
+            ],
+            "retention_days": 365
+          },
+          {
+            "name": "Backup & Disaster Recovery",
+            "status": "ACTIVE",
+            "backup_frequency": "daily",
+            "cross_region_replication": true,
+            "recovery_time_objective": "1 hour",
+            "recovery_point_objective": "15 minutes"
+          }
+        ],
+        "duration": 0.00012183189392089844
+      }
+    },
+    {
+      "phase": "health_checks",
+      "status": "SUCCESS",
+      "duration": 2.0051305294036865,
+      "details": {
+        "status": "SUCCESS",
+        "regions": {
+          "us-east-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "SOC2",
+                "HIPAA",
+                "CCPA"
+              ]
+            }
+          },
+          "us-west-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "SOC2",
+                "CCPA"
+              ]
+            }
+          },
+          "sa-east-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "LGPD"
+              ]
+            }
+          },
+          "eu-west-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "GDPR",
+                "ISO27001"
+              ]
+            }
+          },
+          "eu-central-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "GDPR",
+                "ISO27001",
+                "BSI"
+              ]
+            }
+          },
+          "ap-southeast-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "PDPA",
+                "MTCS"
+              ]
+            }
+          },
+          "ap-northeast-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "APPI",
+                "PIPA"
+              ]
+            }
+          },
+          "ap-southeast-2": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "Privacy Act",
+                "NOTAMS"
+              ]
+            }
+          },
+          "me-south-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "UAE DPA"
+              ]
+            }
+          },
+          "af-south-1": {
+            "status": "HEALTHY",
+            "services": {
+              "agi_engine": "HEALTHY",
+              "web_api": "HEALTHY",
+              "monitoring": "HEALTHY",
+              "database": "HEALTHY",
+              "cache": "HEALTHY"
+            },
+            "performance": {
+              "response_time_ms": 150,
+              "throughput_rps": 1000,
+              "error_rate_percent": 0.01,
+              "cpu_utilization_percent": 45,
+              "memory_utilization_percent": 60
+            },
+            "compliance": {
+              "data_residency": "COMPLIANT",
+              "encryption": "ENABLED",
+              "audit_logging": "ENABLED",
+              "frameworks": [
+                "POPIA"
+              ]
+            }
+          }
+        },
+        "global_health": {
+          "load_balancer": "HEALTHY",
+          "cdn": "HEALTHY",
+          "dns": "HEALTHY",
+          "monitoring": "HEALTHY",
+          "security": "HEALTHY",
+          "compliance": "COMPLIANT"
+        },
+        "duration": 2.0051305294036865
+      }
+    },
+    {
+      "phase": "traffic_enablement",
+      "status": "SUCCESS",
+      "duration": 7.104873657226562e-05,
+      "details": {
+        "status": "SUCCESS",
+        "traffic_splits": {
+          "us-east-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "us-west-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "sa-east-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "eu-west-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "eu-central-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "ap-southeast-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "ap-northeast-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "ap-southeast-2": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "me-south-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          },
+          "af-south-1": {
+            "percentage": 10.0,
+            "status": "ACTIVE",
+            "health_check": "PASSING",
+            "canary_deployment": false
+          }
+        },
+        "monitoring": {
+          "real_time_metrics": "ENABLED",
+          "alerting": "ENABLED",
+          "error_tracking": "ENABLED",
+          "performance_monitoring": "ENABLED",
+          "security_monitoring": "ENABLED"
+        },
+        "duration": 7.104873657226562e-05
+      }
+    }
+  ],
+  "total_duration": 5.003418207168579
+}
