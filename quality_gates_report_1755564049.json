@@ -1,0 +1,145 @@
+{
+  "timestamp": 1755564049.9193797,
+  "execution_time_seconds": 2.0149497985839844,
+  "overall_status": "FAIL",
+  "gate_results": {
+    "syntax_check": {
+      "status": "PASS",
+      "errors": [],
+      "files_checked": 82
+    },
+    "import_validation": {
+      "status": "FAIL",
+      "errors": [
+        {
+          "module": "src.intelligent_error_recovery_v2",
+          "error": "No module named 'psutil'"
+        },
+        {
+          "module": "src.quantum_performance_accelerator",
+          "error": "No module named 'psutil'"
+        }
+      ],
+      "modules_tested": 4
+    },
+    "security_scan": {
+      "status": "FAIL",
+      "vulnerabilities": [
+        {
+          "file": "src/autonomous_production_deployment.py",
+          "issue": "Use of exec() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/cli.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/comprehensive_monitoring_suite.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/comprehensive_quality_gates.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/comprehensive_quality_gates.py",
+          "issue": "Use of exec() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/hybrid_qnp_architecture.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/neuromorphic_optimization.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/neuromorphic_spikeformer.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/photonic_quality_analyzer.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/photonic_quality_analyzer.py",
+          "issue": "Use of exec() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/quantum_inspired_sentiment.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/security_enhancements.py",
+          "issue": "Use of eval() function",
+          "severity": "HIGH"
+        },
+        {
+          "file": "src/security_enhancements.py",
+          "issue": "Use of exec() function",
+          "severity": "HIGH"
+        }
+      ],
+      "security_score": 0
+    },
+    "performance_test": {
+      "status": "PASS",
+      "benchmarks": {
+        "agi_init_time": 0.0007014274597167969,
+        "neural_process_time": 0.00040650367736816406
+      },
+      "performance_score": 100
+    },
+    "integration_test": {
+      "status": "FAIL",
+      "tests": [
+        {
+          "name": "AGI-Security Integration",
+          "status": "PASS"
+        },
+        {
+          "name": "Error Recovery Integration",
+          "status": "FAIL",
+          "error": "No module named 'psutil'"
+        },
+        {
+          "name": "Quantum Accelerator Integration",
+          "status": "FAIL",
+          "error": "No module named 'psutil'"
+        }
+      ],
+      "coverage": 33.33333333333333
+    },
+    "code_quality": {
+      "status": "PASS",
+      "metrics": {
+        "total_files": 82,
+        "total_lines": 51651,
+        "code_lines": 38808,
+        "comment_lines": 3205,
+        "comment_ratio": 6.205107355133492,
+        "avg_lines_per_file": 629.890243902439
+      },
+      "quality_score": 100
+    }
+  },
+  "summary": {
+    "total_gates": 6,
+    "passed": 3,
+    "warnings": 0,
+    "failed": 3,
+    "errors": 0,
+    "success_rate": 50.0
+  }
+}
