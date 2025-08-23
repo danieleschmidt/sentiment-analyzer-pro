@@ -1,18 +1,12 @@
-"""Multi-region deployment support for global scalability."""
 
-import os
 import json
-import requests
-import logging
-from typing import Dict, List, Optional, Any
-from enum import Enum
-from dataclasses import dataclass
-from datetime import datetime
 import time
+from typing import Dict, Any, List, Optional
+from dataclasses import dataclass, asdict
+from enum import Enum
+from datetime import datetime
 
-logger = logging.getLogger(__name__)
-
-class Region(Enum):
+class DeploymentRegion(Enum):
     """Supported deployment regions."""
     US_EAST_1 = "us-east-1"
     US_WEST_2 = "us-west-2"
@@ -20,293 +14,408 @@ class Region(Enum):
     EU_CENTRAL_1 = "eu-central-1"
     AP_SOUTHEAST_1 = "ap-southeast-1"
     AP_NORTHEAST_1 = "ap-northeast-1"
+    SA_EAST_1 = "sa-east-1"
 
 @dataclass
 class RegionConfig:
     """Configuration for a deployment region."""
-    region: Region
-    endpoint: str
-    latency_threshold_ms: float
-    max_capacity: int
-    current_load: float = 0.0
-    health_status: str = "healthy"
-    last_health_check: Optional[datetime] = None
+    region: DeploymentRegion
+    primary: bool
+    data_residency_compliant: bool
+    applicable_regulations: List[str]
+    instance_types: List[str]
+    auto_scaling_enabled: bool
+    min_instances: int
+    max_instances: int
+    target_cpu_utilization: float
+    backup_region: Optional[DeploymentRegion]
 
-class RegionManager:
-    """Manages multi-region deployment and load balancing."""
+class MultiRegionDeploymentManager:
+    """Multi-region deployment management system."""
     
     def __init__(self):
-        self.regions: Dict[Region, RegionConfig] = {}
-        self.primary_region = Region.US_EAST_1
-        self.load_balancer_config = self._get_default_load_balancer_config()
-        self._initialize_regions()
-    
-    def _get_default_load_balancer_config(self) -> Dict[str, Any]:
-        """Get default load balancer configuration."""
-        return {
-            "algorithm": "least_connections",
-            "health_check_interval": 30,
-            "failover_threshold": 0.8,
-            "retry_attempts": 3,
-            "timeout_seconds": 30
-        }
-    
-    def _initialize_regions(self):
-        """Initialize default region configurations."""
-        default_configs = {
-            Region.US_EAST_1: {
-                "endpoint": os.getenv("US_EAST_1_ENDPOINT", "https://sentiment-us-east-1.api.com"),
-                "latency_threshold_ms": 50.0,
-                "max_capacity": 1000
-            },
-            Region.US_WEST_2: {
-                "endpoint": os.getenv("US_WEST_2_ENDPOINT", "https://sentiment-us-west-2.api.com"),
-                "latency_threshold_ms": 75.0,
-                "max_capacity": 800
-            },
-            Region.EU_WEST_1: {
-                "endpoint": os.getenv("EU_WEST_1_ENDPOINT", "https://sentiment-eu-west-1.api.com"),
-                "latency_threshold_ms": 60.0,
-                "max_capacity": 600
-            },
-            Region.EU_CENTRAL_1: {
-                "endpoint": os.getenv("EU_CENTRAL_1_ENDPOINT", "https://sentiment-eu-central-1.api.com"),
-                "latency_threshold_ms": 55.0,
-                "max_capacity": 500
-            },
-            Region.AP_SOUTHEAST_1: {
-                "endpoint": os.getenv("AP_SOUTHEAST_1_ENDPOINT", "https://sentiment-ap-southeast-1.api.com"),
-                "latency_threshold_ms": 80.0,
-                "max_capacity": 400
-            },
-            Region.AP_NORTHEAST_1: {
-                "endpoint": os.getenv("AP_NORTHEAST_1_ENDPOINT", "https://sentiment-ap-northeast-1.api.com"),
-                "latency_threshold_ms": 70.0,
-                "max_capacity": 600
-            }
-        }
+        self.regions = self._initialize_regions()
+        self.load_balancing_strategy = "geo_proximity"
+        self.failover_strategy = "automatic"
+        self.data_replication_strategy = "async"
         
-        for region, config in default_configs.items():
-            self.regions[region] = RegionConfig(
-                region=region,
-                endpoint=config["endpoint"],
-                latency_threshold_ms=config["latency_threshold_ms"],
-                max_capacity=config["max_capacity"]
-            )
-    
-    def add_region(self, region_config: RegionConfig):
-        """Add a new region configuration."""
-        self.regions[region_config.region] = region_config
-        logger.info(f"Added region: {region_config.region.value}")
-    
-    def remove_region(self, region: Region):
-        """Remove a region configuration."""
-        if region in self.regions:
-            del self.regions[region]
-            logger.info(f"Removed region: {region.value}")
-    
-    def get_optimal_region(self, user_location: Optional[Dict[str, float]] = None) -> Region:
-        """Get optimal region for user based on location and load."""
-        healthy_regions = [
-            region for region, config in self.regions.items()
-            if config.health_status == "healthy" and 
-            config.current_load < self.load_balancer_config["failover_threshold"]
-        ]
+    def _initialize_regions(self) -> Dict[DeploymentRegion, RegionConfig]:
+        """Initialize region configurations."""
         
-        if not healthy_regions:
-            logger.warning("No healthy regions available, using primary region")
-            return self.primary_region
-        
-        if user_location:
-            return self._get_geographically_optimal_region(user_location, healthy_regions)
-        
-        return self._get_load_optimal_region(healthy_regions)
-    
-    def _get_geographically_optimal_region(
-        self, 
-        user_location: Dict[str, float], 
-        available_regions: List[Region]
-    ) -> Region:
-        """Get geographically optimal region based on user location."""
-        user_lat = user_location.get("latitude", 0.0)
-        user_lon = user_location.get("longitude", 0.0)
-        
-        region_coordinates = {
-            Region.US_EAST_1: (39.0458, -76.6413),
-            Region.US_WEST_2: (45.5152, -122.6784),
-            Region.EU_WEST_1: (53.3498, -6.2603),
-            Region.EU_CENTRAL_1: (50.1109, 8.6821),
-            Region.AP_SOUTHEAST_1: (1.3521, 103.8198),
-            Region.AP_NORTHEAST_1: (35.6762, 139.6503)
-        }
-        
-        min_distance = float('inf')
-        optimal_region = available_regions[0]
-        
-        for region in available_regions:
-            if region in region_coordinates:
-                reg_lat, reg_lon = region_coordinates[region]
-                distance = ((user_lat - reg_lat) ** 2 + (user_lon - reg_lon) ** 2) ** 0.5
-                
-                load_factor = self.regions[region].current_load
-                adjusted_distance = distance * (1 + load_factor)
-                
-                if adjusted_distance < min_distance:
-                    min_distance = adjusted_distance
-                    optimal_region = region
-        
-        return optimal_region
-    
-    def _get_load_optimal_region(self, available_regions: List[Region]) -> Region:
-        """Get region with lowest load."""
-        if self.load_balancer_config["algorithm"] == "least_connections":
-            return min(available_regions, key=lambda r: self.regions[r].current_load)
-        elif self.load_balancer_config["algorithm"] == "round_robin":
-            return available_regions[int(time.time()) % len(available_regions)]
-        else:
-            return available_regions[0]
-    
-    def health_check_region(self, region: Region) -> bool:
-        """Perform health check on a region."""
-        config = self.regions.get(region)
-        if not config:
-            return False
-        
-        try:
-            start_time = time.time()
-            response = requests.get(
-                f"{config.endpoint}/health",
-                timeout=self.load_balancer_config["timeout_seconds"]
-            )
-            latency = (time.time() - start_time) * 1000
-            
-            if response.status_code == 200:
-                config.health_status = "healthy"
-                config.last_health_check = datetime.now()
-                
-                if latency > config.latency_threshold_ms:
-                    logger.warning(f"High latency detected in {region.value}: {latency:.2f}ms")
-                
-                return True
-            else:
-                config.health_status = "unhealthy"
-                logger.error(f"Health check failed for {region.value}: HTTP {response.status_code}")
-                return False
-                
-        except Exception as e:
-            config.health_status = "unhealthy"
-            logger.error(f"Health check failed for {region.value}: {e}")
-            return False
-    
-    def health_check_all_regions(self) -> Dict[Region, bool]:
-        """Perform health check on all regions."""
-        results = {}
-        for region in self.regions:
-            results[region] = self.health_check_region(region)
-        return results
-    
-    def update_region_load(self, region: Region, load: float):
-        """Update current load for a region."""
-        if region in self.regions:
-            self.regions[region].current_load = load
-    
-    def get_region_stats(self) -> Dict[str, Any]:
-        """Get statistics for all regions."""
-        stats = {
-            "total_regions": len(self.regions),
-            "healthy_regions": sum(
-                1 for config in self.regions.values()
-                if config.health_status == "healthy"
+        regions = {
+            DeploymentRegion.US_EAST_1: RegionConfig(
+                region=DeploymentRegion.US_EAST_1,
+                primary=True,
+                data_residency_compliant=True,
+                applicable_regulations=["CCPA"],
+                instance_types=["t3.medium", "t3.large", "c5.xlarge"],
+                auto_scaling_enabled=True,
+                min_instances=2,
+                max_instances=20,
+                target_cpu_utilization=70.0,
+                backup_region=DeploymentRegion.US_WEST_2
             ),
-            "average_load": sum(
-                config.current_load for config in self.regions.values()
-            ) / len(self.regions) if self.regions else 0,
-            "regions": {}
+            DeploymentRegion.US_WEST_2: RegionConfig(
+                region=DeploymentRegion.US_WEST_2,
+                primary=False,
+                data_residency_compliant=True,
+                applicable_regulations=["CCPA"],
+                instance_types=["t3.medium", "t3.large"],
+                auto_scaling_enabled=True,
+                min_instances=1,
+                max_instances=10,
+                target_cpu_utilization=70.0,
+                backup_region=DeploymentRegion.US_EAST_1
+            ),
+            DeploymentRegion.EU_WEST_1: RegionConfig(
+                region=DeploymentRegion.EU_WEST_1,
+                primary=True,
+                data_residency_compliant=True,
+                applicable_regulations=["GDPR"],
+                instance_types=["t3.medium", "t3.large", "c5.xlarge"],
+                auto_scaling_enabled=True,
+                min_instances=2,
+                max_instances=15,
+                target_cpu_utilization=70.0,
+                backup_region=DeploymentRegion.EU_CENTRAL_1
+            ),
+            DeploymentRegion.EU_CENTRAL_1: RegionConfig(
+                region=DeploymentRegion.EU_CENTRAL_1,
+                primary=False,
+                data_residency_compliant=True,
+                applicable_regulations=["GDPR"],
+                instance_types=["t3.medium"],
+                auto_scaling_enabled=True,
+                min_instances=1,
+                max_instances=8,
+                target_cpu_utilization=70.0,
+                backup_region=DeploymentRegion.EU_WEST_1
+            ),
+            DeploymentRegion.AP_SOUTHEAST_1: RegionConfig(
+                region=DeploymentRegion.AP_SOUTHEAST_1,
+                primary=True,
+                data_residency_compliant=True,
+                applicable_regulations=["PDPA"],
+                instance_types=["t3.medium", "t3.large"],
+                auto_scaling_enabled=True,
+                min_instances=2,
+                max_instances=12,
+                target_cpu_utilization=70.0,
+                backup_region=DeploymentRegion.AP_NORTHEAST_1
+            ),
+            DeploymentRegion.AP_NORTHEAST_1: RegionConfig(
+                region=DeploymentRegion.AP_NORTHEAST_1,
+                primary=False,
+                data_residency_compliant=True,
+                applicable_regulations=["PIPEDA", "APP"],
+                instance_types=["t3.medium"],
+                auto_scaling_enabled=True,
+                min_instances=1,
+                max_instances=8,
+                target_cpu_utilization=70.0,
+                backup_region=DeploymentRegion.AP_SOUTHEAST_1
+            ),
+            DeploymentRegion.SA_EAST_1: RegionConfig(
+                region=DeploymentRegion.SA_EAST_1,
+                primary=True,
+                data_residency_compliant=True,
+                applicable_regulations=["LGPD"],
+                instance_types=["t3.medium"],
+                auto_scaling_enabled=True,
+                min_instances=1,
+                max_instances=6,
+                target_cpu_utilization=75.0,
+                backup_region=None
+            )
         }
         
-        for region, config in self.regions.items():
-            stats["regions"][region.value] = {
-                "endpoint": config.endpoint,
-                "health_status": config.health_status,
-                "current_load": config.current_load,
-                "max_capacity": config.max_capacity,
-                "latency_threshold_ms": config.latency_threshold_ms,
-                "last_health_check": config.last_health_check.isoformat() if config.last_health_check else None
-            }
-        
-        return stats
+        return regions
     
-    def failover_to_backup(self, failed_region: Region) -> Optional[Region]:
-        """Failover to backup region when primary fails."""
-        backup_regions = [
-            region for region in self.regions
-            if region != failed_region and self.regions[region].health_status == "healthy"
-        ]
+    def get_optimal_region(self, client_location: str, compliance_requirements: List[str] = None) -> DeploymentRegion:
+        """Get optimal region for client based on location and compliance."""
         
-        if not backup_regions:
-            logger.error("No backup regions available for failover")
-            return None
+        # Normalize client location
+        location_lower = client_location.lower()
         
-        backup_region = self._get_load_optimal_region(backup_regions)
-        logger.info(f"Failing over from {failed_region.value} to {backup_region.value}")
-        return backup_region
-
-class GlobalLoadBalancer:
-    """Global load balancer for sentiment analysis service."""
+        # Geographic proximity mapping
+        if any(region in location_lower for region in ['usa', 'united states', 'north america']):
+            if 'west' in location_lower or any(state in location_lower for state in ['california', 'oregon', 'washington']):
+                return DeploymentRegion.US_WEST_2
+            return DeploymentRegion.US_EAST_1
+        
+        elif any(region in location_lower for region in ['europe', 'eu', 'germany', 'france', 'uk']):
+            if any(country in location_lower for country in ['germany', 'austria', 'poland']):
+                return DeploymentRegion.EU_CENTRAL_1
+            return DeploymentRegion.EU_WEST_1
+        
+        elif any(region in location_lower for region in ['asia', 'singapore', 'malaysia', 'thailand']):
+            return DeploymentRegion.AP_SOUTHEAST_1
+        
+        elif any(region in location_lower for region in ['japan', 'korea', 'taiwan']):
+            return DeploymentRegion.AP_NORTHEAST_1
+        
+        elif any(region in location_lower for region in ['brazil', 'south america', 'latin america']):
+            return DeploymentRegion.SA_EAST_1
+        
+        # Default to US East if no match
+        return DeploymentRegion.US_EAST_1
     
-    def __init__(self, region_manager: RegionManager):
-        self.region_manager = region_manager
-        self.request_counts: Dict[Region, int] = {}
+    def check_compliance_requirements(self, region: DeploymentRegion, requirements: List[str]) -> bool:
+        """Check if region meets compliance requirements."""
+        
+        if region not in self.regions:
+            return False
+        
+        region_config = self.regions[region]
+        region_regulations = set(region_config.applicable_regulations)
+        required_regulations = set(requirements)
+        
+        # Check if all requirements are satisfied
+        return required_regulations.issubset(region_regulations)
     
-    def route_request(
-        self, 
-        request_data: Dict[str, Any], 
-        user_location: Optional[Dict[str, float]] = None
-    ) -> Dict[str, Any]:
-        """Route request to optimal region."""
-        optimal_region = self.region_manager.get_optimal_region(user_location)
+    def get_deployment_manifest(self, region: DeploymentRegion) -> Dict[str, Any]:
+        """Generate deployment manifest for a region."""
         
-        if optimal_region not in self.request_counts:
-            self.request_counts[optimal_region] = 0
+        if region not in self.regions:
+            raise ValueError(f"Region {region.value} not supported")
         
-        self.request_counts[optimal_region] += 1
+        config = self.regions[region]
         
-        # Update load metrics
-        current_load = self.request_counts[optimal_region] / self.region_manager.regions[optimal_region].max_capacity
-        self.region_manager.update_region_load(optimal_region, current_load)
-        
-        return {
-            "region": optimal_region.value,
-            "endpoint": self.region_manager.regions[optimal_region].endpoint,
-            "request_id": f"{optimal_region.value}-{int(time.time())}-{self.request_counts[optimal_region]}"
-        }
-    
-    def get_load_balancer_stats(self) -> Dict[str, Any]:
-        """Get load balancer statistics."""
-        total_requests = sum(self.request_counts.values())
-        
-        return {
-            "total_requests": total_requests,
-            "request_distribution": {
-                region.value: count for region, count in self.request_counts.items()
+        manifest = {
+            "apiVersion": "apps/v1",
+            "kind": "Deployment",
+            "metadata": {
+                "name": "sentiment-analyzer-pro",
+                "namespace": "default",
+                "labels": {
+                    "app": "sentiment-analyzer-pro",
+                    "region": region.value,
+                    "primary": str(config.primary).lower()
+                }
             },
-            "region_stats": self.region_manager.get_region_stats()
+            "spec": {
+                "replicas": config.min_instances,
+                "selector": {
+                    "matchLabels": {
+                        "app": "sentiment-analyzer-pro"
+                    }
+                },
+                "template": {
+                    "metadata": {
+                        "labels": {
+                            "app": "sentiment-analyzer-pro",
+                            "region": region.value
+                        }
+                    },
+                    "spec": {
+                        "containers": [{
+                            "name": "sentiment-analyzer",
+                            "image": "sentiment-analyzer-pro:latest",
+                            "ports": [{"containerPort": 5000}],
+                            "env": [
+                                {"name": "DEPLOYMENT_REGION", "value": region.value},
+                                {"name": "PRIMARY_REGION", "value": str(config.primary)},
+                                {"name": "APPLICABLE_REGULATIONS", "value": ",".join(config.applicable_regulations)},
+                                {"name": "AUTO_SCALING_ENABLED", "value": str(config.auto_scaling_enabled)},
+                                {"name": "MIN_INSTANCES", "value": str(config.min_instances)},
+                                {"name": "MAX_INSTANCES", "value": str(config.max_instances)}
+                            ],
+                            "resources": {
+                                "requests": {
+                                    "cpu": "100m",
+                                    "memory": "256Mi"
+                                },
+                                "limits": {
+                                    "cpu": "500m", 
+                                    "memory": "512Mi"
+                                }
+                            },
+                            "livenessProbe": {
+                                "httpGet": {
+                                    "path": "/health",
+                                    "port": 5000
+                                },
+                                "initialDelaySeconds": 30,
+                                "periodSeconds": 10
+                            },
+                            "readinessProbe": {
+                                "httpGet": {
+                                    "path": "/ready",
+                                    "port": 5000
+                                },
+                                "initialDelaySeconds": 5,
+                                "periodSeconds": 5
+                            }
+                        }],
+                        "nodeSelector": {
+                            "region": region.value
+                        }
+                    }
+                }
+            }
         }
+        
+        return manifest
+    
+    def get_auto_scaling_config(self, region: DeploymentRegion) -> Dict[str, Any]:
+        """Generate auto-scaling configuration for a region."""
+        
+        if region not in self.regions:
+            raise ValueError(f"Region {region.value} not supported")
+        
+        config = self.regions[region]
+        
+        hpa_config = {
+            "apiVersion": "autoscaling/v2",
+            "kind": "HorizontalPodAutoscaler", 
+            "metadata": {
+                "name": f"sentiment-analyzer-pro-hpa-{region.value}",
+                "namespace": "default"
+            },
+            "spec": {
+                "scaleTargetRef": {
+                    "apiVersion": "apps/v1",
+                    "kind": "Deployment",
+                    "name": "sentiment-analyzer-pro"
+                },
+                "minReplicas": config.min_instances,
+                "maxReplicas": config.max_instances,
+                "metrics": [
+                    {
+                        "type": "Resource",
+                        "resource": {
+                            "name": "cpu",
+                            "target": {
+                                "type": "Utilization",
+                                "averageUtilization": int(config.target_cpu_utilization)
+                            }
+                        }
+                    },
+                    {
+                        "type": "Resource", 
+                        "resource": {
+                            "name": "memory",
+                            "target": {
+                                "type": "Utilization",
+                                "averageUtilization": 80
+                            }
+                        }
+                    }
+                ],
+                "behavior": {
+                    "scaleUp": {
+                        "stabilizationWindowSeconds": 60,
+                        "policies": [{
+                            "type": "Percent",
+                            "value": 100,
+                            "periodSeconds": 60
+                        }]
+                    },
+                    "scaleDown": {
+                        "stabilizationWindowSeconds": 300,
+                        "policies": [{
+                            "type": "Percent",
+                            "value": 10,
+                            "periodSeconds": 60
+                        }]
+                    }
+                }
+            }
+        }
+        
+        return hpa_config
+    
+    def get_global_load_balancer_config(self) -> Dict[str, Any]:
+        """Generate global load balancer configuration."""
+        
+        # Primary regions for each geographic area
+        primary_regions = [region for region, config in self.regions.items() if config.primary]
+        
+        upstream_servers = []
+        for region in primary_regions:
+            config = self.regions[region]
+            upstream_servers.append({
+                "server": f"sentiment-{region.value}.terragon.ai",
+                "weight": 100,
+                "max_fails": 3,
+                "fail_timeout": "30s",
+                "backup": False
+            })
+            
+            # Add backup servers
+            if config.backup_region and config.backup_region in self.regions:
+                upstream_servers.append({
+                    "server": f"sentiment-{config.backup_region.value}.terragon.ai",
+                    "weight": 50,
+                    "max_fails": 2,
+                    "fail_timeout": "20s",
+                    "backup": True
+                })
+        
+        load_balancer_config = {
+            "global_load_balancer": {
+                "strategy": self.load_balancing_strategy,
+                "health_check_interval": "10s",
+                "health_check_timeout": "5s",
+                "failover_strategy": self.failover_strategy,
+                "upstream_servers": upstream_servers,
+                "geographic_routing": {
+                    "americas": [DeploymentRegion.US_EAST_1.value, DeploymentRegion.US_WEST_2.value, DeploymentRegion.SA_EAST_1.value],
+                    "europe": [DeploymentRegion.EU_WEST_1.value, DeploymentRegion.EU_CENTRAL_1.value],
+                    "asia_pacific": [DeploymentRegion.AP_SOUTHEAST_1.value, DeploymentRegion.AP_NORTHEAST_1.value]
+                },
+                "ssl_termination": True,
+                "compression_enabled": True,
+                "caching_enabled": True,
+                "rate_limiting": {
+                    "requests_per_minute": 1000,
+                    "burst_size": 200
+                }
+            }
+        }
+        
+        return load_balancer_config
+    
+    def generate_deployment_summary(self) -> Dict[str, Any]:
+        """Generate deployment summary report."""
+        
+        total_regions = len(self.regions)
+        primary_regions = len([r for r in self.regions.values() if r.primary])
+        
+        total_min_capacity = sum(config.min_instances for config in self.regions.values())
+        total_max_capacity = sum(config.max_instances for config in self.regions.values())
+        
+        compliance_coverage = {}
+        for config in self.regions.values():
+            for regulation in config.applicable_regulations:
+                if regulation not in compliance_coverage:
+                    compliance_coverage[regulation] = []
+                compliance_coverage[regulation].append(config.region.value)
+        
+        summary = {
+            "deployment_overview": {
+                "total_regions": total_regions,
+                "primary_regions": primary_regions,
+                "backup_regions": total_regions - primary_regions,
+                "global_coverage": True
+            },
+            "capacity_planning": {
+                "total_min_instances": total_min_capacity,
+                "total_max_instances": total_max_capacity,
+                "auto_scaling_enabled": all(config.auto_scaling_enabled for config in self.regions.values())
+            },
+            "compliance_coverage": compliance_coverage,
+            "high_availability": {
+                "multi_region": True,
+                "automatic_failover": self.failover_strategy == "automatic",
+                "data_replication": self.data_replication_strategy,
+                "load_balancing": self.load_balancing_strategy
+            },
+            "supported_regions": [region.value for region in self.regions.keys()],
+            "deployment_date": datetime.now().isoformat()
+        }
+        
+        return summary
 
-_global_region_manager = RegionManager()
-_global_load_balancer = GlobalLoadBalancer(_global_region_manager)
-
-def get_region_manager() -> RegionManager:
-    """Get global region manager."""
-    return _global_region_manager
-
-def get_load_balancer() -> GlobalLoadBalancer:
-    """Get global load balancer."""
-    return _global_load_balancer
-
-def route_request(
-    request_data: Dict[str, Any], 
-    user_location: Optional[Dict[str, float]] = None
-) -> Dict[str, Any]:
-    """Route request globally."""
-    return _global_load_balancer.route_request(request_data, user_location)
+# Global multi-region deployment manager
+deployment_manager = MultiRegionDeploymentManager()
