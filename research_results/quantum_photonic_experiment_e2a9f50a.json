@@ -1,0 +1,128 @@
+{
+  "experiment_id": "e2a9f50a-a8e7-4717-8f6c-d2c5afddf2fb",
+  "timestamp": "2025-08-25T03:09:36.012702",
+  "config": {
+    "experiment_name": "quantum_photonic_fusion_validation_v4",
+    "random_seed": 42,
+    "num_bootstrap_samples": 1000,
+    "confidence_level": 0.95,
+    "significance_alpha": 0.05,
+    "cv_folds": 5,
+    "cv_stratified": true,
+    "cv_shuffle": true,
+    "num_performance_runs": 10,
+    "performance_warmup_runs": 3,
+    "multiple_testing_correction": "bonferroni",
+    "track_environment": true,
+    "save_intermediate_results": true
+  },
+  "accuracy_scores": [
+    0.8909936725768507,
+    0.9066401718342081,
+    0.9009726844488192,
+    0.9169830227622114,
+    0.9192587026711715
+  ],
+  "f1_scores": [
+    0.8776840862066203,
+    0.8798123162786545,
+    0.8763681294053229,
+    0.8925109413801371,
+    0.9163977022639013
+  ],
+  "precision_scores": [
+    0.8567283276614414,
+    0.8902889423234417,
+    0.8873545637960859,
+    0.8774560606223556,
+    0.898654435855715
+  ],
+  "recall_scores": [
+    0.8833182063422892,
+    0.8993087418109139,
+    0.8838570978203936,
+    0.9078221879754997,
+    0.9144517245679112
+  ],
+  "training_times": [
+    3.0980469625348688,
+    3.4983521440396155,
+    0.32540738093257476,
+    0.27710737459621143,
+    3.19996319818391
+  ],
+  "inference_times": [
+    0.005941605973695856,
+    0.0007950758915851276,
+    0.00043325378756148335,
+    0.007740369856857915,
+    0.002767683050830363
+  ],
+  "statistical_significance": {
+    "test_type": "mannwhitney",
+    "baseline_mean": 0.785231716529002,
+    "baseline_std": 0.012031992325879136,
+    "experimental_mean": 0.9069696508586521,
+    "experimental_std": 0.010417220895599565,
+    "sample_sizes": {
+      "baseline": 5,
+      "experimental": 5
+    },
+    "statistic": 25.0,
+    "p_value": 0.007936507936507936,
+    "significant": "True"
+  },
+  "effect_sizes": {
+    "cohens_d": 9.675628524988035
+  },
+  "confidence_intervals": {
+    "accuracy": [
+      0.8981145771771096,
+      0.9158247245401947
+    ],
+    "f1": [
+      0.8777417427883019,
+      0.9036144355154327
+    ]
+  },
+  "environment_info": {
+    "python_version": "3.12.3 (main, Jun 18 2025, 17:59:45) [GCC 13.3.0]",
+    "numpy_version": "2.3.2",
+    "best_fusion_mode": "full_fusion",
+    "scipy_available": true,
+    "sklearn_available": true,
+    "num_samples": 2000,
+    "comparative_results": {
+      "classical": {
+        "mean_accuracy": 0.785231716529002,
+        "std_accuracy": 0.012031992325879136,
+        "mean_training_time": 1.4361181602941984,
+        "mean_inference_time": 0.0058651754382742964
+      },
+      "quantum_only": {
+        "mean_accuracy": 0.8271898541862155,
+        "std_accuracy": 0.032677662042395896,
+        "mean_training_time": 0.7143237848859252,
+        "mean_inference_time": 0.019874938828029043
+      },
+      "photonic_only": {
+        "mean_accuracy": 0.8180700201509454,
+        "std_accuracy": 0.03264325246873738,
+        "mean_training_time": 1.1696031410375116,
+        "mean_inference_time": 0.005824146634498359
+      },
+      "quantum_enhanced": {
+        "mean_accuracy": 0.8770998059013699,
+        "std_accuracy": 0.009201748979981285,
+        "mean_training_time": 1.0824134297973491,
+        "mean_inference_time": 0.01090234164889264
+      },
+      "full_fusion": {
+        "mean_accuracy": 0.9069696508586521,
+        "std_accuracy": 0.010417220895599565,
+        "mean_training_time": 2.079775412057436,
+        "mean_inference_time": 0.003535597712106149
+      }
+    }
+  }
+}

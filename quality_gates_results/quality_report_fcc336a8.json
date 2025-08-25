@@ -1,0 +1,114 @@
+{
+  "execution_id": "fcc336a8",
+  "timestamp": "2025-08-25T03:16:39.953381",
+  "gate_results": [
+    {
+      "gate_name": "Code Quality",
+      "passed": false,
+      "score": 0.0,
+      "details": {
+        "python_files_count": 200,
+        "ruff_status": "\u274c FAILED (1 issues)",
+        "flake8_status": "\u26a0\ufe0f Issues found",
+        "syntax_check": "\u274c Syntax errors found",
+        "import_check": "\u26a0\ufe0f Some import issues"
+      },
+      "execution_time": 6.46308445930481,
+      "errors": [
+        "  File \"src/autonomous_research_master_system.py\", line 236",
+        "    \ud83c\udfaf SYSTEM CAPABILITIES:\\\")\\n    capabilities = master_report['system_capabilities']\\n    for capability, status in capabilities.items():\\n        status_symbol = \\\"\u2705\\\" if status else \\\"\u274c\\\"\\n        print(f\\\"  {status_symbol} {capability.replace('_', ' ').title()}\\\")\\n    \\n    print(f\\\"\\\\n\ud83d\udd2e FUTURE RESEARCH DIRECTIONS:\\\")\\n    for direction in master_report['future_research_directions'][:3]:\\n        print(f\\\"  \u2022 {direction}\\\")\\n    \\n    print(\\\"\\\\n\\\" + \\\"=\\\" * 60)\\n    print(\\\"\ud83c\udf89 AUTONOMOUS RESEARCH DEMONSTRATION COMPLETED\\\")\\n    print(\\\"   First fully autonomous AI research system operational!\\\")\\n    print(\\\"   Ready for production deployment and continuous research.\\\")\\n    \\n    return research_system, execution, master_report\\n\\n\\nif __name__ == \\\"__main__\\\":\\n    asyncio.run(main())\"",
+        "           ^"
+      ],
+      "warnings": [
+        "/bin/sh: 1: ruff: not found"
+      ]
+    },
+    {
+      "gate_name": "Security Scanning",
+      "passed": false,
+      "score": 0,
+      "details": {
+        "bandit_high_issues": 14,
+        "bandit_medium_issues": 20,
+        "bandit_status": "\u26a0\ufe0f Found 14 high, 20 medium issues",
+        "safety_status": "\u26a0\ufe0f Safety check completed with warnings",
+        "secret_scan": "\u26a0\ufe0f Potential secrets found"
+      },
+      "execution_time": 12.112035751342773,
+      "errors": [
+        "HIGH: hashlib",
+        "HIGH: hashlib",
+        "HIGH: hashlib"
+      ],
+      "warnings": [
+        "MEDIUM: blacklist",
+        "MEDIUM: hardcoded_tmp_directory",
+        "MEDIUM: hardcoded_tmp_directory",
+        "Could not parse safety results",
+        "Potential hardcoded secrets detected"
+      ]
+    },
+    {
+      "gate_name": "Test Coverage",
+      "passed": false,
+      "score": 30.0,
+      "details": {
+        "test_files_count": 39,
+        "pytest_status": "\u274c Some tests failed",
+        "coverage_percentage": "6.3%",
+        "coverage_status": "\u274c Low coverage"
+      },
+      "execution_time": 6.892104625701904,
+      "errors": [
+        "Coverage too low: 6.3%"
+      ],
+      "warnings": []
+    },
+    {
+      "gate_name": "Performance Benchmarks",
+      "passed": true,
+      "score": 90.0,
+      "details": {
+        "import_time": "2.178s",
+        "import_status": "\u2705 Imports successful",
+        "import_performance": "\u26a0\ufe0f Moderate import time",
+        "model_creation_time": "1.891s",
+        "functionality_status": "\u2705 Basic functionality works",
+        "functionality_performance": "\u2705 Fast model creation"
+      },
+      "execution_time": 4.069282531738281,
+      "errors": [],
+      "warnings": [
+        "Slow imports: 2.178s"
+      ]
+    },
+    {
+      "gate_name": "Documentation Quality",
+      "passed": true,
+      "score": 100.0,
+      "details": {
+        "readme_status": "\u2705 README.md exists",
+        "readme_quality": "\u2705 Comprehensive README",
+        "docs_count": 23,
+        "docs_status": "\u2705 Comprehensive documentation",
+        "comment_lines": 7208,
+        "code_documentation": "\u2705 Well documented code",
+        "examples_status": "\u2705 Examples provided"
+      },
+      "execution_time": 0.021386384963989258,
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "total_gates": 5,
+  "passed_gates": 2,
+  "overall_score": 44.0,
+  "overall_passed": false,
+  "total_execution_time": 29.561847448349,
+  "python_version": "3.12.3 (main, Jun 18 2025, 17:59:45) [GCC 13.3.0]",
+  "system_info": {
+    "platform": "linux",
+    "python_executable": "/usr/bin/python3",
+    "working_directory": "/root/repo"
+  }
+}
