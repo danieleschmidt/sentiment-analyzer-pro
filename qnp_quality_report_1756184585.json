@@ -1,0 +1,267 @@
+{
+  "timestamp": "2025-08-26T05:03:05.672432",
+  "overall_pass": false,
+  "total_score": 0.2735714285714286,
+  "gate_results": [
+    {
+      "gate_name": "syntax_validation",
+      "passed": false,
+      "score": 0.9904761904761905,
+      "details": {
+        "files_checked": 105,
+        "syntax_errors": 1,
+        "error_rate": 0.009523809523809525
+      },
+      "execution_time_seconds": 0.663006067276001,
+      "errors": [
+        "/root/repo/src/autonomous_research_master_system.py: unexpected character after line continuation character (autonomous_research_master_system.py, line 236)"
+      ],
+      "warnings": []
+    },
+    {
+      "gate_name": "import_validation",
+      "passed": false,
+      "score": 0.0,
+      "details": {
+        "total_modules": 4,
+        "successful_imports": 0,
+        "failed_imports": 4,
+        "import_results": [
+          {
+            "module": "quantum_neuromorphic_photonic_fusion",
+            "status": "failed",
+            "error": "No module named 'numpy'"
+          },
+          {
+            "module": "qnp_production_framework",
+            "status": "failed",
+            "error": "No module named 'numpy'"
+          },
+          {
+            "module": "qnp_research_validation",
+            "status": "failed",
+            "error": "No module named 'numpy'"
+          },
+          {
+            "module": "qnp_global_scaling_system",
+            "status": "failed",
+            "error": "No module named 'numpy'"
+          }
+        ]
+      },
+      "execution_time_seconds": 0.14400219917297363,
+      "errors": [
+        "quantum_neuromorphic_photonic_fusion: No module named 'numpy'",
+        "qnp_production_framework: No module named 'numpy'",
+        "qnp_research_validation: No module named 'numpy'",
+        "qnp_global_scaling_system: No module named 'numpy'"
+      ],
+      "warnings": []
+    },
+    {
+      "gate_name": "qnp_core_validation",
+      "passed": false,
+      "score": 0.0,
+      "details": {
+        "error": "No module named 'numpy'"
+      },
+      "execution_time_seconds": 0.0006861686706542969,
+      "errors": [
+        "No module named 'numpy'"
+      ],
+      "warnings": []
+    },
+    {
+      "gate_name": "security_scan",
+      "passed": false,
+      "score": 0,
+      "details": {
+        "files_scanned": 105,
+        "total_issues": 122,
+        "high_severity": 0,
+        "medium_severity": 122,
+        "low_severity": 0,
+        "issues": [
+          {
+            "file": "/root/repo/src/__init__.py",
+            "line": 31,
+            "type": "hardcoded_secrets",
+            "pattern": "token",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/advanced_validation_engine.py",
+            "line": 621,
+            "type": "hardcoded_secrets",
+            "pattern": "password",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/advanced_validation_engine.py",
+            "line": 621,
+            "type": "hardcoded_secrets",
+            "pattern": "secret",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/advanced_validation_engine.py",
+            "line": 622,
+            "type": "hardcoded_secrets",
+            "pattern": "secret",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/advanced_validation_engine.py",
+            "line": 621,
+            "type": "hardcoded_secrets",
+            "pattern": "api_key",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/advanced_validation_engine.py",
+            "line": 621,
+            "type": "hardcoded_secrets",
+            "pattern": "token",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/aspect_sentiment.py",
+            "line": 11,
+            "type": "hardcoded_secrets",
+            "pattern": "token",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/aspect_sentiment.py",
+            "line": 44,
+            "type": "hardcoded_secrets",
+            "pattern": "token",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/aspect_sentiment.py",
+            "line": 48,
+            "type": "hardcoded_secrets",
+            "pattern": "token",
+            "severity": "medium"
+          },
+          {
+            "file": "/root/repo/src/aspect_sentiment.py",
+            "line": 50,
+            "type": "hardcoded_secrets",
+            "pattern": "token",
+            "severity": "medium"
+          }
+        ]
+      },
+      "execution_time_seconds": 0.21424603462219238,
+      "errors": [],
+      "warnings": [
+        "Found 122 potential security issues"
+      ]
+    },
+    {
+      "gate_name": "performance_benchmarks",
+      "passed": false,
+      "score": 0.0,
+      "details": {
+        "error": "No module named 'numpy'"
+      },
+      "execution_time_seconds": 0.0014832019805908203,
+      "errors": [
+        "No module named 'numpy'"
+      ],
+      "warnings": []
+    },
+    {
+      "gate_name": "research_validation",
+      "passed": false,
+      "score": 0.5,
+      "details": {
+        "validation_error": "No module named 'numpy'"
+      },
+      "execution_time_seconds": 0.0012423992156982422,
+      "errors": [],
+      "warnings": [
+        "Research validation failed: No module named 'numpy'"
+      ]
+    },
+    {
+      "gate_name": "documentation_check",
+      "passed": true,
+      "score": 1.0,
+      "details": {
+        "total_doc_items": 5,
+        "docs_present": 5,
+        "coverage_percent": 100.0,
+        "doc_checks": [
+          {
+            "item": "README.md",
+            "exists": true
+          },
+          {
+            "item": "quantum_neuromorphic_photonic_fusion.py docstring",
+            "exists": true
+          },
+          {
+            "item": "qnp_production_framework.py docstring",
+            "exists": true
+          },
+          {
+            "item": "qnp_research_validation.py docstring",
+            "exists": true
+          },
+          {
+            "item": "qnp_global_scaling_system.py docstring",
+            "exists": true
+          }
+        ]
+      },
+      "execution_time_seconds": 0.0007715225219726562,
+      "errors": [],
+      "warnings": []
+    },
+    {
+      "gate_name": "integration_tests",
+      "passed": false,
+      "score": 0.0,
+      "details": {
+        "total_tests": 2,
+        "successful_tests": 0,
+        "test_results": [
+          {
+            "test": "production_framework_integration",
+            "status": "fail",
+            "error": "No module named 'numpy'"
+          },
+          {
+            "test": "global_cluster_integration",
+            "status": "fail",
+            "error": "No module named 'numpy'"
+          }
+        ]
+      },
+      "execution_time_seconds": 0.002117633819580078,
+      "errors": [],
+      "warnings": []
+    }
+  ],
+  "execution_summary": {
+    "total_execution_time_seconds": 1.030426263809204,
+    "gates_executed": 8,
+    "gates_passed": 1,
+    "gates_failed": 7,
+    "average_execution_time": 0.12844440340995789,
+    "critical_gates_passed": false
+  },
+  "recommendations": [
+    "\u274c QNP system requires attention before production deployment",
+    "Fix syntax_validation errors: /root/repo/src/autonomous_research_master_system.py: unexpected character after line continuation character (autonomous_research_master_system.py, line 236)",
+    "Fix import_validation errors: quantum_neuromorphic_photonic_fusion: No module named 'numpy', qnp_production_framework: No module named 'numpy', qnp_research_validation: No module named 'numpy'",
+    "Fix qnp_core_validation errors: No module named 'numpy'",
+    "Improve security_scan (score: 0.00)",
+    "Fix performance_benchmarks errors: No module named 'numpy'",
+    "Improve research_validation (score: 0.50)",
+    "Improve integration_tests (score: 0.00)"
+  ]
+}

@@ -1,0 +1,573 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: qnp-production
+  labels:
+    app: qnp-system
+    version: v1.0.0
+    tier: production
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qnp-config
+  namespace: qnp-production
+data:
+  QNP_LOG_LEVEL: "INFO"
+  QNP_CACHE_SIZE: "50000"
+  QNP_WORKERS: "8"
+  QNP_QUANTUM_QUBITS: "8"
+  QNP_NEUROMORPHIC_NEURONS: "64"
+  QNP_PHOTONIC_CHANNELS: "16"
+  QNP_REGIONS: "us-east,eu-west,ap-southeast"
+  QNP_COMPLIANCE_MODE: "strict"
+  QNP_METRICS_ENABLED: "true"
+  PYTHONUNBUFFERED: "1"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: qnp-secrets
+  namespace: qnp-production
+type: Opaque
+data:
+  # Base64 encoded secrets (replace with actual values)
+  jwt-secret: cW5wLXNlY3VyZS1qd3Qtc2VjcmV0LWtleS0yMDI1
+  encryption-key: cW5wLWVuY3J5cHRpb24ta2V5LWZvci1wcm9kdWN0aW9u
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qnp-fusion-engine
+  namespace: qnp-production
+  labels:
+    app: qnp-fusion-engine
+    version: v1.0.0
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: qnp-fusion-engine
+  template:
+    metadata:
+      labels:
+        app: qnp-fusion-engine
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: qnp-service-account
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: qnp-fusion-engine
+        image: qnp/fusion-engine:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          name: http
+        - containerPort: 8080
+          name: metrics
+        env:
+        - name: QNP_ENVIRONMENT
+          value: "production"
+        - name: QNP_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: QNP_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        envFrom:
+        - configMapRef:
+            name: qnp-config
+        - secretRef:
+            name: qnp-secrets
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: qnp-cache
+          mountPath: /app/cache
+        - name: qnp-logs
+          mountPath: /app/logs
+        - name: config-volume
+          mountPath: /app/config
+      volumes:
+      - name: qnp-cache
+        emptyDir:
+          sizeLimit: 1Gi
+      - name: qnp-logs
+        emptyDir:
+          sizeLimit: 100Mi
+      - name: config-volume
+        configMap:
+          name: qnp-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qnp-fusion-service
+  namespace: qnp-production
+  labels:
+    app: qnp-fusion-engine
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8000
+    protocol: TCP
+    name: http
+  - port: 8080
+    targetPort: 8080
+    protocol: TCP
+    name: metrics
+  selector:
+    app: qnp-fusion-engine
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: qnp-ingress
+  namespace: qnp-production
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rate-limit: "1000"
+    nginx.ingress.kubernetes.io/rate-limit-connections: "100"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  tls:
+  - hosts:
+    - api.qnp-system.com
+    secretName: qnp-tls-secret
+  rules:
+  - host: api.qnp-system.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: qnp-fusion-service
+            port:
+              number: 80
+
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: qnp-hpa
+  namespace: qnp-production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: qnp-fusion-engine
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 30
+      - type: Pods
+        value: 5
+        periodSeconds: 30
+      selectPolicy: Max
+
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: qnp-service-account
+  namespace: qnp-production
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: qnp-role
+  namespace: qnp-production
+rules:
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["get", "list"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: ["get", "list"]
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: qnp-role-binding
+  namespace: qnp-production
+subjects:
+- kind: ServiceAccount
+  name: qnp-service-account
+  namespace: qnp-production
+roleRef:
+  kind: Role
+  name: qnp-role
+  apiGroup: rbac.authorization.k8s.io
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: qnp-network-policy
+  namespace: qnp-production
+spec:
+  podSelector:
+    matchLabels:
+      app: qnp-fusion-engine
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8000
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: monitoring
+    ports:
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+    - protocol: TCP
+      port: 80
+
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: qnp-pdb
+  namespace: qnp-production
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: qnp-fusion-engine
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: qnp-audit-logs
+  namespace: qnp-production
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast-ssd
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qnp-compliance-engine
+  namespace: qnp-production
+  labels:
+    app: qnp-compliance-engine
+    version: v1.0.0
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: qnp-compliance-engine
+  template:
+    metadata:
+      labels:
+        app: qnp-compliance-engine
+        version: v1.0.0
+    spec:
+      serviceAccountName: qnp-service-account
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: qnp-compliance-engine
+        image: qnp/compliance-engine:v1.0.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8001
+          name: http
+        env:
+        - name: QNP_ENVIRONMENT
+          value: "production"
+        - name: QNP_COMPLIANCE_MODE
+          value: "strict"
+        envFrom:
+        - configMapRef:
+            name: qnp-config
+        - secretRef:
+            name: qnp-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: audit-logs
+          mountPath: /app/audit
+      volumes:
+      - name: audit-logs
+        persistentVolumeClaim:
+          claimName: qnp-audit-logs
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qnp-compliance-service
+  namespace: qnp-production
+  labels:
+    app: qnp-compliance-engine
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8001
+    protocol: TCP
+    name: http
+  selector:
+    app: qnp-compliance-engine
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: qnp-fusion-engine
+  namespace: qnp-production
+  labels:
+    app: qnp-fusion-engine
+spec:
+  selector:
+    matchLabels:
+      app: qnp-fusion-engine
+  endpoints:
+  - port: metrics
+    path: /metrics
+    interval: 15s
+
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: qnp-alerts
+  namespace: qnp-production
+  labels:
+    app: qnp-fusion-engine
+spec:
+  groups:
+  - name: qnp-fusion-engine
+    rules:
+    - alert: QNPHighErrorRate
+      expr: rate(qnp_requests_total{status="error"}[5m]) > 0.1
+      for: 2m
+      labels:
+        severity: critical
+      annotations:
+        summary: "QNP Fusion Engine has high error rate"
+        description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+    
+    - alert: QNPHighLatency
+      expr: histogram_quantile(0.95, rate(qnp_request_duration_seconds_bucket[5m])) > 0.2
+      for: 2m
+      labels:
+        severity: warning
+      annotations:
+        summary: "QNP Fusion Engine has high latency"
+        description: "95th percentile latency is {{ $value }}s"
+    
+    - alert: QNPLowThroughput
+      expr: rate(qnp_requests_total[5m]) < 10
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: "QNP Fusion Engine has low throughput"
+        description: "Request rate is {{ $value }} requests/second"
+    
+    - alert: QNPPodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="qnp-production",pod=~"qnp-fusion-engine-.*"}[5m]) > 0
+      for: 1m
+      labels:
+        severity: critical
+      annotations:
+        summary: "QNP pod is crash looping"
+        description: "Pod {{ $labels.pod }} is restarting frequently"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: qnp-grafana-dashboard
+  namespace: qnp-production
+  labels:
+    grafana_dashboard: "1"
+data:
+  qnp-dashboard.json: |
+    {
+      "dashboard": {
+        "id": null,
+        "title": "QNP Fusion Engine Dashboard",
+        "tags": ["qnp", "fusion", "production"],
+        "timezone": "browser",
+        "panels": [
+          {
+            "id": 1,
+            "title": "Request Rate",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(qnp_requests_total[5m])",
+                "legendFormat": "Requests/sec"
+              }
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+          },
+          {
+            "id": 2,
+            "title": "Response Time",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.50, rate(qnp_request_duration_seconds_bucket[5m]))",
+                "legendFormat": "50th percentile"
+              },
+              {
+                "expr": "histogram_quantile(0.95, rate(qnp_request_duration_seconds_bucket[5m]))",
+                "legendFormat": "95th percentile"
+              }
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+          },
+          {
+            "id": 3,
+            "title": "QNP Fusion Score",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "qnp_fusion_score",
+                "legendFormat": "Fusion Score"
+              }
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+          },
+          {
+            "id": 4,
+            "title": "Quantum Coherence",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "qnp_quantum_coherence",
+                "legendFormat": "Coherence"
+              }
+            ],
+            "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+          }
+        ],
+        "time": {
+          "from": "now-1h",
+          "to": "now"
+        },
+        "refresh": "5s"
+      }
+    }
